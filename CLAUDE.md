@@ -64,7 +64,7 @@ Push to `main`. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`.
    - Melton time
    - Wyndham time and venue
    - Chapters 5 and 6
-   - Real phone, website and email
+   - Website and email
    - Maribyrnong poster and photos
    - Confirmed `access` per venue
 2. Self-serve admin (Decap CMS at `/admin` editing `data/site.json`); then remove the dormant Studio code.
