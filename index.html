@@ -207,10 +207,10 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
 #toast.on{opacity:1}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
-
+<!--SEO-JSONLD-->
 </head>
 <body>
-<script type="application/json" id="site-fallback">{"_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to this folder, e.g. media/melton-poster.jpg.", "config": {"about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.", "email": "", "facebook": "", "instagram": "", "logoId": "media/logo.png", "mascotName": "Sunny", "orgName": "AbleShine", "phone": "0434 555 555", "rsvp": "", "tagline": "Free, all-abilities community days across Melbourne. Pick a chapter to open its room.", "title": "AbleShine World", "website": ""}, "events": [{"address": "", "color": "purple", "date": "2026-08-28", "easyRead": ["Our first chapter happened in August.", "People came to play, make things and meet friends.", "Tap a photo to make it big."], "lineup": ["Magic show", "People Bingo", "Bingo", "Live acoustic music", "Group craft", "Talent show", "NDIS Live Q&A", "Photo booth", "Holistic healing"], "name": "Maribyrnong", "posterAlt": "", "posterId": "", "previousDate": "", "published": true, "time": "11:00am – 3:00pm", "venue": "Maribyrnong Civic Precinct (CPACH)", "id": "maribyrnong-2026-08-28"}, {"address": "", "color": "pink", "date": "2026-11-23", "easyRead": ["The day changed. It is now Monday 23 November.", "The place is the same: Fraser Rise.", "It is free. Your support worker comes free too."], "lineup": [], "name": "Melton", "posterAlt": "Melton Chapter date change poster: moved from 18 to 23 November 2026, venue remains Fraser Rise Children's and Community Centre", "posterId": "media/melton-poster.jpg", "previousDate": "Wed 18 Nov", "published": true, "time": "", "venue": "Fraser Rise Children's & Community Centre", "id": "melton-2026-11-23"}, {"address": "", "color": "teal", "date": "2026-11-25", "easyRead": ["Come on Wednesday 25 November.", "It starts at 11 in the morning and ends at 3.", "There is magic, animals, bingo and music."], "lineup": ["Magic show", "Animal encounters", "Bingo", "Live music", "Surprise dance", "Raffles & giveaways"], "name": "Whittlesea", "posterAlt": "Whittlesea Chapter save-the-date poster: 25 November 2026, 11am to 3pm, Epping Memorial Community Centre", "posterId": "media/whittlesea-poster.jpg", "previousDate": "", "published": true, "time": "11:00am – 3:00pm", "venue": "Epping Memorial Community Centre", "id": "whittlesea-2026-11-25"}, {"address": "", "color": "amber", "date": "2026-11-30", "easyRead": ["Come on Monday 30 November.", "We will share the place soon.", "It is free for everyone."], "lineup": [], "name": "Wyndham", "posterAlt": "", "posterId": "", "previousDate": "", "published": true, "time": "", "venue": "", "id": "wyndham-2026-11-30"}], "snapshots": [], "_snapshot_example": {"eventId": "maribyrnong-2026-08-28", "assetId": "media/maribyrnong/photo-01.jpg", "caption": "Magic show", "alt": "Describe what the photo shows", "createdAt": 1}}</script>
+<noscript><style>#listview{display:block!important}</style><p style="position:fixed;z-index:99;left:16px;right:16px;bottom:16px;background:#fff;border:3px solid #22114A;border-radius:12px;padding:12px">The 3D world needs JavaScript. The chapter list is shown instead.</p></noscript>
 <a class="skip" href="#guide" id="skip">Skip the 3D world: open the chapter guide</a>
 <div class="app" id="app">
   <canvas id="world" tabindex="0" aria-label="AbleShine world. A 3D island where each event is a festival tent along a story trail. Use the chapter guide or list view for the same information."></canvas>
@@ -262,7 +262,7 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
       <h1 class="comic" id="lv-title">One story. <span>Every chapter.</span></h1>
       <p id="lv-tag">Free community days across Melbourne. Pick a chapter to open its room.</p>
       <button class="btn purple" id="lv-back" style="margin-top:.4rem">Back to the 3D world</button>
-      <div class="cards" id="cards"></div>
+      <div class="cards" id="cards"><!--SEO-CARDS--></div>
     </div>
   </section>
 
@@ -377,6 +377,7 @@ function renderMeta(){
 function numBadge(c, cls){ return h('span', {class: (cls||'num') + ' bg-' + c.color, 'aria-hidden':'true'}, c.num); }
 function renderGuide(){
   const ol = $('#guide-list'); ol.replaceChildren();
+  if (S.loadError){ ol.append(h('li', {class:'blank'}, h('span',{class:'comic'},'The chapters did not load'), h('p',{style:'margin:.4rem 0 .8rem'},'Check your internet connection, then try again.'), h('button',{class:'btn purple', onclick: () => location.reload()},'Try again'))); return; }
   if (!S.chapters.length){ ol.append(h('li', {class:'blank'}, h('span',{class:'comic'},'No chapters yet'), S.canEdit ? 'Open Studio to add the first one.' : 'Check back soon.')); return; }
   S.chapters.forEach(c => ol.append(h('li', null, h('button', {class:'crow', onclick: () => { closePanel('guide'); goChapter(c.id); }},
     numBadge(c), h('span',{class:'txt'}, h('strong',null,c.name), h('span',null, fmtShort(c.date) + ' · ' + (c.venue || 'Venue TBC'))),
@@ -384,6 +385,7 @@ function renderGuide(){
 }
 function renderCards(){
   const box = $('#cards'); box.replaceChildren();
+  if (S.loadError){ box.append(h('div',{class:'blank'}, h('span',{class:'comic'},'The chapters did not load'), h('p',{style:'margin:.4rem 0 .8rem'},'Check your internet connection, then try again.'), h('button',{class:'btn purple', onclick: () => location.reload()},'Try again'))); return; }
   if (!S.chapters.length){ box.append(h('div',{class:'blank'}, h('span',{class:'comic'},'The first page is still blank'), S.loaded ? 'Chapters appear here as soon as they are added.' : 'Loading…')); return; }
   S.chapters.forEach(c => {
     const cover = c.posterId ? h('img', {src:MEDIA(c.posterId), alt:'', loading:'lazy'}) : h('span', {class:'comic big outline'}, c.num);
@@ -436,7 +438,11 @@ function renderRoom(){
       h('div',null,h('strong',{style:'color:var(--teal)'},'Passive'),'Sit back and soak it up.'),
       h('div',null,h('strong',{style:'color:#8A6400'},'Light'),'Join in as much as feels good.'),
       h('div',null,h('strong',{style:'color:var(--pink)'},'Full'),'Dive in and help run the fun.')),
-    h('p',{class:'note',style:'margin:.7rem 0 0'},'Quiet zone, Auslan interpreter and step-free access. Tell us what you need when you RSVP.')));
+    ));
+  const access = (c.access || []).filter(Boolean);
+  body.append(h('div', {class:'block'}, h('h3',null,'Access on the day'),
+    access.length ? h('ul',{class:'chips'}, access.map(t => h('li',null,t))) : null,
+    h('p',{class:'note',style:'margin:' + (access.length ? '.6rem' : '0') + ' 0 0'}, access.length ? 'Need something else? Tell us when you RSVP.' : 'Access details for this venue are being confirmed. Tell us what you need when you RSVP and we will let you know.')));
   if (c.posterId) body.append(h('div', {class:'block'}, h('h3',null,'Poster'),
     h('div',{class:'poster'}, h('img',{src:MEDIA(c.posterId), alt: c.posterAlt || ('Poster for Chapter ' + c.num + ', ' + c.name)})),
     h('div',{class:'actions',style:'margin-top:.6rem'}, h('button',{class:'btn sm', onclick: () => downloadAsset(c.posterId, 'AbleShine-' + slug(c.name) + '-poster')}, 'Download poster'))));
@@ -740,9 +746,9 @@ function initWorld(){
   const ring = mk(new T.TorusGeometry(10.5,0.22,6,64), '#E0187A', false); ring.rotation.x = -Math.PI/2; ring.position.y = 0.42; plaza.add(ring);
   const ped = mk(new T.CylinderGeometry(1.6,2.2,3,16), '#5B2DB0'); ped.position.y = 1.9; plaza.add(ped);
   const faceTex = canvasTex(512,512,(g) => {
-    g.translate(256,256); g.strokeStyle = '#1A1033'; g.lineWidth = 14; g.lineCap = 'round';
-    for (let i = 0; i < 12; i++){ g.save(); g.rotate(i*Math.PI/6); g.fillStyle = '#F5B800'; g.beginPath(); g.moveTo(-26,-150); g.lineTo(0,-238); g.lineTo(26,-150); g.closePath(); g.fill(); g.stroke(); g.restore(); }
-    g.fillStyle = '#FFC93C'; g.beginPath(); g.arc(0,0,148,0,Math.PI*2); g.fill(); g.stroke();
+    g.translate(256,256); g.strokeStyle = '#22114A'; g.lineWidth = 14; g.lineCap = 'round';
+    for (let i = 0; i < 12; i++){ g.save(); g.rotate(i*Math.PI/6); g.fillStyle = '#FFC72C'; g.beginPath(); g.moveTo(-26,-150); g.lineTo(0,-238); g.lineTo(26,-150); g.closePath(); g.fill(); g.stroke(); g.restore(); }
+    g.fillStyle = '#FFC72C'; g.beginPath(); g.arc(0,0,148,0,Math.PI*2); g.fill(); g.stroke();
     g.lineWidth = 16; g.beginPath(); g.arc(-52,-18,26,Math.PI*1.1,Math.PI*1.9); g.stroke(); g.beginPath(); g.arc(52,-18,26,Math.PI*1.1,Math.PI*1.9); g.stroke();
     g.beginPath(); g.arc(0,20,70,Math.PI*0.18,Math.PI*0.82); g.stroke();
     g.fillStyle = 'rgba(214,31,105,.35)'; g.beginPath(); g.arc(-95,40,22,0,Math.PI*2); g.fill(); g.beginPath(); g.arc(95,40,22,0,Math.PI*2); g.fill();
@@ -755,15 +761,15 @@ function initWorld(){
   const SKIN = ['#F6D3B3','#D9A47A','#A86B43','#6B4428'];
   function person(o){
     const g = new T.Group(), P = {g, type:o.type, legs:[], arms:[], wheels:[]};
-    const hood = HEX[o.hood] || o.hood || '#4B1FA8', skin = SKIN[o.skin != null ? o.skin : 1], jeans = '#2E3A8C';
+    const hood = HEX[o.hood] || o.hood || '#5B2DB0', skin = SKIN[o.skin != null ? o.skin : 1], jeans = '#2E3A8C';
     const limb = (len, r, col) => { const piv = new T.Group(); const m = mk(new T.CylinderGeometry(r, r, len, 10), col, true, 1.12); m.position.y = -len/2; piv.add(m); return piv; };
     if (o.type === 'chair'){
       const frame = '#3B3355';
       const seat = mk(new T.BoxGeometry(1.3,0.22,1.2), frame); seat.position.set(0,1.0,0); g.add(seat);
       const back = mk(new T.BoxGeometry(1.3,1.2,0.16), frame); back.position.set(0,1.62,-0.6); g.add(back);
-      [-0.78, 0.78].forEach(x => { const w = new T.Group(); w.position.set(x,0.78,-0.1); const tor = mk(new T.TorusGeometry(0.72,0.09,8,24), '#1A1033', false); tor.rotation.y = Math.PI/2; w.add(tor);
-        for (let k = 0; k < 3; k++){ const sp = new T.Mesh(new T.BoxGeometry(0.05,1.4,0.05), toon('#C9BCE8')); sp.rotation.x = k*Math.PI/3; w.add(sp); } g.add(w); P.wheels.push(w); });
-      [-0.5, 0.5].forEach(x => { const c = mk(new T.SphereGeometry(0.17,10,8), '#1A1033', false); c.position.set(x,0.17,0.62); g.add(c); });
+      [-0.78, 0.78].forEach(x => { const w = new T.Group(); w.position.set(x,0.78,-0.1); const tor = mk(new T.TorusGeometry(0.72,0.09,8,24), '#22114A', false); tor.rotation.y = Math.PI/2; w.add(tor);
+        for (let k = 0; k < 3; k++){ const sp = new T.Mesh(new T.BoxGeometry(0.05,1.4,0.05), toon('#C9B8F2')); sp.rotation.x = k*Math.PI/3; w.add(sp); } g.add(w); P.wheels.push(w); });
+      [-0.5, 0.5].forEach(x => { const c = mk(new T.SphereGeometry(0.17,10,8), '#22114A', false); c.position.set(x,0.17,0.62); g.add(c); });
       const torso = mk(new T.CylinderGeometry(0.5,0.58,1.1,12), hood); torso.position.set(0,1.7,-0.18); g.add(torso);
       const thigh = mk(new T.BoxGeometry(0.9,0.36,0.9), jeans); thigh.position.set(0,1.26,0.3); g.add(thigh);
       const shin = mk(new T.BoxGeometry(0.85,0.75,0.32), jeans); shin.position.set(0,0.82,0.68); g.add(shin);
@@ -776,7 +782,7 @@ function initWorld(){
       const head = mk(new T.SphereGeometry(0.45,16,12), skin); head.position.y = 2.65; g.add(head);
       const hair = new T.Mesh(new T.SphereGeometry(0.48,16,8,0,Math.PI*2,0,Math.PI/2.1), toon('#2A1A12')); hair.position.y = 2.71; g.add(hair);
       [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, hood); a.position.set(x,2.18,0); g.add(a); P.arms.push(a); });
-      if (o.type === 'cane'){ const cane = mk(new T.CylinderGeometry(0.06,0.06,1.9,8), '#F5B800', true, 1.3); cane.position.set(0.98,0.95,0.35); cane.rotation.x = 0.12; g.add(cane); P.cane = cane; }
+      if (o.type === 'cane'){ const cane = mk(new T.CylinderGeometry(0.06,0.06,1.9,8), '#FFC72C', true, 1.3); cane.position.set(0.98,0.95,0.35); cane.rotation.x = 0.12; g.add(cane); P.cane = cane; }
     }
     return P;
   }
@@ -832,7 +838,7 @@ function initWorld(){
     () => 'The Chapter guide lists every event. No 3D needed.',
     () => 'Want to talk to the team? Tap Connect up top.'];
   setTimeout(() => W.say(TIPS[0](), 6500), 1400);
-  const marker = new T.Mesh(new T.RingGeometry(0.6,0.9,24), new T.MeshBasicMaterial({color:'#D61F69'})); marker.rotation.x = -Math.PI/2; marker.visible = false; scene.add(marker);
+  const marker = new T.Mesh(new T.RingGeometry(0.6,0.9,24), new T.MeshBasicMaterial({color:'#E0187A'})); marker.rotation.x = -Math.PI/2; marker.visible = false; scene.add(marker);
 
   // dynamic world (rebuilt from chapters)
   let dyn = new T.Group(); scene.add(dyn);
@@ -1162,8 +1168,7 @@ if (W.ok){ W.layout([]); applyPrefs(); }
   S.canEdit = false; $('#b-studio').hidden = true;
   let site = null;
   try { const res = await fetch('data/site.json', {cache:'no-cache'}); if (res.ok) site = await res.json(); } catch(e){}
-  if (!site){ try { site = JSON.parse(document.getElementById('site-fallback').textContent); } catch(e){} }
-  if (!site){ S.loaded = true; refresh(); $('#series-count').textContent = 'Chapters could not load'; return; }
+  if (!site){ S.loaded = true; S.loadError = true; refresh(); $('#series-count').textContent = 'Chapters could not load'; return; }
   S.config = site.config || {}; S.events = site.events || []; S.snaps = (site.snapshots || []).map((s, i) => Object.assign({id: 'snap' + i}, s));
   S.loaded = true; refresh(); routeHash();
 })();

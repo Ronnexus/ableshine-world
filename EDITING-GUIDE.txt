@@ -1,57 +1,54 @@
-ABLESHINE WORLD - WEBSITE FOLDER
-================================
+ABLESHINE WORLD - EDITING GUIDE
+===============================
+
+Live site: https://ableshine-world.netlify.app
+The site publishes itself from GitHub (Ronnexus/ableshine-world, branch main).
+Any change saved to GitHub is live in about a minute. No dragging or uploading to Netlify.
 
 What's in here
 - index.html         The whole 3D website (world, Sunny, tents, rooms, Connect, list view)
-- data/site.json     All the content: contact details + every chapter
+- data/site.json     ALL the content: contact details, every chapter, every photo
 - media/             Logo, posters and event photos
-
-Do not double-click index.html to test it. Browsers block 3D images when a page is
-opened straight from your computer. Test it on Netlify (step 1 below) instead.
+- scripts/, netlify.toml, CLAUDE.md   Behind-the-scenes files. Leave these alone.
 
 
-GO LIVE (about 5 minutes)
--------------------------
-1. Go to https://app.netlify.com/drop and sign up (free).
-2. Drag this whole "ableshine-world" folder onto the page.
-   You get a live link like https://random-name.netlify.app straight away.
-3. Site configuration > Change site name  (e.g. ableshine.netlify.app)
-4. To use your own domain: Domain management > Add a domain, then follow the
-   DNS steps Netlify shows (usually adding one record where you bought the domain).
-   HTTPS is set up automatically.
-
-Already have a website on regular hosting (cPanel / WordPress)?
-Upload this folder via File Manager into public_html, e.g. public_html/world
-It will be live at yourdomain.com/world
-
-Site on Wix / Squarespace / Shopify?
-Do steps 1-4 with a subdomain such as world.yourdomain.com, then link to it
-(or embed it full-width) from your main site.
+THE EASY WAY
+------------
+Send Claude the new details and photos and ask it to update the site.
 
 
-UPDATE THE SITE
----------------
-Edit data/site.json in any text editor (or send it to Claude to update).
+EDIT IT YOURSELF ON GITHUB
+--------------------------
+1. Open github.com/Ronnexus/ableshine-world, then data, then site.json.
+2. Click the pencil (Edit), make the change, then click "Commit changes".
+3. Wait about a minute and refresh the live site.
 
-Add a chapter: copy one block inside "events", change the details.
+Add a chapter: copy one block inside "events" and change the details.
   - "id": a unique name, e.g. "brimbank-2026-12-04"
   - "date": YYYY-MM-DD, or "" if not locked in (shows as Date TBC)
   - "color": purple, pink, teal (shows as blue) or amber (shows as yellow)
   - "posterId": path to the poster, e.g. "media/brimbank-poster.jpg"
+  - "access": ONLY access features confirmed for that venue, e.g.
+      ["Auslan interpreter", "Quiet zone", "Step-free entry", "Accessible toilets"]
+    Leave it as [] until confirmed. The room then says details are being confirmed.
+  - "previousDate": only if the date moved, e.g. "Wed 18 Nov" (shows a date-change banner)
   Chapters sort by date, number themselves and get their status automatically.
 
 Add event photos:
   1. Resize photos to about 2000px wide first (phone originals are too heavy).
-  2. Put them in media/<chapter>/  e.g. media/maribyrnong/photo-01.jpg
-  3. Add one line per photo to "snapshots":
+  2. Upload them on GitHub into media/<chapter>/ (Add file, then Upload files),
+     e.g. media/maribyrnong/photo-01.jpg
+  3. Add one line per photo to "snapshots" in site.json:
      {"eventId": "maribyrnong-2026-08-28", "assetId": "media/maribyrnong/photo-01.jpg",
       "caption": "Magic show", "alt": "Kids laughing at the magician", "createdAt": 1}
-  createdAt sets the order (1, 2, 3...).
+  createdAt sets the order (1, 2, 3...). Always write the alt text: it is what
+  screen-reader users hear.
 
-Then drag the folder onto Netlify again: Deploys > drag and drop to replace the old version.
+A typo in site.json (a missing comma or quote) stops the chapters loading.
+If the site shows "The chapters did not load", undo your last edit on GitHub.
 
 Videos aren't in this version yet. Upload them to YouTube (unlisted) and we'll add
 a video strip to each room in the next update.
 
-Before sharing: check the phone number and add the website/email in data/site.json
+Before sharing: check the phone number and add the website and email in site.json
 ("config" section). Get photo consent from everyone pictured.

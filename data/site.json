@@ -1,5 +1,5 @@
 {
-  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to this folder, e.g. media/melton-poster.jpg.",
+  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to the site root, e.g. media/melton-poster.jpg. 'access' lists the access features CONFIRMED for that venue (e.g. Auslan interpreter, Quiet zone, Step-free entry, Accessible toilets). Leave it empty until confirmed.",
   "config": {
     "about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.",
     "email": "",
@@ -42,7 +42,11 @@
       "published": true,
       "time": "11:00am – 3:00pm",
       "venue": "Maribyrnong Civic Precinct (CPACH)",
-      "id": "maribyrnong-2026-08-28"
+      "id": "maribyrnong-2026-08-28",
+      "access": [
+        "Auslan interpreter",
+        "Quiet zone"
+      ]
     },
     {
       "address": "",
@@ -61,7 +65,8 @@
       "published": true,
       "time": "",
       "venue": "Fraser Rise Children's & Community Centre",
-      "id": "melton-2026-11-23"
+      "id": "melton-2026-11-23",
+      "access": []
     },
     {
       "address": "",
@@ -87,7 +92,8 @@
       "published": true,
       "time": "11:00am – 3:00pm",
       "venue": "Epping Memorial Community Centre",
-      "id": "whittlesea-2026-11-25"
+      "id": "whittlesea-2026-11-25",
+      "access": []
     },
     {
       "address": "",
@@ -106,7 +112,8 @@
       "published": true,
       "time": "",
       "venue": "",
-      "id": "wyndham-2026-11-30"
+      "id": "wyndham-2026-11-30",
+      "access": []
     }
   ],
   "snapshots": [],
