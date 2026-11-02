@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'dist');
-const SITE = (process.env.URL || 'https://ableshine-world.netlify.app').replace(/\/$/, '');
+const SITE = (process.env.URL || 'https://ableshine.com.au').replace(/\/$/, '');
 
 const site = JSON.parse(fs.readFileSync(path.join(root, 'data/site.json'), 'utf8'));
 const cfg = site.config || {};

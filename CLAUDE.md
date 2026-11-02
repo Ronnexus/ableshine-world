@@ -1,6 +1,6 @@
 # AbleShine World
 
-Live site: https://ableshine-world.netlify.app (Netlify project `ableshine-world`, auto-deploys from `main`).
+Live site: https://ableshine.com.au (also ableshine-world.netlify.app; Netlify project `ableshine-world`, auto-deploys from `main`).
 
 A 3D, third-person "event world" for AbleShine: free, all-abilities community days across Melbourne. Each event is a **chapter**: a striped festival tent on a story trail spiralling out from a plaza with a giant sun statue. Visitors walk a character (walking, wheelchair or cane, optional assistance dog) with **Sunny** the sun mascot floating beside them. Tapping a tent walks them along the trail and opens that chapter's **room**.
 

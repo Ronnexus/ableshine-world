@@ -1,7 +1,7 @@
 ABLESHINE WORLD - EDITING GUIDE
 ===============================
 
-Live site: https://ableshine-world.netlify.app
+Live site: https://ableshine.com.au
 The site publishes itself from GitHub (Ronnexus/ableshine-world, branch main).
 Any change saved to GitHub is live in about a minute. No dragging or uploading to Netlify.
 
