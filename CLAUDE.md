@@ -11,7 +11,7 @@ A 3D, third-person "event world" for AbleShine: free, all-abilities community da
 | `index.html` | The whole app: HTML, CSS, JS in one file. No framework, no bundler. |
 | `data/site.json` | **All content.** The single source of truth. Edit this to change the site. |
 | `media/` | Logo, posters, event photos. |
-| `scripts/build-seo.mjs` | Netlify build step. Writes `dist/`: the home page (SEO title and description, Organization/WebSite/Event JSON-LD, absolute share previews, pre-rendered cards linking to chapter pages); a static page per chapter at `/chapters/<id>/` (tickets, details, Easy Read, access, poster, photos, Facebook/Instagram, Event + Breadcrumb JSON-LD); an events index at `/chapters/`; `sitemap.xml`; `robots.txt`. Statuses on static pages are computed at build time (Melbourne date). |
+| `scripts/build-seo.mjs` | Netlify build step. Writes `dist/`: the home page (SEO title and description, Organization/WebSite/Event JSON-LD, absolute share previews, pre-rendered cards linking to chapter pages); a static page per chapter at `/chapters/<id>/` (tickets, details, Easy Read, access, poster, photos, Facebook/Instagram, Event + Breadcrumb JSON-LD); an events index at `/chapters/`; a partners page at `/partners/`; `sitemap.xml`; `robots.txt`. Statuses on static pages are computed at build time (Melbourne date). |
 | `netlify.toml` | Build command, `dist` publish dir, cache headers. |
 | `EDITING-GUIDE.txt` | Plain-English guide for the owner. |
 
@@ -30,6 +30,8 @@ events[]:  id (unique slug, also the page URL), name, date (YYYY-MM-DD or "" = T
            ticketUrl (Eventbrite; "Get tickets" buttons until the date passes),
            facebookUrl (Facebook event), instagramUrl (Instagram post)
 snapshots[]: eventId, assetId (path), caption, alt, createdAt (number = order)
+partners[]:  name, type (Partner|Sponsor|Supporter…), logo (path), url, blurb
+             (only organisations that have agreed to be named)
 ```
 Add fields; never rename existing ones.
 
@@ -38,8 +40,10 @@ Add fields; never rename existing ones.
 - **`computeChapters()`**: published events, dated ones sorted by date then undated by name; numbered 01, 02…; status from the visitor's date: past `wrapped`, today `live`, first future `next`, later `upcoming`, no date `soon`. Never hard-code the number of events.
 - **`refresh()`**: re-renders meta, guide, list cards, open room and lightbox; calls `W.layout()` only when the chapter signature changes.
 - **`initWorld()`**: Three.js scene. `layout(chapters)` rebuilds the island (radius grows with chapter count), CatmullRom story trail, `tent()` per chapter (status-specific dressing), instanced pop-art trees, flowers, floating stars and hearts, lilac skyline, plus the HTML labels (`buildLabels`). The avatar, dog, Sunny (`mascot()`), statue, camera, input and the `frame()` loop live here too.
-- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`.
-- **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), Me popover, lightbox. Escape closes the top panel.
+- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play` and `#partners`.
+- **Landmark tents** (`SPECIALS`, `specialTent()` in `layout`): the **Partners pavilion** (striped pyramid canopy with a logo board drawn from `partners[]`) and the **Play Tent** (rainbow dome) sit beside the plaza, outside the chapter spiral. `goSpecial(kind)` walks there (`W.travelSpecial`), then `openSpecial(kind)` opens `#special` (`renderSpecial`). They're listed under "Around the island" in the guide and as cards in List view.
+- **Sensory games** (`GAMES`, `openGame`, `gLoop`, `#game` overlay): Bubble Pop, Glow Painter, Music Pads (real buttons, keys 1–8) and Breathe with Sunny (4s in / 2s hold / 6s out, phase announced via aria-live). No scores, timers or fail states. Soft WebAudio pentatonic notes, Sound toggle (localStorage `asw.sound`), Calm mode halves speeds and turns off vibration. The 3D loop pauses while a game is open.
+- **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), landmark panel (`renderSpecial`), Me popover, lightbox, game. Escape closes the top panel.
 - **Prefs** (localStorage `asw.*`): calm, big text, list view, character choices.
 - **Dormant code**: Studio, upload and photo-edit functions (`S.canEdit`, `S.db`, `S.assets`, `renderStudio`, `eventForm`, `settingsForm`, `uploadSnaps`, `deleteSnap`) are left from the original claude.ai version and never run here (`S.canEdit = false`). Remove them when the CMS admin replaces them.
 
@@ -64,7 +68,6 @@ Push to `main`. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`.
    - Melton time
    - Wyndham time and venue
    - Chapters 5 and 6
-   - Website and email
    - Maribyrnong poster and photos
    - Confirmed `access` per venue
 2. Self-serve admin (Decap CMS at `/admin` editing `data/site.json`); then remove the dormant Studio code.

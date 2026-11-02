@@ -1,8 +1,8 @@
 {
-  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to the site root, e.g. media/melton-poster.jpg. 'access' lists the access features CONFIRMED for that venue (e.g. Auslan interpreter, Quiet zone, Step-free entry, Accessible toilets). Leave it empty until confirmed. 'ticketUrl' is the Eventbrite link (shows Get tickets buttons until the event has passed). 'facebookUrl' and 'instagramUrl' link the chapter's Facebook event and Instagram post.",
+  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to the site root, e.g. media/melton-poster.jpg. 'access' lists the access features CONFIRMED for that venue (e.g. Auslan interpreter, Quiet zone, Step-free entry, Accessible toilets). Leave it empty until confirmed. 'ticketUrl' is the Eventbrite link (shows Get tickets buttons until the event has passed). 'facebookUrl' and 'instagramUrl' link the chapter's Facebook event and Instagram post. 'partners' fills the Partners pavilion: name, type (e.g. Partner, Sponsor, Supporter), logo (path), url, blurb. Only list organisations that have agreed to be named.",
   "config": {
     "about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.",
-    "email": "",
+    "email": "connect@ableshine.com.au",
     "facebook": "https://www.facebook.com/ableshineau",
     "instagram": "https://www.instagram.com/ableshineau",
     "logoId": "media/logo.png",
@@ -12,7 +12,7 @@
     "rsvp": "",
     "tagline": "Free, all-abilities community days across Melbourne. Pick a chapter to open its room.",
     "title": "AbleShine World",
-    "website": "",
+    "website": "https://www.ableshine.com.au",
     "seoDescription": ""
   },
   "events": [
@@ -136,5 +136,13 @@
     "caption": "Magic show",
     "alt": "Describe what the photo shows",
     "createdAt": 1
+  },
+  "partners": [],
+  "_partner_example": {
+    "name": "Organisation name",
+    "type": "Sponsor",
+    "logo": "media/partners/organisation-logo.png",
+    "url": "https://example.org",
+    "blurb": "One short line about what they support."
   }
 }

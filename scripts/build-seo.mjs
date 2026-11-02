@@ -82,6 +82,8 @@ const chapters = pub.filter(e => isDate(e.date)).sort((a, b) => a.date.localeCom
     };
   });
 
+const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+const sameSite = u => host(u) === host(SITE);
 const socials = [['Facebook', safeUrl(cfg.facebook)], ['Instagram', safeUrl(cfg.instagram)]].filter(s => s[1]);
 const website = safeUrl(cfg.website);
 const homeTitle = cfg.seoTitle || `${org} | Free all-abilities community events in Melbourne`;
@@ -121,7 +123,7 @@ const orgLd = {
   '@context': 'https://schema.org', '@type': 'Organization', name: org, url: SITE + '/',
   logo: abs(cfg.logoId || 'media/logo.png'),
   ...(cfg.phone ? { telephone: cfg.phone } : {}), ...(cfg.email ? { email: cfg.email } : {}),
-  ...(socials.length || website ? { sameAs: [...socials.map(s => s[1]), ...(website && !website.startsWith(SITE) ? [website] : [])] } : {})
+  ...(socials.length || (website && !sameSite(website)) ? { sameAs: [...socials.map(s => s[1]), ...(website && !sameSite(website) ? [website] : [])] } : {})
 };
 
 // ---------- shared page chrome for the static pages ----------
@@ -201,6 +203,7 @@ function topbar(nextTickets) {
 <a href="/" aria-label="${esc(org)} home"><img src="${esc(rootPath(cfg.logoId || 'media/logo.png'))}" alt="${esc(org)}" width="110" height="58"></a>
 <nav aria-label="Main">
 <a class="btn" href="/chapters/">All events</a>
+<a class="btn" href="/partners/">Partners</a>
 <a class="btn purple" href="/">Explore the 3D world</a>
 ${nextTickets ? `<a class="btn pink" href="${esc(nextTickets.tickets)}" target="_blank" rel="noopener">Get tickets: ${esc(nextTickets.name)}</a>` : ''}
 </nav></div></header>`;
@@ -209,7 +212,7 @@ function footer() {
   const bits = [];
   if (cfg.phone) bits.push(`Phone: <a href="tel:${esc(cfg.phone.replace(/\s+/g, ''))}">${esc(cfg.phone)}</a>`);
   if (cfg.email) bits.push(`Email: <a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>`);
-  if (website) bits.push(`<a href="${esc(website)}">${esc(website.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</a>`);
+  if (website && !sameSite(website)) bits.push(`<a href="${esc(website)}">${esc(website.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</a>`);
   const soc = socials.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${s[0]}</a>`).join(' · ');
   return `<footer><div class="wrap">
 <div><strong>${esc(org)}</strong>${esc(cfg.about || 'Free, all-abilities community days across Melbourne.')}</div>
@@ -301,6 +304,33 @@ ${footer()}`;
   fs.writeFileSync(path.join(out, 'chapters', 'index.html'), html);
 }
 
+// ---------- partners page ----------
+function partnersPage() {
+  const url = SITE + '/partners/';
+  const list = (site.partners || []).filter(p => p && p.name);
+  const title = `${org} partners and sponsors | Free all-abilities community days in Melbourne`;
+  const desc = clip(list.length ? `${org} days are free thanks to our partners and sponsors: ${list.map(p => p.name).join(', ')}.` : `${org} days are free thanks to local partners and sponsors. Find out how your organisation can partner with ${org}.`, 158);
+  const cards = list.map(p => { const u = safeUrl(p.url);
+    return `<li class="card" style="display:flex;flex-direction:column;gap:8px">${p.logo ? `<img src="${esc(rootPath(p.logo))}" alt="${esc(p.name)} logo" loading="lazy" style="max-height:80px;width:auto;object-fit:contain;align-self:flex-start">` : ''}<strong style="font-size:1.2rem">${esc(p.name)}</strong>${p.type ? `<span class="chip" style="align-self:flex-start">${esc(p.type)}</span>` : ''}${p.blurb ? `<span>${esc(p.blurb)}</span>` : ''}${u ? `<a class="btn" style="align-self:flex-start" href="${esc(u)}" target="_blank" rel="noopener">Visit ${esc(p.name)}</a>` : ''}</li>`; }).join('\n');
+  const html = head({ title, desc, url, image: abs(cfg.logoId || 'media/logo.png') }) + `
+${topbar(nextWithTix)}
+<section class="hero c-amber"><div class="wrap">
+<span class="brush">Thank you</span>
+<h1>Our partners</h1>
+<p>${esc(org)} days are free because local organisations back them.</p>
+</div></section>
+<main class="wrap">
+${list.length ? `<ul class="list" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${cards}</ul>` : '<section class="card"><h2>Partner spots are open</h2><p style="margin:0">Our first partners and sponsors will appear here soon.</p></section>'}
+<section class="card"><h2>Partner with ${esc(org)}</h2>
+<p>Want your organisation in our Partners tent and on our event days? We would love to hear from you.</p>
+<div class="acts">${cfg.email ? `<a class="btn pink" href="mailto:${esc(cfg.email)}?subject=${encodeURIComponent('Partnering with ' + org)}">Email ${esc(cfg.email)}</a>` : ''}${cfg.phone ? `<a class="btn" href="tel:${esc(cfg.phone.replace(/\s+/g, ''))}">Call ${esc(cfg.phone)}</a>` : ''}<a class="btn purple" href="/#partners">Visit the Partners tent in 3D</a></div>
+</section>
+</main>
+${footer()}`;
+  fs.mkdirSync(path.join(out, 'partners'), { recursive: true });
+  fs.writeFileSync(path.join(out, 'partners', 'index.html'), html);
+}
+
 // ---------- home page (the 3D world) ----------
 function home() {
   let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -335,7 +365,8 @@ for (const dir of ['data', 'media']) fs.cpSync(path.join(root, dir), path.join(o
 const nEvents = home();
 chapters.forEach(chapterPage);
 eventsIndex();
-const urls = [['/', '1.0'], ['/chapters/', '0.9'], ...chapters.map(c => [c.page, c.status === 'wrapped' ? '0.6' : '0.8'])];
+partnersPage();
+const urls = [['/', '1.0'], ['/chapters/', '0.9'], ['/partners/', '0.5'], ...chapters.map(c => [c.page, c.status === 'wrapped' ? '0.6' : '0.8'])];
 fs.writeFileSync(path.join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p]) => `  <url><loc>${SITE}${u}</loc><lastmod>${buildDate}</lastmod><priority>${p}</priority></url>`).join('\n')}

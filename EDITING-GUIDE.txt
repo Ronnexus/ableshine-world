@@ -40,6 +40,13 @@ Add a chapter: copy one block inside "events" and change the details.
   Each chapter also gets its own web page: ableshine.com.au/chapters/<id>/
   Use that link when sharing on Facebook and Instagram.
 
+Partners and sponsors: add one block per organisation to "partners":
+  {"name": "Organisation name", "type": "Sponsor", "logo": "media/partners/their-logo.png",
+   "url": "https://their-site.com.au", "blurb": "One short line about what they support."}
+  Upload the logo into media/partners/ first. They appear in the Partners tent (on its
+  logo board and in its panel) and on ableshine.com.au/partners/. Only add organisations
+  that have agreed to be named.
+
 Your Facebook and Instagram pages go in the "config" section ("facebook", "instagram").
 They show in Connect, in every page footer, and tell Google they belong to AbleShine.
 
