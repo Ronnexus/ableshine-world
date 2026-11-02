@@ -3,8 +3,8 @@
   "config": {
     "about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.",
     "email": "",
-    "facebook": "",
-    "instagram": "",
+    "facebook": "https://www.facebook.com/ableshineau",
+    "instagram": "https://www.instagram.com/ableshineau",
     "logoId": "media/logo.png",
     "mascotName": "Sunny",
     "orgName": "AbleShine",
@@ -71,7 +71,7 @@
       "venue": "Fraser Rise Children's & Community Centre",
       "id": "melton-2026-11-23",
       "access": [],
-      "ticketUrl": "",
+      "ticketUrl": "https://www.eventbrite.com.au/e/ableshine-funday-melton-chapter-tickets-2003317089342",
       "facebookUrl": "",
       "instagramUrl": ""
     },
@@ -101,7 +101,7 @@
       "venue": "Epping Memorial Community Centre",
       "id": "whittlesea-2026-11-25",
       "access": [],
-      "ticketUrl": "",
+      "ticketUrl": "https://www.eventbrite.com.au/e/ableshine-funday-whittlesea-chapter-tickets-2003321181582",
       "facebookUrl": "",
       "instagramUrl": ""
     },
