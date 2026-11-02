@@ -1,0 +1,120 @@
+{
+  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to this folder, e.g. media/melton-poster.jpg.",
+  "config": {
+    "about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.",
+    "email": "",
+    "facebook": "",
+    "instagram": "",
+    "logoId": "media/logo.png",
+    "mascotName": "Sunny",
+    "orgName": "AbleShine",
+    "phone": "0434 555 555",
+    "rsvp": "",
+    "tagline": "Free, all-abilities community days across Melbourne. Pick a chapter to open its room.",
+    "title": "AbleShine World",
+    "website": ""
+  },
+  "events": [
+    {
+      "address": "",
+      "color": "purple",
+      "date": "2026-08-28",
+      "easyRead": [
+        "Our first chapter happened in August.",
+        "People came to play, make things and meet friends.",
+        "Tap a photo to make it big."
+      ],
+      "lineup": [
+        "Magic show",
+        "People Bingo",
+        "Bingo",
+        "Live acoustic music",
+        "Group craft",
+        "Talent show",
+        "NDIS Live Q&A",
+        "Photo booth",
+        "Holistic healing"
+      ],
+      "name": "Maribyrnong",
+      "posterAlt": "",
+      "posterId": "",
+      "previousDate": "",
+      "published": true,
+      "time": "11:00am – 3:00pm",
+      "venue": "Maribyrnong Civic Precinct (CPACH)",
+      "id": "maribyrnong-2026-08-28"
+    },
+    {
+      "address": "",
+      "color": "pink",
+      "date": "2026-11-23",
+      "easyRead": [
+        "The day changed. It is now Monday 23 November.",
+        "The place is the same: Fraser Rise.",
+        "It is free. Your support worker comes free too."
+      ],
+      "lineup": [],
+      "name": "Melton",
+      "posterAlt": "Melton Chapter date change poster: moved from 18 to 23 November 2026, venue remains Fraser Rise Children's and Community Centre",
+      "posterId": "media/melton-poster.jpg",
+      "previousDate": "Wed 18 Nov",
+      "published": true,
+      "time": "",
+      "venue": "Fraser Rise Children's & Community Centre",
+      "id": "melton-2026-11-23"
+    },
+    {
+      "address": "",
+      "color": "teal",
+      "date": "2026-11-25",
+      "easyRead": [
+        "Come on Wednesday 25 November.",
+        "It starts at 11 in the morning and ends at 3.",
+        "There is magic, animals, bingo and music."
+      ],
+      "lineup": [
+        "Magic show",
+        "Animal encounters",
+        "Bingo",
+        "Live music",
+        "Surprise dance",
+        "Raffles & giveaways"
+      ],
+      "name": "Whittlesea",
+      "posterAlt": "Whittlesea Chapter save-the-date poster: 25 November 2026, 11am to 3pm, Epping Memorial Community Centre",
+      "posterId": "media/whittlesea-poster.jpg",
+      "previousDate": "",
+      "published": true,
+      "time": "11:00am – 3:00pm",
+      "venue": "Epping Memorial Community Centre",
+      "id": "whittlesea-2026-11-25"
+    },
+    {
+      "address": "",
+      "color": "amber",
+      "date": "2026-11-30",
+      "easyRead": [
+        "Come on Monday 30 November.",
+        "We will share the place soon.",
+        "It is free for everyone."
+      ],
+      "lineup": [],
+      "name": "Wyndham",
+      "posterAlt": "",
+      "posterId": "",
+      "previousDate": "",
+      "published": true,
+      "time": "",
+      "venue": "",
+      "id": "wyndham-2026-11-30"
+    }
+  ],
+  "snapshots": [],
+  "_snapshot_example": {
+    "eventId": "maribyrnong-2026-08-28",
+    "assetId": "media/maribyrnong/photo-01.jpg",
+    "caption": "Magic show",
+    "alt": "Describe what the photo shows",
+    "createdAt": 1
+  }
+}

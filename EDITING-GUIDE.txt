@@ -1,0 +1,57 @@
+ABLESHINE WORLD - WEBSITE FOLDER
+================================
+
+What's in here
+- index.html         The whole 3D website (world, Sunny, tents, rooms, Connect, list view)
+- data/site.json     All the content: contact details + every chapter
+- media/             Logo, posters and event photos
+
+Do not double-click index.html to test it. Browsers block 3D images when a page is
+opened straight from your computer. Test it on Netlify (step 1 below) instead.
+
+
+GO LIVE (about 5 minutes)
+-------------------------
+1. Go to https://app.netlify.com/drop and sign up (free).
+2. Drag this whole "ableshine-world" folder onto the page.
+   You get a live link like https://random-name.netlify.app straight away.
+3. Site configuration > Change site name  (e.g. ableshine.netlify.app)
+4. To use your own domain: Domain management > Add a domain, then follow the
+   DNS steps Netlify shows (usually adding one record where you bought the domain).
+   HTTPS is set up automatically.
+
+Already have a website on regular hosting (cPanel / WordPress)?
+Upload this folder via File Manager into public_html, e.g. public_html/world
+It will be live at yourdomain.com/world
+
+Site on Wix / Squarespace / Shopify?
+Do steps 1-4 with a subdomain such as world.yourdomain.com, then link to it
+(or embed it full-width) from your main site.
+
+
+UPDATE THE SITE
+---------------
+Edit data/site.json in any text editor (or send it to Claude to update).
+
+Add a chapter: copy one block inside "events", change the details.
+  - "id": a unique name, e.g. "brimbank-2026-12-04"
+  - "date": YYYY-MM-DD, or "" if not locked in (shows as Date TBC)
+  - "color": purple, pink, teal (shows as blue) or amber (shows as yellow)
+  - "posterId": path to the poster, e.g. "media/brimbank-poster.jpg"
+  Chapters sort by date, number themselves and get their status automatically.
+
+Add event photos:
+  1. Resize photos to about 2000px wide first (phone originals are too heavy).
+  2. Put them in media/<chapter>/  e.g. media/maribyrnong/photo-01.jpg
+  3. Add one line per photo to "snapshots":
+     {"eventId": "maribyrnong-2026-08-28", "assetId": "media/maribyrnong/photo-01.jpg",
+      "caption": "Magic show", "alt": "Kids laughing at the magician", "createdAt": 1}
+  createdAt sets the order (1, 2, 3...).
+
+Then drag the folder onto Netlify again: Deploys > drag and drop to replace the old version.
+
+Videos aren't in this version yet. Upload them to YouTube (unlisted) and we'll add
+a video strip to each room in the next update.
+
+Before sharing: check the phone number and add the website/email in data/site.json
+("config" section). Get photo consent from everyone pictured.
