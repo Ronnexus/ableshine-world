@@ -11,7 +11,7 @@ A 3D, third-person "event world" for AbleShine: free, all-abilities community da
 | `index.html` | The whole app: HTML, CSS, JS in one file. No framework, no bundler. |
 | `data/site.json` | **All content.** The single source of truth. Edit this to change the site. |
 | `media/` | Logo, posters, event photos. |
-| `scripts/build-seo.mjs` | Netlify build step. Copies the site to `dist/`, pre-renders chapter cards, adds schema.org Event data and absolute share-preview URLs. |
+| `scripts/build-seo.mjs` | Netlify build step. Writes `dist/`: the home page (SEO title and description, Organization/WebSite/Event JSON-LD, absolute share previews, pre-rendered cards linking to chapter pages); a static page per chapter at `/chapters/<id>/` (tickets, details, Easy Read, access, poster, photos, Facebook/Instagram, Event + Breadcrumb JSON-LD); an events index at `/chapters/`; `sitemap.xml`; `robots.txt`. Statuses on static pages are computed at build time (Melbourne date). |
 | `netlify.toml` | Build command, `dist` publish dir, cache headers. |
 | `EDITING-GUIDE.txt` | Plain-English guide for the owner. |
 
@@ -21,11 +21,14 @@ External scripts (cdnjs): Three.js **r128** (global `THREE`) and JSZip 3.10.1. F
 
 ```
 config:    title, tagline, mascotName, logoId (path), orgName, about,
-           phone, rsvp (WhatsApp, falls back to phone), website, email, facebook, instagram
-events[]:  id (unique slug), name, date (YYYY-MM-DD or "" = TBC), time, venue, address,
+           phone, rsvp (WhatsApp, falls back to phone), website, email, facebook, instagram,
+           seoTitle, seoDescription (optional overrides for the home page)
+events[]:  id (unique slug, also the page URL), name, date (YYYY-MM-DD or "" = TBC), time, venue, address,
            previousDate (text, shows a "date changed" banner), lineup[], easyRead[],
            access[] (ONLY confirmed access features), color (purple|pink|teal|amber),
-           posterId (path), posterAlt, published (bool)
+           posterId (path), posterAlt, published (bool),
+           ticketUrl (Eventbrite; "Get tickets" buttons until the date passes),
+           facebookUrl (Facebook event), instagramUrl (Instagram post)
 snapshots[]: eventId, assetId (path), caption, alt, createdAt (number = order)
 ```
 Add fields; never rename existing ones.

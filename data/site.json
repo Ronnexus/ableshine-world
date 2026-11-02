@@ -1,5 +1,5 @@
 {
-  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to the site root, e.g. media/melton-poster.jpg. 'access' lists the access features CONFIRMED for that venue (e.g. Auslan interpreter, Quiet zone, Step-free entry, Accessible toilets). Leave it empty until confirmed.",
+  "_readme": "Edit this file to update the site. Dates are YYYY-MM-DD; leave date empty for TBC. Photo and poster paths are relative to the site root, e.g. media/melton-poster.jpg. 'access' lists the access features CONFIRMED for that venue (e.g. Auslan interpreter, Quiet zone, Step-free entry, Accessible toilets). Leave it empty until confirmed. 'ticketUrl' is the Eventbrite link (shows Get tickets buttons until the event has passed). 'facebookUrl' and 'instagramUrl' link the chapter's Facebook event and Instagram post.",
   "config": {
     "about": "Free, all-abilities community days across Melbourne. Everyone belongs. Every ability shines.",
     "email": "",
@@ -12,7 +12,8 @@
     "rsvp": "",
     "tagline": "Free, all-abilities community days across Melbourne. Pick a chapter to open its room.",
     "title": "AbleShine World",
-    "website": ""
+    "website": "",
+    "seoDescription": ""
   },
   "events": [
     {
@@ -46,7 +47,10 @@
       "access": [
         "Auslan interpreter",
         "Quiet zone"
-      ]
+      ],
+      "ticketUrl": "",
+      "facebookUrl": "",
+      "instagramUrl": ""
     },
     {
       "address": "",
@@ -66,7 +70,10 @@
       "time": "",
       "venue": "Fraser Rise Children's & Community Centre",
       "id": "melton-2026-11-23",
-      "access": []
+      "access": [],
+      "ticketUrl": "",
+      "facebookUrl": "",
+      "instagramUrl": ""
     },
     {
       "address": "",
@@ -93,7 +100,10 @@
       "time": "11:00am – 3:00pm",
       "venue": "Epping Memorial Community Centre",
       "id": "whittlesea-2026-11-25",
-      "access": []
+      "access": [],
+      "ticketUrl": "",
+      "facebookUrl": "",
+      "instagramUrl": ""
     },
     {
       "address": "",
@@ -113,7 +123,10 @@
       "time": "",
       "venue": "",
       "id": "wyndham-2026-11-30",
-      "access": []
+      "access": [],
+      "ticketUrl": "",
+      "facebookUrl": "",
+      "instagramUrl": ""
     }
   ],
   "snapshots": [],

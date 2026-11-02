@@ -32,7 +32,16 @@ Add a chapter: copy one block inside "events" and change the details.
       ["Auslan interpreter", "Quiet zone", "Step-free entry", "Accessible toilets"]
     Leave it as [] until confirmed. The room then says details are being confirmed.
   - "previousDate": only if the date moved, e.g. "Wed 18 Nov" (shows a date-change banner)
+  - "ticketUrl": the Eventbrite link. Shows "Get tickets" next to the chapter name, in the
+    top bar (for the next event) and on the chapter's own page. Hidden once the date passes.
+  - "facebookUrl": the Facebook event link.  "instagramUrl": the Instagram post link.
+  Leave any link as "" if you don't have it yet; its button just won't show.
   Chapters sort by date, number themselves and get their status automatically.
+  Each chapter also gets its own web page: ableshine.com.au/chapters/<id>/
+  Use that link when sharing on Facebook and Instagram.
+
+Your Facebook and Instagram pages go in the "config" section ("facebook", "instagram").
+They show in Connect, in every page footer, and tell Google they belong to AbleShine.
 
 Add event photos:
   1. Resize photos to about 2000px wide first (phone originals are too heavy).

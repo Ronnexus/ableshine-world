@@ -126,6 +126,8 @@ dl.facts dd{margin:.15rem 0 0;font-weight:700}
 .ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
 .ways div{border:2px solid var(--ink);border-radius:12px;padding:.55rem;font-size:.85rem;line-height:1.35}
 .ways strong{display:block;font-family:var(--f-head);font-weight:900;font-size:1rem}
+.head-acts{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-top:.6rem}
+.btn.tix{font-size:1rem;min-height:46px}
 .change{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:.55rem .8rem;margin-top:.8rem;font-size:.95rem}
 .actions{display:flex;flex-wrap:wrap;gap:.5rem}
 .poster{border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--lilac)}
@@ -230,6 +232,7 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
       <button class="btn sm sq" id="b-big" aria-pressed="false" aria-label="Larger text">A+</button>
       <button class="btn sm purple" id="b-studio" hidden>Studio</button>
       <button class="btn sm amber" id="b-connect">Connect</button>
+      <a class="btn sm pink" id="b-tix" hidden target="_blank" rel="noopener">Get tickets</a>
       <button class="btn sm pink" id="b-rsvp">RSVP free</button>
     </div>
   </header>
@@ -329,6 +332,9 @@ const NAMES = {purple:'Purple', pink:'Pink', teal:'Blue', amber:'Yellow'};
 const mascotName = () => (S.config.mascotName || 'Sunny');
 const STATUS = {wrapped:'Snapshots ready', live:'Happening today', next:'Up next', upcoming:'Coming up', soon:'Date TBC'};
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const safeUrl = u => { u = String(u || '').trim(); if (!u) return ''; if (!/^https?:\/\//i.test(u)) u = 'https://' + u; try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch(e){ return ''; } };
+const tix = c => (c && c.status !== 'wrapped' && safeUrl(c.ticketUrl)) || '';
+const pageUrl = c => 'chapters/' + c.id + '/';
 const MEDIA = x => (/[\/.]/.test(String(x)) ? String(x) : 'media/' + x);
 
 /* ---------- state ---------- */
@@ -372,7 +378,9 @@ function renderMeta(){
   $('#lv-tag').textContent = S.config.tagline || 'Free community days across Melbourne. Pick a chapter to open its room.';
   if (S.config.logoId){ const l = $('#logo'); l.src = MEDIA(S.config.logoId); l.hidden = false; $('#wordmark').hidden = true; }
   else { $('#logo').hidden = true; $('#wordmark').hidden = false; }
-  document.title = title;
+  const nx = S.chapters.find(x => x.status === 'live' || x.status === 'next'), tl = tix(nx), bt = $('#b-tix');
+  bt.hidden = !tl; $('#b-rsvp').hidden = !!tl;
+  if (tl){ bt.href = tl; bt.textContent = 'Get tickets: ' + nx.name; bt.setAttribute('aria-label', 'Get tickets for ' + nx.name + ', ' + fmtShort(nx.date) + ' (opens Eventbrite)'); }
 }
 function numBadge(c, cls){ return h('span', {class: (cls||'num') + ' bg-' + c.color, 'aria-hidden':'true'}, c.num); }
 function renderGuide(){
@@ -414,7 +422,8 @@ function renderRoom(){
   const head = h('div', {class:'sheet-head bg-' + c.color},
     h('div', {class:'row'}, h('div', null, h('span',{class:'comic brush kicker' + (c.color === 'amber' ? '' : ' y')}, 'Chapter ' + c.num), h('h2',{class:'comic outline',id:'room-title',tabindex:'-1'}, c.name)),
       h('button', {class:'btn sm', onclick: closeRoom}, 'Close')),
-    h('span', {class:'chip ' + c.status}, STATUS[c.status]),
+    h('div', {class:'head-acts'}, h('span', {class:'chip ' + c.status}, STATUS[c.status]),
+      tix(c) ? h('a', {class:'btn amber tix', href: tix(c), target:'_blank', rel:'noopener', 'aria-label': 'Get tickets for Chapter ' + c.num + ', ' + c.name + ' (opens Eventbrite)'}, 'Get tickets') : null),
     c.previousDate ? h('div', {class:'change', role:'status'}, h('strong',null,'Date changed. '), 'Was ' + c.previousDate + ', now ' + fmtLong(c.date) + '. Same venue, please update your calendar.') : null);
   const body = h('div', {class:'sheet-body'});
   body.append(h('div', {class:'block'}, h('h3',null,'The essentials'),
@@ -424,9 +433,11 @@ function renderRoom(){
       h('div',null,h('dt',null,'Where'),h('dd',null,c.venue || 'To be confirmed', c.address ? h('span',{style:'display:block;font-weight:400'}, c.address) : null)),
       h('div',null,h('dt',null,'Cost'),h('dd',null,'Free. Support workers free.'))),
     h('div', {class:'actions', style:'margin-top:.9rem'},
-      h('button', {class:'btn pink', onclick: showRsvp}, 'RSVP'),
+      tix(c) ? h('a', {class:'btn pink', href: tix(c), target:'_blank', rel:'noopener'}, 'Get tickets on Eventbrite') : (c.status === 'wrapped' ? null : h('button', {class:'btn pink', onclick: showRsvp}, 'RSVP')),
       mapQ ? h('a', {class:'btn', href:'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mapQ), target:'_blank', rel:'noopener'}, 'Directions') : null,
-      h('button', {class:'btn', onclick: () => copyText(chapterSummary(c), 'Details copied')}, 'Copy details'),
+      h('button', {class:'btn', onclick: () => shareChapter(c)}, 'Share'),
+      safeUrl(c.facebookUrl) ? h('a', {class:'btn', href: safeUrl(c.facebookUrl), target:'_blank', rel:'noopener'}, 'Facebook event') : null,
+      safeUrl(c.instagramUrl) ? h('a', {class:'btn', href: safeUrl(c.instagramUrl), target:'_blank', rel:'noopener'}, 'See it on Instagram') : null,
       (S.list && W.ok) ? h('button', {class:'btn purple', onclick: () => { $('#room').hidden = true; S.openId = null; setList(false, c.id); }}, 'See it in the 3D world') : null)));
   body.append(h('div', {id:'rsvp-slot'}));
   const easy = (c.easyRead || []).filter(Boolean);
@@ -466,12 +477,18 @@ function renderRoom(){
       h('button', {class:'btn sm', onclick: () => openStudio(c.id)}, 'Edit chapter')));
   }
   body.append(wall);
+  body.append(h('p', {class:'note', style:'margin:0'}, h('a', {href: pageUrl(c)}, 'Open the full event page for ' + c.name)));
   body.append(h('nav', {class:'pager', 'aria-label':'Other chapters'},
     h('button', {class:'btn sm', disabled: !prev, onclick: () => prev && goChapter(prev.id)}, prev ? '◀ ' + prev.name : 'Start of the story'),
     h('button', {class:'btn sm amber', disabled: !next, onclick: () => next && goChapter(next.id)}, next ? 'Turn the page: ' + next.name + ' ▶' : 'Latest chapter')));
   r.replaceChildren(head, body);
 }
-function chapterSummary(c){ return 'AbleShine Chapter ' + c.num + ': ' + c.name + '\n' + fmtLong(c.date) + (c.time ? ', ' + c.time : '') + '\n' + (c.venue || 'Venue TBC') + (c.address ? ', ' + c.address : '') + '\nFree. Support workers free.' + (S.config.rsvp ? '\nRSVP: ' + S.config.rsvp : ''); }
+function chapterSummary(c){ return 'AbleShine Chapter ' + c.num + ': ' + c.name + '\n' + fmtLong(c.date) + (c.time ? ', ' + c.time : '') + '\n' + (c.venue || 'Venue TBC') + (c.address ? ', ' + c.address : '') + '\nFree. Support workers free.' + (tix(c) ? '\nTickets: ' + tix(c) : (S.config.rsvp || S.config.phone) ? '\nRSVP: ' + (S.config.rsvp || S.config.phone) : ''); }
+async function shareChapter(c){
+  const url = new URL(pageUrl(c), location.href.split('#')[0]).href, text = chapterSummary(c);
+  if (navigator.share){ try { await navigator.share({title: 'AbleShine Chapter ' + c.num + ': ' + c.name, text, url}); return; } catch(e){ if (e && e.name === 'AbortError') return; } }
+  copyText(text + '\n' + url, 'Event details and link copied');
+}
 function showRsvp(){
   let slot = $('#rsvp-slot');
   const num = S.config.rsvp || S.config.phone;
