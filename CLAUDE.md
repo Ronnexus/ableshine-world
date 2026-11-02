@@ -60,7 +60,14 @@ Add fields; never rename existing ones.
 
 ## Deploy
 
-Push to `main`. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`. `dist/` is git-ignored. To check locally, run `node scripts/build-seo.mjs` and serve `dist/` (opening the file directly breaks textures).
+`main` is production. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`. `dist/` is git-ignored. To check locally, run `node scripts/build-seo.mjs` and serve `dist/` (opening the file directly breaks textures).
+
+## Versions and releases
+
+- Work on a branch (`feature/…`, `fix/…`, `content/…`) and open a pull request into `main`. Netlify builds a **deploy preview** for every PR. Previews need a Netlify team login; production is public.
+- Fill in the PR checklist (`.github/pull_request_template.md`). Pick PATCH (content/fixes), MINOR (new feature) or MAJOR (big new area/redesign), and move the `[Unreleased]` notes in `CHANGELOG.md` under the new version.
+- After merging, create a GitHub Release on `main` named `vX.Y.Z` with the changelog notes. Tags can't be pushed from Claude sessions, so releases are made on GitHub.
+- Small content-only edits to `data/site.json` may go straight to `main` as a PATCH. Note them in `CHANGELOG.md` with the next PR.
 
 ## Known gaps / next work
 
