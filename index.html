@@ -8,9 +8,15 @@
 <meta property="og:description" content="Free, all-abilities community days across Melbourne. Explore every AbleShine chapter in a 3D world, see what is on, and view the photos.">
 <meta property="og:image" content="media/logo.png">
 <link rel="icon" href="media/logo.png">
+<link rel="apple-touch-icon" href="media/apple-touch-icon.png">
+<link rel="manifest" href="media/manifest.webmanifest">
+<meta name="theme-color" content="#4B1F9E">
 <title>AbleShine World</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;600;700;800;900&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;600;700;800;900&display=swap">
+<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;600;700;800;900&display=swap';document.head.appendChild(l);})();</script>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;600;700;800;900&display=swap"></noscript>
 <style>
 html,body{margin:0}
 img{max-width:100%}
@@ -276,7 +282,7 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
 
   <header class="hud-top">
     <div class="brand">
-      <img id="logo" alt="AbleShine" hidden>
+      <img id="logo" alt="AbleShine" width="340" height="180" hidden>
       <span class="word" id="wordmark">able<b>shine</b></span>
       <div class="sub"><strong id="series-title">AbleShine World</strong><span id="series-count">Loading chapters…</span></div>
     </div>
@@ -354,7 +360,6 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
   <div id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -686,7 +691,7 @@ function applyPrefs(){
   $('#b-big').setAttribute('aria-pressed', S.big ? 'true':'false');
   $('#b-list').textContent = S.list ? '3D world' : 'List view';
   $('#b-list').setAttribute('aria-label', S.list ? 'Back to the 3D world' : 'Switch to list view');
-  $('#lv-back').hidden = !W.ok;
+  $('#lv-back').hidden = !W.ok && !S.lazy3d;
   $('#listview').hidden = !S.list;
   $('#cam').hidden = S.list; $('#labels').hidden = S.list;
 }
@@ -1137,6 +1142,15 @@ function initWorld(){
   if (!window.THREE) throw new Error('no three');
   const T = THREE, canvas = $('#world');
   const renderer = new T.WebGLRenderer({canvas, antialias:true});
+  // Power-saving 3D: with no graphics card (software rendering) every frame is expensive, so the world
+  // only draws while something is happening. W.wake(seconds) keeps it drawing for a while.
+  let glName = ''; try { const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info'); glName = String(gl.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || ''); } catch(e){}
+  const forcedQ = store.get('quality', '');
+  W.lite = forcedQ === 'lite' || (forcedQ !== 'high' && /swiftshader|llvmpipe|softpipe|software|basic render/i.test(glName));
+  let awake = performance.now() + 3000; W.wake = sec => { awake = Math.max(awake, performance.now() + (sec || 1.5)*1000); };
+  try { T.DefaultLoadingManager.onLoad = () => W.wake(1); } catch(e){}
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => W.wake(1));
+  ['pointerdown','pointermove','wheel','keydown','touchstart'].forEach(ev => window.addEventListener(ev, () => W.wake(2), {passive: true}));
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   const scene = new T.Scene();
@@ -1187,10 +1201,13 @@ function initWorld(){
   // people (avatar + NPCs)
   const SKIN = ['#F6D3B3','#D9A47A','#A86B43','#6B4428'];
   function person(o){
-    const g = new T.Group(), body = new T.Group(), P = {g, body, type:o.type, legs:[], arms:[], wheels:[], eyes:[]};
+    const g = new T.Group(), body = new T.Group(), P = {g, body, type:o.type, legs:[], arms:[], wheels:[], eyes:[], elbows:[], knees:[]};
     const hood = HEX[o.hood] || o.hood || '#5B2DB0', skin = SKIN[o.skin != null ? o.skin : 1], jeans = '#2E3A8C', hairC = '#2A1A12';
-    const limb = (len, r, col) => { const piv = new T.Group(); const m = mk(new T.CylinderGeometry(r, r, len, 10), col, true, 1.12); m.position.y = -len/2; piv.add(m); return piv; };
-    const hand = (piv, len) => { const hd = mk(new T.SphereGeometry(0.18, 12, 10), skin, true, 1.15); hd.position.y = -len - 0.05; piv.add(hd); };
+    // jointed limb: upper part on the shoulder or hip, lower part on an elbow or knee (returned as .joint)
+    const limb = (len, r, col, lowCol) => { const piv = new T.Group(), up = mk(new T.CylinderGeometry(r, r*0.95, len*0.5, 10), col, true, 1.12); up.position.y = -len*0.25; piv.add(up);
+      const jt = new T.Group(); jt.position.y = -len*0.5; piv.add(jt); const ball = mk(new T.SphereGeometry(r*0.98, 10, 8), lowCol || col, false); jt.add(ball);
+      const lo = mk(new T.CylinderGeometry(r*0.95, r*0.85, len*0.5, 10), lowCol || col, true, 1.12); lo.position.y = -len*0.25; jt.add(lo); piv.joint = jt; return piv; };
+    const hand = (piv, len) => { const hd = mk(new T.SphereGeometry(0.18, 12, 10), skin, true, 1.15); hd.position.y = -len*0.5 - 0.05; piv.joint.add(hd); };
     // head on a neck pivot so it can nod, tilt and look around; face with blinking eyes, rosy cheeks and a smile
     const head = (y, z) => {
       const hg = new T.Group(); hg.position.set(0, y, z); body.add(hg); P.head = hg;
@@ -1205,6 +1222,8 @@ function initWorld(){
     const hoodRing = (y, z) => { const r = mk(new T.TorusGeometry(0.36, 0.14, 8, 18), hood, true, 1.1); r.rotation.x = Math.PI/2; r.position.set(0, y, z); body.add(r); };
     const badge = (y, z) => { const b = mk(new T.CylinderGeometry(0.15, 0.15, 0.05, 14), '#FFC72C', true, 1.25); b.rotation.x = Math.PI/2; b.position.set(0, y, z); body.add(b); };
     body.position.y = 1.1; g.add(body);
+    const scarf = new T.Group(); scarf.position.set(0.18, o.type === 'chair' ? 1.12 : 1.18, o.type === 'chair' ? -0.5 : -0.38); const sc = mk(new T.BoxGeometry(0.2, 0.75, 0.06), '#E0187A', true, 1.12); sc.position.y = -0.37; scarf.add(sc);
+    const tip = mk(new T.BoxGeometry(0.22, 0.12, 0.08), '#FFC72C', false); tip.position.y = -0.78; scarf.add(tip); body.add(scarf); P.scarf = scarf;
     if (o.type === 'chair'){
       const frame = '#3B3355';
       const seat = mk(new T.BoxGeometry(1.3,0.22,1.2), frame); seat.position.set(0,1.0,0); g.add(seat);
@@ -1217,12 +1236,21 @@ function initWorld(){
       [-0.22, 0.22].forEach(x => { const sh = mk(new T.BoxGeometry(0.34,0.2,0.5), '#FFFFFF', true, 1.1); sh.position.set(x,0.44,0.82); g.add(sh); });
       const torso = mk(new T.CylinderGeometry(0.5,0.58,1.1,12), hood); torso.position.set(0,0.6,-0.18); body.add(torso);
       hoodRing(1.14, -0.22); badge(0.72, 0.36); head(1.05, -0.15);
-      [-0.66, 0.66].forEach(x => { const a = limb(0.85, 0.15, hood); hand(a, 0.85); a.position.set(x,0.95,-0.15); a.rotation.x = -0.5; body.add(a); P.arms.push(a); });
+      [-0.66, 0.66].forEach(x => { const a = limb(0.85, 0.15, hood); hand(a, 0.85); a.position.set(x,0.95,-0.15); a.rotation.x = -0.5; body.add(a); P.arms.push(a); P.elbows.push(a.joint); });
+      const pole = mk(new T.CylinderGeometry(0.04, 0.04, 2.4, 6), '#22114A', false); pole.position.set(0.55, 2.7, -0.7); g.add(pole);
+      const fl = new T.Group(); fl.position.set(0.55, 3.75, -0.7); const fm = mk(new T.ConeGeometry(0.32, 0.9, 3), '#E0187A', true, 1.1); fm.rotation.z = Math.PI/2; fm.position.x = -0.45; fl.add(fm); g.add(fl); P.flag = fl;
     } else {
-      [-0.25, 0.25].forEach(x => { const l = limb(1.1, 0.21, jeans); const sh = mk(new T.BoxGeometry(0.36,0.22,0.56), '#FFFFFF', true, 1.1); sh.position.set(0,-1.0,0.1); l.add(sh); l.position.set(x,1.1,0); g.add(l); P.legs.push(l); });
+      [-0.25, 0.25].forEach(x => { const l = limb(1.1, 0.21, jeans); const sh = mk(new T.BoxGeometry(0.36,0.22,0.56), '#FFFFFF', true, 1.1); sh.position.set(0,-0.45,0.1); l.joint.add(sh);
+        const sole = new T.Mesh(new T.BoxGeometry(0.37,0.06,0.57), toon('#E0187A')); sole.position.set(0,-0.55,0.1); l.joint.add(sole); l.position.set(x,1.1,0); g.add(l); P.legs.push(l); P.knees.push(l.joint); });
       const torso = mk(new T.CylinderGeometry(0.52,0.6,1.2,12), hood); torso.position.y = 0.58; body.add(torso);
       hoodRing(1.2, -0.05); badge(0.75, 0.56); head(1.15, 0);
-      [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, hood); hand(a, 0.95); a.position.set(x,1.08,0); body.add(a); P.arms.push(a); });
+      [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, hood); hand(a, 0.95); a.position.set(x,1.08,0); body.add(a); P.arms.push(a); P.elbows.push(a.joint); });
+      // the back is what you see most while walking: hood, a yellow AbleShine backpack with a pink sun patch, straps
+      const hb = mk(new T.SphereGeometry(0.34, 14, 10, 0, Math.PI*2, 0, Math.PI*0.6), hood, true, 1.08); hb.rotation.x = -1.9; hb.position.set(0, 1.08, -0.42); body.add(hb);
+      const pack = mk(new T.BoxGeometry(0.8, 0.82, 0.36), '#FFC72C', true, 1.07); pack.position.set(0, 0.62, -0.68); body.add(pack);
+      const flap = mk(new T.BoxGeometry(0.82, 0.26, 0.4), '#E0187A', false); flap.position.set(0, 0.98, -0.68); body.add(flap);
+      const patch = mk(new T.CylinderGeometry(0.17, 0.17, 0.05, 14), '#E0187A', true, 1.25); patch.rotation.x = Math.PI/2; patch.position.set(0, 0.56, -0.88); body.add(patch);
+      [-0.3, 0.3].forEach(x => { const st = new T.Mesh(new T.BoxGeometry(0.1, 0.9, 0.06), toon('#22114A')); st.position.set(x, 0.75, 0.5); st.rotation.x = -0.12; body.add(st); });
       if (o.type === 'cane'){ const cp = new T.Group(); cp.position.set(0.96, 1.3, 0.3); const cane = mk(new T.CylinderGeometry(0.06,0.06,1.35,8), '#FFC72C', true, 1.3); cane.position.y = -0.62; cp.add(cane);
         const grip = mk(new T.TorusGeometry(0.14, 0.05, 6, 12, Math.PI), '#22114A', false); grip.position.set(0, 0.04, 0.12); grip.rotation.y = Math.PI/2; cp.add(grip); g.add(cp); P.caneP = cp; }
     }
@@ -1360,11 +1388,24 @@ function initWorld(){
   }
   buildAvatar();
   // gestures: wave, cheer, clap, dance (Me panel buttons, tapping your character, and a wave on arrival)
-  W.gesture = (k, quiet) => { const gs = GESTURES.find(x => x.k === k); if (!gs || !av.P) return; av.gk = k; av.gt = av.gd = gs.dur;
+  W.gesture = (k, quiet) => { const gs = GESTURES.find(x => x.k === k); if (!gs || !av.P) return; av.gk = k; av.gt = av.gd = gs.dur; W.wake && W.wake(gs.dur + 0.5);
     if (!av.path.length) av.yawT = cam.yaw;
     if (quiet) return; W.say && W.say(gs.say, 2200);
     if (k === 'cheer') [0, 2, 4, 7].forEach((n, i) => setTimeout(() => tone(NOTES[n], 0.35, 0.05), i*90));
     if (k === 'clap') [0, 1, 2].forEach(i => setTimeout(() => tone(NOTES[6], 0.1, 0.06, 'triangle'), i*220)); };
+  // footstep confetti: little coloured puffs that pop up and shrink away (one draw call)
+  const PUFF_N = 24, puffs = new T.InstancedMesh(new T.SphereGeometry(0.16, 8, 6), toon('#FFFFFF'), PUFF_N), puffD = new T.Object3D(), puffC = new T.Color(), puffList = [];
+  for (let i = 0; i < PUFF_N; i++){ puffList.push({life: 0, x: 0, z: 0, vx: 0, vz: 0}); puffs.setColorAt(i, puffC.set(['#FF7AB6','#FFC72C','#7FD8F5','#B79BF2','#FFFFFF','#9BE07A'][i % 6])); }
+  puffs.frustumCulled = false; scene.add(puffs); let puffI = 0, lastStep = 0;
+  function stepPuffs(dt, calm){
+    const st = Math.floor(av.phase/Math.PI);
+    if (!calm && av.mv > 0.5 && st !== lastStep){ const fx = Math.sin(av.yaw), fz = Math.cos(av.yaw), side = st % 2 ? 0.28 : -0.28;
+      for (let k = 0; k < 3; k++){ const p = puffList[puffI++ % PUFF_N]; p.life = 1; p.x = av.pos.x - fx*0.3 + fz*side; p.z = av.pos.z - fz*0.3 - fx*side; const a = Math.random()*Math.PI*2; p.vx = Math.cos(a)*1.4 - fx*0.8; p.vz = Math.sin(a)*1.4 - fz*0.8; } }
+    lastStep = st;
+    puffList.forEach((p, i) => { if (p.life > 0){ p.life -= dt*2.2; p.x += p.vx*dt; p.z += p.vz*dt; }
+      const k = Math.max(0, p.life); puffD.position.set(p.x, 0.15 + (1 - k)*0.5*(k > 0 ? 1 : 0), p.z); puffD.scale.setScalar(k > 0 ? 0.4 + k : 0.0001); puffD.updateMatrix(); puffs.setMatrixAt(i, puffD.matrix); });
+    puffs.instanceMatrix.needsUpdate = true;
+  }
   // walking, pushing, idling and gesturing, all eased so poses blend instead of snapping
   function poseAvatar(P, dt, t, calm){
     const chair = P.type === 'chair', mv = calm ? 0 : av.mv, ph = av.phase, sw = Math.sin(ph)*0.7*mv, B = P.body;
@@ -1385,6 +1426,13 @@ function initWorld(){
         bob += Math.abs(Math.sin(w))*(chair ? 0.05 : 0.25)*k*e; lg[0] += Math.sin(w)*0.3*k*e; lg[1] -= Math.sin(w)*0.3*k*e; if (chair) spin = Math.sin(t*3.5)*0.45*k*e; P.head.rotation.z = Math.sin(w)*0.18*k*e; }
       if (av.gt <= 0) av.gk = null; }
     P.legs.forEach((l, i) => l.rotation.x = lg[i]);
+    // knees bend as each leg swings through; elbows stay soft and pump with the stride
+    P.knees.forEach((kn, i) => { kn.rotation.x = Math.max(0, Math.sin(ph + (i ? Math.PI : 0) - 0.6))*1.1*mv; });
+    const elb = av.gk === 'cheer' ? 0.05 : av.gk === 'clap' ? 0.7 : av.gk === 'wave' ? null : 0.25 + 0.55*mv + (chair ? 0.5 : 0);
+    P.elbows.forEach((el, i) => { el.rotation.x = -(av.gk === 'wave' && i === 1 ? 0.35 + Math.sin(t*12)*0.3*(calm ? 0 : 1) : (elb == null ? 0.25 : elb) + (chair ? 0 : Math.abs(sw)*0.4)); });
+    if (P.scarf) P.scarf.rotation.x = calm ? 0.55 : 0.55 + mv*0.75 + Math.sin(t*13)*0.18*mv + Math.sin(t*1.7)*0.05;
+    if (P.flag) P.flag.rotation.y = calm ? 0 : Math.sin(t*(3 + mv*6))*0.35;
+    P.head.position.y = (chair ? 1.05 : 1.15) - (chair ? 0 : Math.abs(Math.sin(ph))*0.04*mv);
     P.arms.forEach((a, i) => { a.rotation.x = ax[i]; a.rotation.z = az[i]; });
     B.rotation.set(lean, 0, roll); P.g.position.y = bob; if (spin) P.g.rotation.y = av.yaw + spin;
   }
@@ -1827,7 +1875,7 @@ function initWorld(){
   }
 
   // camera + input
-  const cam = { yaw: 0.35, dist: 26, yawT: 0.35, distT: 26 };
+  const cam = { yaw: 0.35, dist: 22, yawT: 0.35, distT: 22 };
   const keys = {};
   const ray = new T.Raycaster(), ndc = new T.Vector2();
   let down = null, pinch = null; const pointers = new Map();
@@ -1885,7 +1933,7 @@ function initWorld(){
   function frame(){
     requestAnimationFrame(frame);
     if (S.list || S.page || document.hidden || G.on) return;
-    const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime, calm = S.calm || reduce;
+    const raw = clock.getDelta(), dt = Math.min(raw, 0.05), t = clock.elapsedTime, calm = S.calm || reduce, amb = !calm && !W.lite;
     // input
     const kx = (keys.d||keys.arrowright?1:0) - (keys.a||keys.arrowleft?1:0), kz = (keys.s||keys.arrowdown?1:0) - (keys.w||keys.arrowup?1:0);
     let moving = false;
@@ -1900,7 +1948,7 @@ function initWorld(){
     if (moving){ av.phase += dt*(P.type === 'chair' ? 6 : 10); av.idle = 0; } else av.idle += dt;
     av.mv += ((moving ? 1 : 0) - av.mv)*Math.min(1, dt*8);
     P.wheels.forEach(w => { if (moving) w.rotation.x += (av.speed||9)*dt/0.72; });
-    poseAvatar(P, dt, t, calm);
+    poseAvatar(P, dt, t, calm); stepPuffs(dt, calm);
     if (av.dog){ const fx = Math.sin(av.yaw), fz = Math.cos(av.yaw); const want = v.set(av.pos.x - fx*1.6 + fz*1.4, 0, av.pos.z - fz*1.6 - fx*1.4);
       const dd = av.dogPos.distanceTo(want); if (dd > 0.05){ const dog = av.dog.g; const mv = Math.min(dd, Math.max(6, dd*4)*dt); const dir = want.clone().sub(av.dogPos).normalize(); av.dogPos.addScaledVector(dir, mv); dog.rotation.y = Math.atan2(dir.x, dir.z); }
       av.dog.g.position.copy(av.dogPos); const dw = dd > 0.2 && !calm ? Math.sin(t*14)*0.5 : 0; av.dog.legs.forEach((l,i) => l.rotation.x = (i%2?dw:-dw)); av.dog.tail.rotation.z = calm ? 0 : Math.sin(t*(av.gk ? 20 : 8))*0.5;
@@ -1909,7 +1957,7 @@ function initWorld(){
     const k = calm ? 1 : Math.min(1, dt*5); cam.yaw += (cam.yawT - cam.yaw)*k; cam.dist += (cam.distT - cam.dist)*k; placeCam();
     sun.position.set(av.pos.x + 30, 60, av.pos.z + 20); sun.target.position.copy(av.pos);
     // ambient life
-    if (!calm){ clouds.forEach(c => { c.x += dt*1.2; if (c.x > 220) c.x = -220; }); placeClouds();
+    if (amb){ clouds.forEach(c => { c.x += dt*1.2; if (c.x > 220) c.x = -220; }); placeClouds();
       anim.forEach(a => { if (a.k === 'flag') a.o.rotation.x = Math.sin(t*3)*0.25; else if (a.k === 'float') a.o.position.y = a.y + Math.sin(t*1.5 + a.ph)*0.6;
         else if (a.k === 'balloons') a.place(t);
         else if (a.k === 'glow') a.o.material.emissiveIntensity = 0.45 + Math.sin(t*2.4)*0.3;
@@ -1920,7 +1968,10 @@ function initWorld(){
     sunny.g.position.y += (2.7 + (calm ? 0 : Math.sin(t*2.2)*0.25) - sunny.g.position.y)*sk; sunny.g.rotation.y = cam.yaw;
     sunny.armR.rotation.z = calm ? 0.5 : (bub.el.hidden ? 0.5 + Math.sin(t*2)*0.1 : 2.4 + Math.sin(t*9)*0.45);
     toppers.forEach(sp => { const d = camera.position.distanceTo(sp.getWorldPosition(v)); sp.material.opacity = Math.min(1, Math.max(0.15, (d - 14) / 12)); });
-    renderer.render(scene, camera); W.sampleQuality(dt);
+    if (W.lite){ // power-saving: draw only while moving, turning, gesturing, talking or just after input
+      if (moving || av.gt > 0 || !bub.el.hidden || Math.abs(cam.yawT - cam.yaw) > 0.002 || Math.abs(cam.distT - cam.dist) > 0.02 || av.mv > 0.02) W.wake(0.6);
+      if (performance.now() > awake) return; }
+    renderer.render(scene, camera); W.sampleQuality(raw);
     // labels
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     tags.forEach(tg => { v.copy(tg.s.anchor).project(camera); const dist = camera.position.distanceTo(tg.s.anchor), st = tg.b.style;
@@ -1942,7 +1993,7 @@ function initWorld(){
   }
   W.nearestIdx = () => { let bi = -1, bd = 1e9; (W.spots||[]).forEach((s,i) => { const d = av.pos.distanceTo(s.pos); if (d < bd){ bd = d; bi = i; } }); return bd < 40 ? bi : -1; };
   W.nearSpecial = () => (W.specials || []).find(sp => av.pos.distanceTo(sp.door) < 8) || null;
-  W.layout = layout; W.rebuildAvatar = () => { buildAvatar(); };
+  W.layout = chs => { layout(chs); W.wake(3); }; W.rebuildAvatar = () => { buildAvatar(); W.wake(1.5); };
   const Q = {n: 0, sum: 0, done: false, forced: store.get('quality', '')};
   function setQuality(level){
     W.quality = level; const low = level === 'low';
@@ -1950,8 +2001,9 @@ function initWorld(){
     npcs.forEach((n, i) => { n.off = low && i % 2 === 1; n.g.visible = !n.off; if (n.dog) n.dog.g.visible = !n.off; });
   }
   W.sampleQuality = dt => { if (Q.done || !S.loaded) return; if (Q.forced){ Q.done = true; setQuality(Q.forced); return; }
-    if (++Q.n > 30){ Q.sum += dt; if (Q.n >= 120){ Q.done = true; if (Q.sum / 90 > 0.034) setQuality('low'); } } };
-  W.ok = true; W.quality = 'high';
+    if (++Q.n > 30){ Q.sum += Math.min(dt, 0.5); if (Q.n >= 120){ Q.done = true; const avg = Q.sum / 90; if (avg > 0.034) setQuality('low'); if (avg > 0.07) W.lite = true; } } };
+  W.ok = true; W.quality = 'high'; if (W.lite){ Q.done = true; setQuality('low'); }
+  window.addEventListener('resize', () => W.wake(1));
   frame();
 }
 function updateHere(force){
@@ -2039,6 +2091,7 @@ function wire(){
   window.addEventListener('hashchange', routeHash);
 }
 function setList(on, thenId){
+  if (!on && !W.ok && S.lazy3d){ S.lazy3d = false; toast('Loading the 3D world...'); loadThree(() => { startWorld(); if (W.ok) setList(false, thenId); }); return; }
   if (!on && !W.ok){ toast('3D is not available on this device.'); return; }
   if (S.page) closePage();
   S.list = on; store.set('list', on); applyPrefs();
@@ -2048,15 +2101,40 @@ function routeHash(){ if (location.hash === '#zones'){ if (S.page !== 'zones') o
 
 /* ---------- boot ---------- */
 applyPrefs(); buildMe(); wire(); wireGame(); renderMeta(); renderGuide(); renderCards();
-try { initWorld(); } catch(e){ W.ok = false; S.list = true; applyPrefs(); $('#b-list').disabled = true; $('#cam').hidden = true; toast('3D is not available on this device, so you are in list view.'); }
-if (W.ok){ W.layout([]); applyPrefs(); }
+// Devices without a graphics card draw 3D in software at 1 or 2 frames a second. They open in List view
+// (everything is there) and build the 3D world only if the visitor asks for it.
+function softwareGL(){
+  try { const c = document.createElement('canvas'), gl = c.getContext('webgl') || c.getContext('experimental-webgl'); if (!gl) return false;
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info'), n = String(gl.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || '');
+    const lose = gl.getExtension('WEBGL_lose_context'); lose && lose.loseContext(); return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(n); } catch(e){ return false; }
+}
+// Three.js (about 150KB zipped) loads in the background, so it never holds up the first paint.
+const THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+function loadThree(cb){ if (window.THREE) return cb(); const sc = document.createElement('script'); sc.src = THREE_URL; sc.crossOrigin = 'anonymous'; sc.onload = cb; sc.onerror = cb; document.head.appendChild(sc); }
+// Build the 3D island once Three.js is here and the page has painted.
+function boot3d(){
+  const fq = store.get('quality', '');
+  if (!S.list && fq !== 'high' && fq !== 'lite' && softwareGL()){
+    S.list = true; S.lazy3d = true; S.booted = true; applyPrefs();
+    toast('This device has no graphics card for 3D, so you are in list view. Tap "Back to the 3D world" to try it anyway.');
+    if (S.loaded){ refresh(); routeHash(); } return;
+  }
+  loadThree(() => requestAnimationFrame(() => setTimeout(startWorld, 0)));
+}
+function startWorld(){
+  try { initWorld(); } catch(e){ W.ok = false; S.list = true; applyPrefs(); $('#b-list').disabled = true; $('#cam').hidden = true; toast('3D is not available on this device, so you are in list view.'); }
+  S.booted = true;
+  if (W.ok){ if (!S.loaded) W.layout([]); applyPrefs(); }
+  if (S.loaded){ refresh(); routeHash(); }
+}
+boot3d();
 (async function(){
   let site = null;
   try { const res = await fetch('data/site.json', {cache:'no-cache'}); if (res.ok) site = await res.json(); } catch(e){}
   if (!site){ S.loaded = true; S.loadError = true; refresh(); $('#series-count').textContent = 'Chapters could not load'; return; }
   S.config = site.config || {}; S.events = site.events || []; S.partners = Array.isArray(site.partners) ? site.partners : [];
   S.wellness = site.wellness && site.wellness.name ? site.wellness : null; if (S.wellness) SPECIALS.find(x => x.kind === 'wellness').name = S.wellness.tentName || S.wellness.name; S.snaps = (site.snapshots || []).map((s, i) => Object.assign({id: 'snap' + i}, s));
-  S.loaded = true; refresh(); routeHash();
+  S.loaded = true; refresh(); if (S.booted) routeHash();
 })();
 })();
 </script>

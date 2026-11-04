@@ -30,11 +30,25 @@ Versions follow **MAJOR.MINOR.PATCH**:
 - Visitors in the crowd wave when they arrive somewhere and say hello as you walk past.
 - Magic zone and Wellbeing zone on the Zones page, plus `#magic` and `#wellness` links.
 
+- **A livelier character on the move:**
+  - Jointed arms and legs: knees bend through each step and elbows pump.
+  - The back is no longer plain: a hood, a yellow backpack with a pink sun patch and straps.
+  - A pink scarf streams out behind as you walk, and wheelchair users get a fluttering pink safety flag.
+  - Little confetti puffs pop up at each footstep (not in Calm mode).
+  - The camera starts a little closer so the character reads better.
+- Home-screen app icon, app manifest and theme colour.
+
 ### Changed
 - **The Play Tent is now an on-brand candy big top** (pink and yellow stripes, a purple and white drum, bunting), replacing the rainbow dome. Its label, topper and list card use the pink and yellow candy stripe too.
 - **Every tent is catchier:** chapter tents have bunting strung from the flagpole to stakes on the grass, and the Partners pavilion has bunting from its peak.
 
 ### Performance
+- **Devices without a graphics card** (software 3D at 1 or 2 frames a second, which is also how Lighthouse and PageSpeed test) now open in List view with everything on it, and a note that they can switch to the 3D world. Three.js isn't downloaded unless they do. If they switch, or a device's frames take over 70ms, the world draws only while something is happening (walking, turning, gesturing, Sunny talking, or just after a tap). Phones and computers with a graphics card are unchanged.
+- Three.js (about 150KB zipped) now loads in the background instead of blocking the page. The page paints first, then builds the 3D island.
+- Local Lighthouse (mobile, software rendering) against 1.2.0: total blocking time **9,840ms → under 50ms**, main-thread work **27s → under 3s**.
+- Fonts no longer block the first paint.
+- The logo has a fixed size, so nothing jumps when it loads.
+- Posters are about 18% lighter.
 - About 350 draw calls, up from 293 in 1.2.0 but still below the 431 in 1.1.0. Triangles are unchanged at about 180k, even with two new tents, bunting everywhere and the more detailed character.
   - The Play Tent went from about 45 draw calls to about 20 (instanced balls, bubbles and bunting).
   - All new scenery is instanced: bunting, stakes, paths, petals, mats, plants and lanterns.
