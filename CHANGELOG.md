@@ -12,6 +12,9 @@ Versions follow **MAJOR.MINOR.PATCH**:
 ### Added
 - This changelog, a pull request checklist, and a release process in CLAUDE.md.
 
+### Changed
+- Melton and Whittlesea ticket buttons now use the branded links ableshinemelton.eventbrite.com.au and ableshinewhittlesea.eventbrite.com.au (same events). Shipped straight to main in 0708daa.
+
 ## [1.0.0] - 2026-11-02
 
 Commit e941284.
