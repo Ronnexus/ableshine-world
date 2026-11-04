@@ -198,14 +198,14 @@ ${extra}
 </head>
 <body>`;
 }
-function topbar(nextTickets) {
+function topbar() {
   return `<header class="top"><div class="wrap">
 <a href="/" aria-label="${esc(org)} home"><img src="${esc(rootPath(cfg.logoId || 'media/logo.png'))}" alt="${esc(org)}" width="110" height="58"></a>
 <nav aria-label="Main">
 <a class="btn" href="/chapters/">All events</a>
 <a class="btn" href="/partners/">Partners</a>
 <a class="btn purple" href="/">Explore the 3D world</a>
-${nextTickets ? `<a class="btn pink" href="${esc(nextTickets.tickets)}" target="_blank" rel="noopener">Get tickets: ${esc(nextTickets.name)}</a>` : ''}
+<a class="btn pink" href="/tickets/">Get tickets</a>
 </nav></div></header>`;
 }
 function footer() {
@@ -222,7 +222,6 @@ function footer() {
 </html>`;
 }
 const nextCh = chapters.find(c => c.status === 'live' || c.status === 'next');
-const nextWithTix = nextCh && nextCh.tickets ? nextCh : null;
 const imgFor = c => abs(c.posterId || cfg.logoId || 'media/logo.png');
 
 // ---------- chapter pages ----------
@@ -241,7 +240,7 @@ function chapterPage(c, i) {
   const tixBtn = c.tickets ? `<a class="btn yellow" href="${esc(c.tickets)}" target="_blank" rel="noopener">Get tickets on Eventbrite</a>` : '';
   const html = head({ title, desc, url, image: imgFor(c), extra: [ld(crumbs), ev ? ld(ev) : ''].join('\n') }) + `
 <a class="btn skiplink" href="#main">Skip to the event details</a>
-${topbar(nextWithTix)}
+${topbar()}
 <section class="hero c-${c.color}"><div class="wrap">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/" style="color:inherit">Home</a> › <a href="/chapters/" style="color:inherit">Events</a> › Chapter ${esc(c.num)}</nav>
 <span class="brush">Chapter ${esc(c.num)}</span>
@@ -292,7 +291,7 @@ function eventsIndex() {
 <span class="chip">${esc(STATUS[c.status])}</span>
 ${c.tickets ? `<a class="btn pink" href="${esc(c.tickets)}" target="_blank" rel="noopener" aria-label="Get tickets for ${esc(c.name)} (opens Eventbrite)">Get tickets</a>` : ''}</li>`).join('\n');
   const html = head({ title, desc, url, image: abs(cfg.logoId || 'media/logo.png'), extra: ld(list) }) + `
-${topbar(nextWithTix)}
+${topbar()}
 <section class="hero c-purple"><div class="wrap">
 <span class="brush">${chapters.length} ${chapters.length === 1 ? 'chapter' : 'chapters'} and counting</span>
 <h1>All ${esc(org)} events</h1>
@@ -304,6 +303,33 @@ ${footer()}`;
   fs.writeFileSync(path.join(out, 'chapters', 'index.html'), html);
 }
 
+// ---------- tickets page: every upcoming event, straight to booking ----------
+function ticketsPage() {
+  const url = SITE + '/tickets/';
+  const up = chapters.filter(c => c.status !== 'wrapped');
+  const phone = cfg.rsvp || cfg.phone || '';
+  const title = `Get tickets | ${org} free all-abilities community days in Melbourne`;
+  const desc = clip(`Book free tickets for upcoming ${org} days${up.length ? ': ' + up.map(c => `${c.name} ${shortDate(c.date)}`).join(', ') : ''}. Support workers free.`, 158);
+  const items = up.map(c => `<li class="ev"><span class="n c-${c.color}" style="color:${c.color === 'amber' || c.color === 'lilac' ? 'var(--ink)' : '#fff'}">${esc(c.num)}</span>
+<span class="t"><a href="${c.page}">${esc(c.name)}</a><span>${esc(longDate(c.date))}${c.time ? ' · ' + esc(c.time) : ''}</span><span>${esc(c.venue || 'Venue to be confirmed')}</span></span>
+<span class="acts">${c.tickets ? `<a class="btn pink" href="${esc(c.tickets)}" target="_blank" rel="noopener" aria-label="Get tickets for ${esc(c.name)}, ${esc(shortDate(c.date))} (opens Eventbrite)">Get tickets</a>` : '<span class="chip">Tickets coming soon</span>'}<a class="btn" href="${c.page}">Details</a></span></li>`).join('\n');
+  const html = head({ title, desc, url, image: abs(cfg.logoId || 'media/logo.png') }) + `
+${topbar()}
+<section class="hero c-pink"><div class="wrap">
+<span class="brush">No tour needed</span>
+<h1>Get tickets</h1>
+<p>Every ${esc(org)} day is free. Pick your event and book in a few taps. Support workers come free too.</p>
+</div></section>
+<main class="wrap">
+${up.length ? `<ol class="list">${items}</ol>` : '<section class="card"><h2>No upcoming events yet</h2><p style="margin:0">New dates are on the way. Check back soon.</p></section>'}
+${up.some(c => !c.tickets) && phone ? `<p class="card" style="margin:0">No ticket link yet? Message us on WhatsApp: <strong>${esc(phone)}</strong></p>` : ''}
+<p class="note">Want to look around first? <a href="/">Explore the AbleShine 3D world</a> or see <a href="/chapters/">all events</a>.</p>
+</main>
+${footer()}`;
+  fs.mkdirSync(path.join(out, 'tickets'), { recursive: true });
+  fs.writeFileSync(path.join(out, 'tickets', 'index.html'), html);
+}
+
 // ---------- partners page ----------
 function partnersPage() {
   const url = SITE + '/partners/';
@@ -313,7 +339,7 @@ function partnersPage() {
   const cards = list.map(p => { const u = safeUrl(p.url);
     return `<li class="card" style="display:flex;flex-direction:column;gap:8px">${p.logo ? `<img src="${esc(rootPath(p.logo))}" alt="${esc(p.name)} logo" loading="lazy" style="max-height:80px;width:auto;object-fit:contain;align-self:flex-start">` : ''}<strong style="font-size:1.2rem">${esc(p.name)}</strong>${p.type ? `<span class="chip" style="align-self:flex-start">${esc(p.type)}</span>` : ''}${p.blurb ? `<span>${esc(p.blurb)}</span>` : ''}${u ? `<a class="btn" style="align-self:flex-start" href="${esc(u)}" target="_blank" rel="noopener">Visit ${esc(p.name)}</a>` : ''}</li>`; }).join('\n');
   const html = head({ title, desc, url, image: abs(cfg.logoId || 'media/logo.png') }) + `
-${topbar(nextWithTix)}
+${topbar()}
 <section class="hero c-amber"><div class="wrap">
 <span class="brush">Thank you</span>
 <h1>Our partners</h1>
@@ -365,8 +391,9 @@ for (const dir of ['data', 'media']) fs.cpSync(path.join(root, dir), path.join(o
 const nEvents = home();
 chapters.forEach(chapterPage);
 eventsIndex();
+ticketsPage();
 partnersPage();
-const urls = [['/', '1.0'], ['/chapters/', '0.9'], ['/partners/', '0.5'], ...chapters.map(c => [c.page, c.status === 'wrapped' ? '0.6' : '0.8'])];
+const urls = [['/', '1.0'], ['/tickets/', '0.9'], ['/chapters/', '0.9'], ['/partners/', '0.5'], ...chapters.map(c => [c.page, c.status === 'wrapped' ? '0.6' : '0.8'])];
 fs.writeFileSync(path.join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p]) => `  <url><loc>${SITE}${u}</loc><lastmod>${buildDate}</lastmod><priority>${p}</priority></url>`).join('\n')}

@@ -11,7 +11,7 @@ A 3D, third-person "event world" for AbleShine: free, all-abilities community da
 | `index.html` | The whole app: HTML, CSS, JS in one file. No framework, no bundler. |
 | `data/site.json` | **All content.** The single source of truth. Edit this to change the site. |
 | `media/` | Logo, posters, event photos. |
-| `scripts/build-seo.mjs` | Netlify build step. Writes `dist/`: the home page (SEO title and description, Organization/WebSite/Event JSON-LD, absolute share previews, pre-rendered cards linking to chapter pages); a static page per chapter at `/chapters/<id>/` (tickets, details, Easy Read, access, poster, photos, Facebook/Instagram, Event + Breadcrumb JSON-LD); an events index at `/chapters/`; a partners page at `/partners/`; `sitemap.xml`; `robots.txt`. Statuses on static pages are computed at build time (Melbourne date). |
+| `scripts/build-seo.mjs` | Netlify build step. Writes `dist/`: the home page (SEO title and description, Organization/WebSite/Event JSON-LD, absolute share previews, pre-rendered cards linking to chapter pages); a static page per chapter at `/chapters/<id>/` (tickets, details, Easy Read, access, poster, photos, Facebook/Instagram, Event + Breadcrumb JSON-LD); an events index at `/chapters/`; a tickets page at `/tickets/` (every upcoming event with its Get tickets button); a partners page at `/partners/`; `sitemap.xml`; `robots.txt`. Statuses on static pages are computed at build time (Melbourne date). |
 | `netlify.toml` | Build command, `dist` publish dir, cache headers. |
 | `EDITING-GUIDE.txt` | Plain-English guide for the owner. |
 
@@ -40,10 +40,13 @@ Add fields; never rename existing ones.
 - **`computeChapters()`**: published events, dated ones sorted by date then undated by name; numbered 01, 02…; status from the visitor's date: past `wrapped`, today `live`, first future `next`, later `upcoming`, no date `soon`. Never hard-code the number of events.
 - **`refresh()`**: re-renders meta, guide, list cards, open room and lightbox; calls `W.layout()` only when the chapter signature changes.
 - **`initWorld()`**: Three.js scene. `layout(chapters)` rebuilds the island (radius grows with chapter count), CatmullRom story trail, `tent()` per chapter (status-specific dressing), instanced pop-art trees, flowers, floating stars and hearts, lilac skyline, plus the HTML labels (`buildLabels`). The avatar, dog, Sunny (`mascot()`), statue, camera, input and the `frame()` loop live here too.
-- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play` and `#partners`.
+- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play`, `#partners` (walk to the tent), `#tickets`, `#zones` and `#our-partners`.
 - **Landmark tents** (`SPECIALS`, `specialTent()` in `layout`): the **Partners pavilion** (striped pyramid canopy with a logo board drawn from `partners[]`) and the **Play Tent** (rainbow dome) sit beside the plaza, outside the chapter spiral. `goSpecial(kind)` walks there (`W.travelSpecial`), then `openSpecial(kind)` opens `#special` (`renderSpecial`). They're listed under "Around the island" in the guide and as cards in List view.
 - **Sensory games** (`GAMES`, `openGame`, `gLoop`, `#game` overlay): Bubble Pop, Glow Painter, Music Pads (real buttons, keys 1–8) and Breathe with Sunny (4s in / 2s hold / 6s out, phase announced via aria-live). No scores, timers or fail states. Soft WebAudio pentatonic notes, Sound toggle (localStorage `asw.sound`), Calm mode halves speeds and turns off vibration. The 3D loop pauses while a game is open.
-- **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), landmark panel (`renderSpecial`), Me popover, lightbox, game. Escape closes the top panel.
+- **Tent toppers** (`topper`, `chapterTopper`, `badgeTopper` in `initWorld`): camera-facing canvas sprites above every tent (numbered medallion per chapter; marquee badge for Partners; rainbow badge for Play), plus `haloRing` and `signBoard` on the grass. These are what make tents stand out; keep each tent visually distinct.
+- **Quick tickets** (`openTickets`/`renderTickets`, `#tickets` sheet): the top-bar "Get tickets" lists every upcoming chapter with its own ticket button. It's for visitors who don't want the tour.
+- **Page views** (`openPage(kind)`/`renderPage`, `#pageview`): full-screen pages in the List-view layout. `zones` groups every tent by zone (open directly, Walk there in 3D, games playable directly); `partners` is the in-app partners page. Opening one adds `body.paging`, which hides the bottom bar and pauses the 3D loop.
+- **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), landmark panel (`renderSpecial`), tickets, page view, Me popover, lightbox, game. Escape closes the top panel.
 - **Prefs** (localStorage `asw.*`): calm, big text, list view, character choices.
 - **Dormant code**: Studio, upload and photo-edit functions (`S.canEdit`, `S.db`, `S.assets`, `renderStudio`, `eventForm`, `settingsForm`, `uploadSnaps`, `deleteSnap`) are left from the original claude.ai version and never run here (`S.canEdit = false`). Remove them when the CMS admin replaces them.
 
@@ -60,7 +63,14 @@ Add fields; never rename existing ones.
 
 ## Deploy
 
-Push to `main`. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`. `dist/` is git-ignored. To check locally, run `node scripts/build-seo.mjs` and serve `dist/` (opening the file directly breaks textures).
+`main` is production. Netlify runs `node scripts/build-seo.mjs` and publishes `dist/`. `dist/` is git-ignored. To check locally, run `node scripts/build-seo.mjs` and serve `dist/` (opening the file directly breaks textures).
+
+## Versions and releases
+
+- Work on a branch (`feature/…`, `fix/…`, `content/…`) and open a pull request into `main`. Netlify builds a **deploy preview** for every PR. Previews need a Netlify team login; production is public.
+- Fill in the PR checklist (`.github/pull_request_template.md`). Pick PATCH (content/fixes), MINOR (new feature) or MAJOR (big new area/redesign), and move the `[Unreleased]` notes in `CHANGELOG.md` under the new version.
+- After merging, create a GitHub Release on `main` named `vX.Y.Z` with the changelog notes. Tags can't be pushed from Claude sessions, so releases are made on GitHub.
+- Small content-only edits to `data/site.json` may go straight to `main` as a PATCH. Note them in `CHANGELOG.md` with the next PR.
 
 ## Known gaps / next work
 
