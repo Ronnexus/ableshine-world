@@ -43,12 +43,23 @@ Add fields; never rename existing ones.
 - **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play`, `#partners` (walk to the tent), `#tickets`, `#zones` and `#our-partners`.
 - **Landmark tents** (`SPECIALS`, `specialTent()` in `layout`): the **Partners pavilion** (striped pyramid canopy with a logo board drawn from `partners[]`) and the **Play Tent** (rainbow dome) sit beside the plaza, outside the chapter spiral. `goSpecial(kind)` walks there (`W.travelSpecial`), then `openSpecial(kind)` opens `#special` (`renderSpecial`). They're listed under "Around the island" in the guide and as cards in List view.
 - **Sensory games** (`GAMES`, `openGame`, `gLoop`, `#game` overlay): Bubble Pop, Glow Painter, Music Pads (real buttons, keys 1–8) and Breathe with Sunny (4s in / 2s hold / 6s out, phase announced via aria-live). No scores, timers or fail states. Soft WebAudio pentatonic notes, Sound toggle (localStorage `asw.sound`), Calm mode halves speeds and turns off vibration. The 3D loop pauses while a game is open.
-- **Tent toppers** (`topper`, `chapterTopper`, `badgeTopper` in `initWorld`): camera-facing canvas sprites above every tent (numbered medallion per chapter; marquee badge for Partners; rainbow badge for Play), plus `haloRing` and `signBoard` on the grass. These are what make tents stand out; keep each tent visually distinct.
+- **Tent toppers** (`topper`, `chapterTopper`, `iconTopper` in `initWorld`): camera-facing canvas medallions above every tent (chapter number; navy star for Partners; rainbow note for Play). They fade when the camera is close. Plus `haloRing` and `signBoard` on the grass. Keep each tent visually distinct.
 - **Quick tickets** (`openTickets`/`renderTickets`, `#tickets` sheet): the top-bar "Get tickets" lists every upcoming chapter with its own ticket button. It's for visitors who don't want the tour.
 - **Page views** (`openPage(kind)`/`renderPage`, `#pageview`): full-screen pages in the List-view layout. `zones` groups every tent by zone (open directly, Walk there in 3D, games playable directly); `partners` is the in-app partners page. Opening one adds `body.paging`, which hides the bottom bar and pauses the 3D loop.
 - **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), landmark panel (`renderSpecial`), tickets, page view, Me popover, lightbox, game. Escape closes the top panel.
 - **Prefs** (localStorage `asw.*`): calm, big text, list view, character choices.
-- **Dormant code**: Studio, upload and photo-edit functions (`S.canEdit`, `S.db`, `S.assets`, `renderStudio`, `eventForm`, `settingsForm`, `uploadSnaps`, `deleteSnap`) are left from the original claude.ai version and never run here (`S.canEdit = false`). Remove them when the CMS admin replaces them.
+- **Walking crowd** (`npcModel`, `npcDog`, `buildCrowd`, `stepCrowd`): 6 + one per chapter (max 12) visitors (walking, wheelchair, cane; two with assistance dogs) walk a ring around the plaza edge (radius 11.5) and the story trail between tent doors, pausing at each. Built per layout. Each is about 6 draw calls (`mergeParts`/`bodyMesh` merge static parts with vertex colours). Calm mode freezes them; low quality hides half.
+- **Performance rules:**
+  - Repeated things are instanced: trees, skyline, clouds, scallops, balloons, flowers, trail stones.
+  - Floaters are `Points`. Labels only write to the DOM when a value changes.
+  - `disposeTree` frees everything a re-layout throws away. Cached textures and the shared `OUT` outline material carry `userData.keep`.
+  - Leaving List view does not re-layout.
+  - Pixel ratio is capped at 1.5.
+  - Adaptive quality (`W.sampleQuality`): after load, if frames average over 34ms, it drops shadows, uses pixel ratio 1 and halves the crowd. `localStorage asw.quality` = `"high"`/`"low"` forces it (for testing).
+  - JSZip is loaded only when someone taps "Download all".
+
+  Baseline before 1.2.0 was about 430 draw calls and 345k triangles. Keep new scenery instanced.
+- **Icons** (`ICONS`, `icon(name, size, fill)`): inline SVG for labels, guide and zone cards. Don't use font glyphs (★ ♫), which render inconsistently.
 
 ## Must not change
 
@@ -80,7 +91,7 @@ Add fields; never rename existing ones.
    - Chapters 5 and 6
    - Maribyrnong poster and photos
    - Confirmed `access` per venue
-2. Self-serve admin (Decap CMS at `/admin` editing `data/site.json`); then remove the dormant Studio code.
+2. Self-serve admin (Decap CMS at `/admin` editing `data/site.json`). The old in-page Studio code was removed in 1.2.0.
 3. Videos per chapter: an optional `videos[]` with click-to-load YouTube-nocookie or Vimeo, or `<video>` with captions. Never autoplay.
-4. Performance: adaptive quality on low-end phones (pixel ratio, shadows); Netlify Image CDN for thumbnails; dispose materials and textures on re-layout.
+4. Performance: Netlify Image CDN for photo thumbnails once event photos are added. Three.js r128 is the biggest download (~600KB, ~150KB gzipped from cdnjs).
 5. Media consent: anyone pictured must have consented; the takedown note in each room must reach a real person.

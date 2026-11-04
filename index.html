@@ -44,6 +44,12 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .bubble{position:absolute;left:0;top:0;z-index:6;max-width:250px;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:.55rem .8rem;font-weight:800;font-size:.95rem;line-height:1.3;box-shadow:var(--shadow);pointer-events:none;will-change:transform}
 .bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:18px;height:18px;background:#fff;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
 .tag .meta .nm{font-family:var(--f-comic);font-weight:400;font-size:1.05rem}
+.ico{display:inline-grid;place-items:center;line-height:0}
+.tag .num.bg-navy,.crow .num.bg-navy{background:var(--ink);color:#FFC72C}
+.bg-navy{background:var(--ink);color:#FFC72C}
+.bg-rainbow{background:linear-gradient(135deg,#E0187A,#FF8A1F 25%,#FFC72C 45%,#7CCB52 62%,#1FA9E1 80%,#5B2DB0)}
+.tag:hover{transform-origin:bottom center}
+.tag:hover .meta .nm{text-decoration:underline;text-underline-offset:3px}
 .crow-c{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;border:2px solid var(--ink);border-radius:14px;padding:.7rem .8rem;background:var(--cream)}
 .crow-c .lbl{font-weight:800;min-width:5rem}
 .crow-c code{font-family:var(--f-body);font-weight:800;font-size:1.1rem;user-select:all;flex:1;min-width:0;overflow-wrap:anywhere}
@@ -64,7 +70,7 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .btn[aria-pressed="true"]{background:var(--ink);color:#fff}
 .calm .btn{box-shadow:none;border-width:2px;transition:none}
 .chip{display:inline-flex;align-items:center;padding:.15em .65em;border-radius:999px;border:2px solid var(--ink);font-weight:700;font-size:.78rem;white-space:nowrap;background:var(--paper)}
-.chip.wrapped{background:var(--purple);color:#fff}.chip.live{background:var(--pink);color:#fff}.chip.next{background:var(--amber)}.chip.soon{background:var(--lilac);color:#3A168A;border-style:dashed}.chip.draft{background:#fff;border-style:dotted}
+.chip.wrapped{background:var(--purple);color:#fff}.chip.live{background:var(--pink);color:#fff}.chip.next{background:var(--amber)}.chip.soon{background:var(--lilac);color:#3A168A;border-style:dashed}
 
 /* World */
 .app{position:fixed;inset:0}
@@ -104,9 +110,8 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .panel{background:var(--paper);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink)}
 .sheet,.drawer{position:absolute;z-index:30;top:calc(env(safe-area-inset-top,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 12px);right:max(12px,env(safe-area-inset-right,0px));width:min(480px,calc(100% - 24px));overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column}
 .drawer{left:max(12px,env(safe-area-inset-left,0px));right:auto;width:min(420px,calc(100% - 24px))}
-#studio{width:min(560px,calc(100% - 24px))}
 @media (max-width:720px){
-  .sheet,.drawer,#studio{left:0;right:0;width:100%;top:auto;bottom:0;max-height:86%;border-radius:22px 22px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .sheet,.drawer{left:0;right:0;width:100%;top:auto;bottom:0;max-height:86%;border-radius:22px 22px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
   .brand .sub{display:none}
   .cam{bottom:calc(env(safe-area-inset-bottom,0px) + 150px)}
 }
@@ -148,7 +153,7 @@ dl.facts dd{margin:.15rem 0 0;font-weight:700}
 .guide-list{list-style:none;margin:0;padding:1rem;display:flex;flex-direction:column;gap:.6rem}
 .crow{display:flex;align-items:center;gap:.8rem;width:100%;min-height:64px;text-align:left;background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:.6rem .75rem;cursor:pointer}
 .crow:hover{background:#FFF3D6}
-.crow .num,.erow .num{flex:none;width:46px;height:46px;border-radius:12px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--f-head);font-weight:900}
+.crow .num{flex:none;width:46px;height:46px;border-radius:12px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--f-head);font-weight:900}
 .crow .txt{flex:1;min-width:0;display:flex;flex-direction:column}
 .crow .txt strong{font-family:var(--f-head);font-weight:900;font-size:1.05rem}
 .crow .txt span{font-size:.85rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -182,7 +187,6 @@ body.paging .hud-bottom,body.paging #cam,body.paging #labels{display:none}
 .card .cbody{padding:.9rem 1rem 1rem;display:flex;flex-direction:column;gap:.35rem}
 .card .cbody strong{font-family:var(--f-head);font-weight:900;font-size:1.35rem}
 .card .cbody span{color:var(--muted);font-size:.92rem}
-.empty-world{max-width:30em;margin:2rem auto;text-align:center}
 
 /* Me popover */
 #me-pop{position:absolute;z-index:31;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 96px);width:min(400px,calc(100% - 32px));padding:1rem;display:flex;flex-direction:column;gap:.8rem}
@@ -201,25 +205,7 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
 .lb-img{background:#fff;display:grid;place-items:center;border-bottom:3px solid var(--ink);border-radius:17px 17px 0 0;overflow:hidden}
 .lb-img img{max-width:100%;max-height:68vh;display:block}
 .lb-foot{padding:.9rem 1rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between}
-.lb-edit{padding:0 1rem 1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.6rem}
 
-/* Forms */
-.form{padding:1.1rem;display:flex;flex-direction:column;gap:.9rem}
-.field{display:flex;flex-direction:column;gap:.3rem}
-.field label,.lbl{font-weight:700;font-size:.9rem}
-.field input[type=text],.field input[type=date],.field textarea,.field input[type=tel],.field input[type=email]{border:2px solid var(--ink);border-radius:10px;padding:.6rem .7rem;background:#fff;min-height:44px;width:100%}
-.field textarea{min-height:96px;resize:vertical}
-.field .help{font-size:.8rem;color:var(--muted)}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.9rem}
-.check{display:flex;align-items:center;gap:.6rem;font-weight:700;min-height:44px}
-.check input{width:22px;height:22px;accent-color:var(--purple)}
-.sec{border-top:3px solid var(--ink);padding-top:1rem;margin-top:.3rem}
-.erow{display:flex;align-items:center;gap:.6rem;border:2px solid var(--ink);border-radius:12px;padding:.5rem .6rem;background:#fff}
-.erow .txt{flex:1;min-width:0}
-.erow .txt strong{display:block;font-family:var(--f-head);font-weight:900}
-.erow .txt span{font-size:.82rem;color:var(--muted)}
-.confirm{background:#FFE4EE;border:2px solid var(--pink);border-radius:12px;padding:.7rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-.status-line{font-size:.9rem;font-weight:700;color:var(--teal);min-height:1.4em}
 
 .special-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.7rem}
 .pcard{border:3px solid var(--ink);border-radius:16px;background:#fff;padding:.8rem;display:flex;flex-direction:column;gap:.4rem}
@@ -276,7 +262,6 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
       <button class="btn sm" id="b-list">List view</button>
       <button class="btn sm" id="b-calm" aria-pressed="false">Calm mode</button>
       <button class="btn sm sq" id="b-big" aria-pressed="false" aria-label="Larger text">A+</button>
-      <button class="btn sm purple" id="b-studio" hidden>Studio</button>
       <button class="btn sm amber" id="b-connect">Connect</button>
       <button class="btn sm pink" id="b-tix" aria-controls="tickets">Get tickets</button>
     </div>
@@ -328,7 +313,6 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
   <aside class="sheet panel" id="connect" hidden aria-labelledby="connect-title"></aside>
   <aside class="sheet panel" id="special" hidden aria-labelledby="special-title"></aside>
   <aside class="sheet panel" id="tickets" hidden aria-labelledby="tickets-title"></aside>
-  <aside class="drawer panel" id="studio" hidden aria-labelledby="studio-title"></aside>
 
   <div class="panel" id="me-pop" hidden role="group" aria-label="Your character">
     <fieldset id="f-type"><legend>How you get around</legend></fieldset>
@@ -347,7 +331,6 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -383,6 +366,23 @@ const HEX = {purple:'#5B2DB0', pink:'#E0187A', teal:'#1FA9E1', amber:'#FFC72C', 
 const TENT = {purple:['#5B2DB0','#FFC72C'], pink:['#E0187A','#FFC72C'], teal:['#1FA9E1','#E0187A'], amber:['#FFC72C','#5B2DB0'], lilac:['#C9B8F2','#FFFFFF']};
 const NAMES = {purple:'Purple', pink:'Pink', teal:'Blue', amber:'Yellow'};
 const mascotName = () => (S.config.mascotName || 'Sunny');
+// small inline icons (no font glyphs) for labels, guide and zone cards
+const ICONS = {
+  star: '<path d="M12 2.6l2.8 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.8 3.2 1.3-6.5-4.9-4.5 6.6-.8z"/>',
+  note: '<path d="M9.5 17.6a3 3 0 1 1-2-2.8V5.2L19 3v11.6a3 3 0 1 1-2-2.8V7.3l-7.5 1.5z"/>',
+  heart: '<path d="M12 20.5s-7.6-4.6-9.4-9.3C1.3 7.8 3.4 4.3 6.9 4.3c2 0 3.5 1.1 5.1 3 1.6-1.9 3.1-3 5.1-3 3.5 0 5.6 3.5 4.3 6.9-1.8 4.7-9.4 9.3-9.4 9.3z"/>',
+  bubbles: '<circle cx="9.5" cy="13.5" r="6.2"/><circle cx="18" cy="6.5" r="3.4"/>',
+  sparkle: '<path d="M12 2l2.4 7.1L21.5 11.5l-7.1 2.4L12 21l-2.4-7.1L2.5 11.5l7.1-2.4z"/>',
+  pads: '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
+  sun: '<circle cx="12" cy="12" r="5.2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" fill="none"/>',
+  ticket: '<path d="M3 6.5h18v4a2 2 0 0 0 0 3v4H3v-4a2 2 0 0 0 0-3z"/>',
+  chat: '<path d="M3.5 4.5h17v11H9.5l-5 4z"/>'
+};
+function icon(name, size, fill){
+  const sp = document.createElement('span'); sp.className = 'ico'; sp.setAttribute('aria-hidden', 'true');
+  sp.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="' + (fill || '#FFFFFF') + '" stroke="#22114A" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">' + ICONS[name] + '</svg>';
+  return sp;
+}
 const STATUS = {wrapped:'Snapshots ready', live:'Happening today', next:'Up next', upcoming:'Coming up', soon:'Date TBC'};
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const safeUrl = u => { u = String(u || '').trim(); if (!u) return ''; if (!/^https?:\/\//i.test(u)) u = 'https://' + u; try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch(e){ return ''; } };
@@ -393,7 +393,7 @@ const MEDIA = x => (/[\/.]/.test(String(x)) ? String(x) : 'media/' + x);
 /* ---------- state ---------- */
 const S = {
   events: [], snaps: [], config: {}, chapters: [], partners: [],
-  db: null, assets: null, downloads: null, canEdit: false, loaded: false,
+  loaded: false,
   openId: null, lb: null,
   calm: store.get('calm', reduce), big: store.get('big', false), list: store.get('list', false),
   me: store.get('me', {type:'walk', hood:'purple', skin:1, dog:true})
@@ -435,7 +435,7 @@ function renderMeta(){
 /* ---------- quick tickets: every upcoming event, no tour needed ---------- */
 function openTickets(){
   $('#room').hidden = true; S.openId = null; S.special = null;
-  ['special','guide','studio','connect'].forEach(closePanel);
+  ['special','guide','connect'].forEach(closePanel);
   renderTickets(); const el = $('#tickets'); el.hidden = false; el.scrollTop = 0; $('#tickets-title').focus();
   try { history.replaceState(null, '', '#tickets'); } catch(e){}
 }
@@ -467,13 +467,13 @@ function numBadge(c, cls){ return h('span', {class: (cls||'num') + ' bg-' + c.co
 function renderGuide(){
   const ol = $('#guide-list'); ol.replaceChildren();
   if (S.loadError){ ol.append(h('li', {class:'blank'}, h('span',{class:'comic'},'The chapters did not load'), h('p',{style:'margin:.4rem 0 .8rem'},'Check your internet connection, then try again.'), h('button',{class:'btn purple', onclick: () => location.reload()},'Try again'))); return; }
-  if (!S.chapters.length){ ol.append(h('li', {class:'blank'}, h('span',{class:'comic'},'No chapters yet'), S.canEdit ? 'Open Studio to add the first one.' : 'Check back soon.')); return; }
+  if (!S.chapters.length){ ol.append(h('li', {class:'blank'}, h('span',{class:'comic'},'No chapters yet'), 'Check back soon.')); return; }
   S.chapters.forEach(c => ol.append(h('li', null, h('button', {class:'crow', onclick: () => { closePanel('guide'); goChapter(c.id); }},
     numBadge(c), h('span',{class:'txt'}, h('strong',null,c.name), h('span',null, fmtShort(c.date) + ' · ' + (c.venue || 'Venue TBC'))),
     h('span',{class:'chip ' + c.status}, STATUS[c.status])))));
   ol.append(h('li', null, h('h3', {style:'font-family:var(--f-head);font-weight:900;margin:.6rem 0 0'}, 'Around the island')));
   SPECIALS.forEach(sp => ol.append(h('li', null, h('button', {class:'crow', onclick: () => { closePanel('guide'); goSpecial(sp.kind); }},
-    h('span', {class:'num ' + sp.bg, 'aria-hidden':'true'}, sp.badge), h('span',{class:'txt'}, h('strong',null,sp.name), h('span',null, sp.line))))));
+    h('span', {class:'num ' + sp.bg, 'aria-hidden':'true'}, icon(sp.icon, 26, sp.kind === 'partners' ? '#FFC72C' : '#FFFFFF')), h('span',{class:'txt'}, h('strong',null,sp.name), h('span',null, sp.line))))));
 }
 function renderCards(){
   const box = $('#cards'); box.replaceChildren();
@@ -487,14 +487,14 @@ function renderCards(){
         h('strong', null, 'Chapter ' + c.num + ': ' + c.name), h('span', null, fmtLong(c.date)), h('span', null, c.venue || 'Venue to be confirmed'))));
   });
   SPECIALS.forEach(sp => box.append(h('button', {class:'card panel', onclick: () => openSpecial(sp.kind)},
-    h('span', {class:'cover ' + sp.bg}, h('span', {class:'comic big outline'}, sp.badge)),
+    h('span', {class:'cover ' + sp.bg}, icon(sp.icon, 96, sp.kind === 'partners' ? '#FFC72C' : '#FFFFFF')),
     h('span', {class:'cbody'}, h('strong', null, sp.name), h('span', null, sp.line)))));
 }
 
 /* ---------- room ---------- */
 function openRoom(id, focus){
   const c = chById(id); if (!c) return;
-  S.openId = id; S.special = null; closePanel('special'); closePanel('guide'); closePanel('studio'); closePanel('connect'); closePanel('tickets');
+  S.openId = id; S.special = null; closePanel('special'); closePanel('guide'); closePanel('connect'); closePanel('tickets');
   renderRoom(); const r = $('#room'); r.hidden = false; r.scrollTop = 0;
   if (focus !== false) $('#room-title') && $('#room-title').focus();
   try { history.replaceState(null, '', '#ch-' + id); } catch(e){}
@@ -557,12 +557,6 @@ function renderRoom(){
     wall.append(h('div', {class:'blank'}, h('span',{class:'comic'}, c.status === 'wrapped' ? 'Photos on the way' : 'This page is still blank'),
       c.status === 'wrapped' ? 'Snapshots from this chapter are being added.' : 'Snapshots unlock after the day. Only people who said yes to photos appear here.'));
   }
-  if (S.canEdit && S.assets){
-    const inp = h('input', {type:'file', accept:'image/png,image/jpeg,image/webp,image/gif', multiple:true, id:'snap-in', class:'sr'});
-    inp.addEventListener('change', () => uploadSnaps(c, inp.files));
-    wall.append(h('div', {class:'actions', style:'margin-top:.7rem'}, inp, h('label', {for:'snap-in', class:'btn sm teal', tabindex:'0', onkeydown: e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); inp.click(); } }}, 'Add photos'),
-      h('button', {class:'btn sm', onclick: () => openStudio(c.id)}, 'Edit chapter')));
-  }
   body.append(wall);
   body.append(h('p', {class:'note', style:'margin:0'}, h('a', {href: pageUrl(c)}, 'Open the full event page for ' + c.name)));
   body.append(h('nav', {class:'pager', 'aria-label':'Other chapters'},
@@ -603,169 +597,27 @@ function renderLb(){
         h('button', {class:'btn sq', onclick: () => step(1), 'aria-label':'Next photo'}, '→'),
         h('button', {class:'btn purple', onclick: () => downloadAsset(s.assetId, 'AbleShine-' + slug(c.name) + '-' + pad(S.lb.i+1))}, 'Download'),
         h('button', {class:'btn pink', id:'lb-close', onclick: closeLb}, 'Close'))));
-  if (S.canEdit && S.db){
-    const cap = h('input', {type:'text', id:'lb-cap', value: s.caption || ''});
-    const alt = h('input', {type:'text', id:'lb-alt', value: s.alt || ''});
-    const confirmSlot = h('div');
-    panel.append(h('div', {class:'lb-edit'},
-      h('div',{class:'field'}, h('label',{for:'lb-cap'},'Caption'), cap),
-      h('div',{class:'field'}, h('label',{for:'lb-alt'},'Alt text (what the photo shows)'), alt),
-      h('div',{class:'actions',style:'align-items:flex-end'},
-        h('button',{class:'btn sm teal', onclick: async () => { try { await S.db.doc('snapshots/' + s.id).update({caption: cap.value.trim(), alt: alt.value.trim()}); toast('Photo details saved'); } catch(e){ toast('Could not save. Try again.'); } }}, 'Save details'),
-        h('button',{class:'btn sm', onclick: () => confirmSlot.replaceChildren(h('div',{class:'confirm'}, 'Remove this photo for everyone?',
-          h('button',{class:'btn sm pink', onclick: () => deleteSnap(s)}, 'Remove'), h('button',{class:'btn sm', onclick: () => confirmSlot.replaceChildren()}, 'Keep it')))}, 'Remove photo')),
-      confirmSlot));
-  }
   box.replaceChildren(panel);
 }
-async function deleteSnap(s){
-  try { await S.db.doc('snapshots/' + s.id).delete(); if (S.assets) await S.assets.delete(s.assetId).catch(()=>{}); toast('Photo removed'); }
-  catch(e){ toast('Could not remove the photo. Try again.'); }
-}
-
 /* ---------- downloads ---------- */
 function extFor(type){ return ({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'})[type] || 'jpg'; }
-function saveBlob(blob, name){ const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return Promise.resolve({status:'saved'}); }
+function saveBlob(blob, name){ const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+let zipLib = null;
+function loadZip(){ return zipLib || (zipLib = window.JSZip ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; sc.onload = res; sc.onerror = () => { zipLib = null; rej(); }; document.head.append(sc); })); }
 async function downloadAsset(id, base){
-  if (!S.downloads){ toast('Downloads are not available in this view'); return; }
-  try { const res = await fetch(MEDIA(id)); const blob = await res.blob(); await S.downloads.save({filename: base + '.' + extFor(blob.type), data: blob}); toast('Saved'); }
-  catch(e){ if (e && e.code === 'declined') return; toast('Download did not finish. Try again.'); }
+  try { const res = await fetch(MEDIA(id)); const blob = await res.blob(); saveBlob(blob, base + '.' + extFor(blob.type)); toast('Saved'); }
+  catch(e){ toast('Download did not finish. Try again.'); }
 }
 async function downloadAll(c){
-  if (!S.downloads || !window.JSZip){ toast('Downloads are not available in this view'); return; }
   toast('Packing ' + c.snaps.length + ' photos…');
   try {
+    await loadZip();
     const zip = new JSZip();
     for (let i = 0; i < c.snaps.length; i++){ const res = await fetch(MEDIA(c.snaps[i].assetId)); const b = await res.blob(); zip.file('AbleShine-' + slug(c.name) + '-' + pad(i+1) + '.' + extFor(b.type), b); }
-    const out = await zip.generateAsync({type:'blob'});
-    await S.downloads.save({filename: 'AbleShine-' + slug(c.name) + '-snapshots.zip', data: out}); toast('Saved');
-  } catch(e){ if (e && e.code === 'declined') return; toast('Download did not finish. Try again.'); }
+    saveBlob(await zip.generateAsync({type:'blob'}), 'AbleShine-' + slug(c.name) + '-snapshots.zip'); toast('Saved');
+  } catch(e){ toast('Download did not finish. Try again.'); }
 }
 
-/* ---------- uploads (editors) ---------- */
-async function uploadSnaps(c, files){
-  if (!files || !files.length || !S.assets || !S.db) return;
-  const list = Array.from(files); let done = 0;
-  for (const f of list){
-    toast('Uploading ' + (done+1) + ' of ' + list.length + '…');
-    try { const r = await S.assets.upload(f); await S.db.collection('snapshots').add({eventId: c.id, assetId: r.id, caption: f.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' '), alt:'', createdAt: Date.now() + done}); done++; }
-    catch(e){ toast((e && e.code === 'too_large') ? f.name + ' is over 20 MB. Resize it and try again.' : 'Could not upload ' + f.name); }
-  }
-  if (done) toast(done + (done === 1 ? ' photo' : ' photos') + ' added to ' + c.name);
-}
-
-/* ---------- Studio ---------- */
-let editing = null;
-function openStudio(id){
-  if (!S.canEdit) return;
-  editing = id === undefined ? null : id;
-  $('#room').hidden = true; S.openId = null; closePanel('guide');
-  renderStudio(); $('#studio').hidden = false; $('#studio-title').focus();
-}
-function renderStudio(){
-  const st = $('#studio');
-  const head = h('div', {class:'guide-head'}, h('div', null, h('p',{class:'note',style:'margin:0'},'Only editors see this'), h('h2',{class:'comic',id:'studio-title',tabindex:'-1'}, 'Studio')),
-    h('button', {class:'btn sm', 'data-close':'studio', onclick: () => closePanel('studio')}, 'Close'));
-  const body = h('div', {class:'form'});
-  if (editing === null){
-    body.append(h('p',{style:'margin:0'}, 'Add a chapter and the world builds its tent, trail, number and room. Chapters sort by date and renumber themselves.'));
-    body.append(h('button', {class:'btn pink', onclick: () => { editing = 'new'; renderStudio(); }}, '+ New chapter'));
-    const all = S.events.slice().sort((a,b) => (a.date||'9999') < (b.date||'9999') ? -1 : 1);
-    const list = h('div', {style:'display:flex;flex-direction:column;gap:.5rem'});
-    if (!all.length) list.append(h('p',{class:'note'}, 'No chapters yet.'));
-    all.forEach(e => {
-      const ch = chById(e.id);
-      list.append(h('div', {class:'erow'}, ch ? numBadge(ch, 'num') : h('span',{class:'chip draft'},'Draft'),
-        h('div', {class:'txt'}, h('strong',null,e.name || 'Untitled'), h('span',null, fmtShort(e.date) + ' · ' + (e.venue || 'Venue TBC'))),
-        h('button', {class:'btn sm', onclick: () => { editing = e.id; renderStudio(); }}, 'Edit')));
-    });
-    body.append(list);
-    body.append(settingsForm());
-  } else body.append(eventForm());
-  st.replaceChildren(head, body);
-}
-function eventForm(){
-  const isNew = editing === 'new';
-  const e = isNew ? {published:true, lineup:[], easyRead:[]} : (S.events.find(x => x.id === editing) || {});
-  let posterId = e.posterId || null;
-  const f = h('form', {novalidate:true, style:'display:flex;flex-direction:column;gap:.9rem'});
-  const fld = (id, label, input, help) => h('div', {class:'field'}, h('label',{for:id},label), input, help ? h('span',{class:'help'},help) : null);
-  const name = h('input', {type:'text', id:'s-name', value:e.name||'', required:true, placeholder:'e.g. Melton'});
-  const date = h('input', {type:'date', id:'s-date', value:e.date||''});
-  const time = h('input', {type:'text', id:'s-time', value:e.time||'', placeholder:'11:00am – 3:00pm'});
-  const venue = h('input', {type:'text', id:'s-venue', value:e.venue||''});
-  const addr = h('input', {type:'text', id:'s-addr', value:e.address||''});
-  const prev = h('input', {type:'text', id:'s-prev', value:e.previousDate||'', placeholder:'e.g. Wed 18 Nov'});
-  const lineup = h('textarea', {id:'s-lineup'}); lineup.value = (e.lineup||[]).join('\n');
-  const easy = h('textarea', {id:'s-easy'}); easy.value = (e.easyRead||[]).join('\n');
-  const palt = h('input', {type:'text', id:'s-palt', value:e.posterAlt||''});
-  const pub = h('input', {type:'checkbox', id:'s-pub'}); pub.checked = e.published !== false;
-  const colors = h('fieldset', null, h('legend',{class:'lbl'},'Tent colour'), COLORS.map(k => { const i = h('input',{type:'radio',name:'s-color',value:k}); if ((e.color||'') === k) i.checked = true; return h('label',{class:'opt'}, i, h('span',null,h('i',{class:'sw',style:'background:'+HEX[k]}), NAMES[k])); }),
-    (() => { const i = h('input',{type:'radio',name:'s-color',value:''}); if (!e.color) i.checked = true; return h('label',{class:'opt'}, i, h('span',null,'Auto')); })());
-  const pPrev = h('div', {class:'poster', style:'max-width:180px'}); const paintP = () => pPrev.replaceChildren(posterId ? h('img',{src:MEDIA(posterId), alt:''}) : h('p',{class:'note',style:'margin:.6rem'},'No poster yet'));
-  paintP();
-  const pIn = h('input', {type:'file', id:'s-poster', accept:'image/png,image/jpeg,image/webp'});
-  pIn.addEventListener('change', async () => { const file = pIn.files[0]; if (!file || !S.assets) return; status.textContent = 'Uploading poster…'; try { const r = await S.assets.upload(file); posterId = r.id; paintP(); status.textContent = 'Poster ready. Save to keep it.'; } catch(err){ status.textContent = 'Poster upload failed. Try a smaller image.'; } });
-  const status = h('p', {class:'status-line', role:'status'});
-  const confirmSlot = h('div');
-  f.append(
-    h('button', {type:'button', class:'btn sm', style:'align-self:flex-start', onclick: () => { editing = null; renderStudio(); }}, '◀ All chapters'),
-    h('h3', {style:'font-family:var(--f-head);font-weight:900;font-size:1.3rem'}, isNew ? 'New chapter' : 'Edit ' + (e.name || 'chapter')),
-    fld('s-name','Place name *', name, 'Shown as the chapter title, e.g. Whittlesea.'),
-    h('div', {class:'two'}, fld('s-date','Date', date, 'Leave empty if not locked in yet.'), fld('s-time','Time', time)),
-    fld('s-venue','Venue', venue), fld('s-addr','Address (for directions)', addr),
-    fld('s-prev','Previous date (only if it moved)', prev),
-    fld('s-lineup',"What's on (one per line)", lineup),
-    fld('s-easy','Easy Read lines (one short sentence per line)', easy),
-    colors,
-    h('div', {class:'field'}, h('label',{for:'s-poster'},'Poster'), pPrev, S.assets ? pIn : h('span',{class:'help'},'Poster upload is not available in this view.'),
-      posterId ? h('button',{type:'button',class:'btn sm',style:'align-self:flex-start',onclick:()=>{ posterId=null; paintP(); }},'Remove poster') : null),
-    fld('s-palt','Poster description (alt text)', palt),
-    h('label', {class:'check'}, pub, 'Show this chapter in the world'),
-    status,
-    h('div', {class:'actions'}, h('button', {type:'submit', class:'btn pink'}, isNew ? 'Add to the world' : 'Save chapter'),
-      isNew ? null : h('button', {type:'button', class:'btn', onclick: () => confirmSlot.replaceChildren(h('div',{class:'confirm'}, 'Delete ' + (e.name||'this chapter') + ' and its room?',
-        h('button',{type:'button',class:'btn sm pink',onclick: async () => { try { await S.db.doc('events/' + e.id).delete(); toast('Chapter deleted'); editing = null; renderStudio(); } catch(err){ status.textContent = 'Could not delete. Try again.'; } }},'Delete'),
-        h('button',{type:'button',class:'btn sm',onclick:()=>confirmSlot.replaceChildren()},'Keep it')))}, 'Delete')),
-    confirmSlot);
-  f.addEventListener('submit', async ev => {
-    ev.preventDefault();
-    if (!name.value.trim()){ status.textContent = 'Add a place name first.'; name.focus(); return; }
-    if (!S.db){ status.textContent = 'Saving is not available in this view.'; return; }
-    const lines = t => t.value.split('\n').map(s => s.trim()).filter(Boolean);
-    const col = (f.querySelector('input[name="s-color"]:checked') || {}).value || '';
-    const doc = { name: name.value.trim(), date: date.value || '', time: time.value.trim(), venue: venue.value.trim(), address: addr.value.trim(),
-      previousDate: prev.value.trim(), lineup: lines(lineup), easyRead: lines(easy), color: col, posterId: posterId || '', posterAlt: palt.value.trim(),
-      published: pub.checked, updatedAt: Date.now() };
-    const id = isNew ? slug(doc.name) + '-' + (doc.date || 'tbc') + '-' + Math.random().toString(36).slice(2,6) : e.id;
-    status.textContent = 'Saving…';
-    try { await S.db.doc('events/' + id).set(Object.assign({createdAt: e.createdAt || Date.now()}, doc)); toast(isNew ? doc.name + ' added to the world' : 'Saved'); editing = null; renderStudio(); }
-    catch(err){ status.textContent = 'Could not save. Check your connection and try again.'; }
-  });
-  return f;
-}
-function settingsForm(){
-  const c = S.config, status = h('p',{class:'status-line',role:'status'}), F = {};
-  const inp = (key, label, type, help) => { const i = type === 'area' ? h('textarea',{id:'g-'+key}) : h('input',{type: type || 'text', id:'g-'+key, value: c[key] || ''}); if (type === 'area') i.value = c[key] || ''; F[key] = i;
-    return h('div',{class:'field'}, h('label',{for:'g-'+key}, label), i, help ? h('span',{class:'help'}, help) : null); };
-  let logoId = c.logoId || '';
-  const lIn = h('input',{type:'file',id:'g-logo',accept:'image/png,image/jpeg,image/webp,image/svg+xml'});
-  lIn.addEventListener('change', async () => { const file = lIn.files[0]; if (!file || !S.assets) return; status.textContent = 'Uploading logo…'; try { const r = await S.assets.upload(file); logoId = r.id; status.textContent = 'Logo ready. Save settings to use it.'; } catch(e){ status.textContent = 'Logo upload failed.'; } });
-  const sub = t => h('h3',{style:'font-family:var(--f-head);font-weight:900;font-size:1.2rem'}, t);
-  const f = h('form', {class:'sec', style:'display:flex;flex-direction:column;gap:.9rem'},
-    sub('Site settings'), inp('title','Series name'), inp('tagline','Tagline'),
-    inp('mascotName','Mascot name','text','The sun guide who walks with visitors.'),
-    S.assets ? h('div',{class:'field'},h('label',{for:'g-logo'},'Logo'),lIn) : null,
-    sub('Connect details'), inp('orgName','Organisation name'), inp('about','About us (shown in Connect)','area'),
-    h('div',{class:'two'}, inp('phone','Phone','tel'), inp('rsvp','RSVP WhatsApp (if different)','tel')),
-    h('div',{class:'two'}, inp('website','Website'), inp('email','Email','email')),
-    h('div',{class:'two'}, inp('facebook','Facebook link'), inp('instagram','Instagram link')),
-    status, h('button',{type:'submit',class:'btn purple',style:'align-self:flex-start'},'Save settings'));
-  f.addEventListener('submit', async ev => { ev.preventDefault(); if (!S.db) return; status.textContent = 'Saving…';
-    const out = {logoId}; Object.keys(F).forEach(k => out[k] = F[k].value.trim());
-    try { await S.db.doc('site/config').set(out); status.textContent = 'Settings saved.'; } catch(e){ status.textContent = 'Could not save settings.'; } });
-  return f;
-}
 function normUrl(u){ return /^https?:\/\//i.test(u) ? u : 'https://' + u; }
 function renderConnect(){
   const c = S.config, phone = c.phone || '', digits = phone.replace(/\D/g,'');
@@ -791,11 +643,11 @@ function renderConnect(){
   body.append(h('p',{class:'note',style:'margin:0'},'Need help getting there, a quiet space or an interpreter? Call or message us to talk through what you need.'));
   $('#connect').replaceChildren(head, body);
 }
-function openConnect(){ $('#room').hidden = true; S.openId = null; S.special = null; closePanel('special'); closePanel('tickets'); closePanel('guide'); closePanel('studio'); renderConnect(); $('#connect').hidden = false; $('#connect-title').focus(); }
+function openConnect(){ $('#room').hidden = true; S.openId = null; S.special = null; closePanel('special'); closePanel('tickets'); closePanel('guide'); renderConnect(); $('#connect').hidden = false; $('#connect-title').focus(); }
 
 /* ---------- panels + a11y ---------- */
 function closePanel(id){ const p = $('#' + id); if (p) p.hidden = true; if (id === 'guide') $('#b-guide').setAttribute('aria-expanded','false'); }
-function openGuide(){ $('#room').hidden = true; S.openId = null; S.special = null; closePanel('special'); closePanel('tickets'); closePanel('studio'); renderGuide(); $('#guide').hidden = false; $('#b-guide').setAttribute('aria-expanded','true'); $('#guide-title').focus(); }
+function openGuide(){ $('#room').hidden = true; S.openId = null; S.special = null; closePanel('special'); closePanel('tickets'); renderGuide(); $('#guide').hidden = false; $('#b-guide').setAttribute('aria-expanded','true'); $('#guide-title').focus(); }
 let liveT; function announce(msg){ const el = $('#here'); clearTimeout(liveT); el.dataset.busy = '1'; el.textContent = msg; liveT = setTimeout(() => { delete el.dataset.busy; updateHere(true); }, 2600); }
 function applyPrefs(){
   document.documentElement.classList.toggle('big', !!S.big);
@@ -812,7 +664,7 @@ function applyPrefs(){
 /* ---------- page views (List-view layout): Zones, Partners ---------- */
 function openPage(kind){
   S.page = kind; $('#room').hidden = true; S.openId = null; S.special = null;
-  ['special','guide','studio','connect','tickets'].forEach(closePanel);
+  ['special','guide','connect','tickets'].forEach(closePanel);
   document.body.classList.add('paging');
   renderPage(); const el = $('#pageview'); el.hidden = false; el.scrollTop = 0; $('#pv-title').focus();
   try { history.replaceState(null, '', kind === 'zones' ? '#zones' : '#our-partners'); } catch(e){}
@@ -828,7 +680,7 @@ function pageHead(title, accent, intro){
 }
 function zCard(o){
   return h('div', {class:'card panel zcard'},
-    h('span', {class:'cover ' + (o.bg || 'bg-purple') + (o.logo ? ' pcover' : '')}, o.logo ? h('img', {src: MEDIA(o.logo), alt: o.alt || '', loading:'lazy'}) : h('span', {class:'comic big outline'}, o.badge)),
+    h('span', {class:'cover ' + (o.bg || 'bg-purple') + (o.logo ? ' pcover' : '')}, o.logo ? h('img', {src: MEDIA(o.logo), alt: o.alt || '', loading:'lazy'}) : o.icon ? icon(o.icon, 84, o.fill) : h('span', {class:'comic big outline'}, o.badge)),
     h('span', {class:'cbody'}, o.chip ? h('span', {class:'chip ' + (o.chipCls || ''), style:'align-self:flex-start'}, o.chip) : null, h('strong', null, o.title), o.lines.filter(Boolean).map(t => h('span', null, t))),
     h('div', {class:'zacts'}, o.acts.filter(Boolean)));
 }
@@ -838,10 +690,10 @@ function renderPage(){
     const list = (S.partners || []).filter(p => p && p.name), email = S.config.email || '', phone = S.config.phone || '';
     const cards = h('div', {class:'cards'});
     list.forEach(p => { const url = safeUrl(p.url);
-      cards.append(zCard({logo: p.logo, alt: p.name + ' logo', badge: '★', bg: 'bg-amber', chip: p.type, title: p.name, lines: [p.blurb],
+      cards.append(zCard({logo: p.logo, alt: p.name + ' logo', icon: 'star', fill: '#FFC72C', bg: 'bg-navy', chip: p.type, title: p.name, lines: [p.blurb],
         acts: [url ? h('a', {class:'btn sm', href: url, target:'_blank', rel:'noopener', 'aria-label':'Visit ' + p.name + ' (opens in a new tab)'}, 'Visit') : null]})); });
-    if (!list.length) cards.append(zCard({badge: '★', bg: 'bg-amber', title: 'Partner spots are open', lines: ['Our first partners and sponsors will appear here soon.'], acts: []}));
-    cards.append(zCard({badge: '♥', bg: 'bg-pink', title: 'Partner with AbleShine', lines: ['Want your organisation in our Partners tent and on our event days? We would love to hear from you.', email, phone],
+    if (!list.length) cards.append(zCard({icon: 'star', fill: '#FFC72C', bg: 'bg-navy', title: 'Partner spots are open', lines: ['Our first partners and sponsors will appear here soon.'], acts: []}));
+    cards.append(zCard({icon: 'heart', bg: 'bg-pink', title: 'Partner with AbleShine', lines: ['Want your organisation in our Partners tent and on our event days? We would love to hear from you.', email, phone],
       acts: [email ? h('button', {class:'btn sm', onclick: () => copyText(email, 'Email copied')}, 'Copy email') : null,
              email ? h('a', {class:'btn sm purple', href: 'mailto:' + email + '?subject=' + encodeURIComponent('Partnering with AbleShine')}, 'Email us') : null]}));
     const walkRow = (W.ok && !S.list) ? h('div', {class:'actions', style:'margin-top:1.5rem'}, h('button', {class:'btn', onclick: () => leaveTo(() => goSpecial('partners'))}, 'Walk to the Partners tent')) : null;
@@ -855,16 +707,16 @@ function renderPage(){
   const ev = S.chapters.map(c => { const t = tix(c);
     return zCard({badge: c.num, bg: 'bg-' + c.color, chip: STATUS[c.status], chipCls: c.status, title: 'Chapter ' + c.num + ': ' + c.name, lines: [fmtLong(c.date), c.venue || 'Venue to be confirmed'],
       acts: [h('button', {class:'btn sm purple', onclick: () => openRoom(c.id)}, 'Open'), walkBtn(() => goChapter(c.id)), t ? h('a', {class:'btn sm pink', href: t, target:'_blank', rel:'noopener', 'aria-label':'Get tickets for ' + c.name + ' (opens Eventbrite)'}, 'Get tickets') : null]}); });
-  const play = [zCard({badge: '♫', bg: 'bg-teal', title: 'Play Tent', lines: ['The rainbow dome. Gentle sensory games with no scores and no rush.'],
+  const play = [zCard({icon: 'note', bg: 'bg-rainbow', title: 'Play Tent', lines: ['The rainbow dome. Gentle sensory games with no scores and no rush.'],
       acts: [h('button', {class:'btn sm purple', onclick: () => openSpecial('play')}, 'Open'), walkBtn(() => goSpecial('play'))]})]
-    .concat(Object.keys(GAMES).map(k => zCard({badge: {bubbles:'●', paint:'✦', pads:'♪', breathe:'☀'}[k], bg: GAMES[k].bg, title: GAMES[k].title, lines: [GAMES[k].blurb],
+    .concat(Object.keys(GAMES).map(k => zCard({icon: {bubbles:'bubbles', paint:'sparkle', pads:'pads', breathe:'sun'}[k], fill: k === 'breathe' ? '#FFFFFF' : undefined, bg: GAMES[k].bg, title: GAMES[k].title, lines: [GAMES[k].blurb],
       acts: [h('button', {class:'btn sm purple', onclick: () => openGame(k)}, 'Play now')]})));
-  const partners = [zCard({badge: '★', bg: 'bg-amber', title: 'Partners tent', lines: ['The gold and navy pavilion. Meet the organisations who make AbleShine happen.'],
+  const partners = [zCard({icon: 'star', fill: '#FFC72C', bg: 'bg-navy', title: 'Partners tent', lines: ['The gold and navy pavilion. Meet the organisations who make AbleShine happen.'],
       acts: [h('button', {class:'btn sm purple', onclick: () => openPage('partners')}, 'See partners'), walkBtn(() => goSpecial('partners'))]})];
   const help = [
-    zCard({badge: '☀', bg: 'bg-amber', title: 'Sunshine Square', lines: ['The plaza with the giant Sunny statue. Every visit starts here.'], acts: [walkBtn(() => W.goHome())]}),
-    zCard({badge: '✓', bg: 'bg-pink', title: 'Get tickets', lines: ['Every upcoming event in one list, no tour needed.'], acts: [h('button', {class:'btn sm purple', onclick: openTickets}, 'Open')]}),
-    zCard({badge: '@', bg: 'bg-purple', title: 'Connect', lines: ['Phone, WhatsApp, email and socials. Ask us anything about access.'], acts: [h('button', {class:'btn sm purple', onclick: openConnect}, 'Open')]})];
+    zCard({icon: 'sun', fill: '#FFFFFF', bg: 'bg-amber', title: 'Sunshine Square', lines: ['The plaza with the giant Sunny statue. Every visit starts here.'], acts: [walkBtn(() => W.goHome())]}),
+    zCard({icon: 'ticket', bg: 'bg-pink', title: 'Get tickets', lines: ['Every upcoming event in one list, no tour needed.'], acts: [h('button', {class:'btn sm purple', onclick: openTickets}, 'Open')]}),
+    zCard({icon: 'chat', bg: 'bg-purple', title: 'Connect', lines: ['Phone, WhatsApp, email and socials. Ask us anything about access.'], acts: [h('button', {class:'btn sm purple', onclick: openConnect}, 'Open')]})];
   box.replaceChildren(...parts,
     ...zone('Event tents', 'One striped tent per AbleShine day, in date order along the story trail.', ev.length ? ev : [h('div', {class:'blank'}, h('span', {class:'comic'}, 'First chapter coming soon'))]),
     ...zone('Play zone', 'Quiet games to tap, draw, listen and breathe. Sound is soft and can be turned off.', play),
@@ -874,8 +726,8 @@ function renderPage(){
 
 /* ---------- landmark tents: Partners + Play ---------- */
 const SPECIALS = [
-  {kind:'play', name:'Play Tent', badge:'♫', bg:'bg-teal', line:'Gentle sensory games. No scores, no rush.'},
-  {kind:'partners', name:'Partners', badge:'★', bg:'bg-amber', line:'The organisations who make AbleShine happen.'}
+  {kind:'play', name:'Play Tent', icon:'note', bg:'bg-rainbow', line:'Gentle sensory games. No scores, no rush.'},
+  {kind:'partners', name:'Partners', icon:'star', bg:'bg-navy', line:'The organisations who make AbleShine happen.'}
 ];
 function goSpecial(kind){
   closePanel('guide');
@@ -887,7 +739,7 @@ function goSpecial(kind){
   W.travelSpecial(kind, () => openSpecial(kind));
 }
 function openSpecial(kind){
-  S.special = kind; $('#room').hidden = true; S.openId = null; closePanel('guide'); closePanel('connect'); closePanel('studio'); closePanel('tickets');
+  S.special = kind; $('#room').hidden = true; S.openId = null; closePanel('guide'); closePanel('connect'); closePanel('tickets');
   renderSpecial(); const el = $('#special'); el.hidden = false; el.scrollTop = 0; $('#special-title').focus();
   try { history.replaceState(null, '', '#' + kind); } catch(e){}
 }
@@ -1052,7 +904,7 @@ function initWorld(){
   if (!window.THREE) throw new Error('no three');
   const T = THREE, canvas = $('#world');
   const renderer = new T.WebGLRenderer({canvas, antialias:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   const scene = new T.Scene();
   const sky = document.createElement('canvas'); sky.width = 4; sky.height = 256;
@@ -1066,19 +918,18 @@ function initWorld(){
   scene.add(sun); scene.add(sun.target);
 
   const grad = new T.DataTexture(new Uint8Array([95,175,255]), 3, 1, T.LuminanceFormat); grad.minFilter = grad.magFilter = T.NearestFilter; grad.needsUpdate = true;
-  const OUT = new T.MeshBasicMaterial({color:'#22114A', side:T.BackSide});
+  const OUT = new T.MeshBasicMaterial({color:'#22114A', side:T.BackSide}); OUT.userData.keep = true;
   const toon = (color, extra) => new T.MeshToonMaterial(Object.assign({color, gradientMap: grad}, extra||{}));
   function mk(geo, mat, outline, sc){ const m = new T.Mesh(geo, typeof mat === 'string' ? toon(mat) : mat); m.castShadow = true; m.receiveShadow = true; if (outline !== false){ const o = new T.Mesh(geo, OUT); o.scale.setScalar(sc || 1.06); m.add(o); } return m; }
-  function canvasTex(w, hgt, draw){ const c = document.createElement('canvas'); c.width = w; c.height = hgt; draw(c.getContext('2d'), w, hgt); const t = new T.CanvasTexture(c); t.anisotropy = 4; return t; }
-  const stripes = {}; function stripeTex(a, b){ const key = a + b; if (stripes[key]) return stripes[key]; const t = canvasTex(256, 32, (g,w,hh) => { for (let i = 0; i < 16; i++){ g.fillStyle = i % 2 ? b : a; g.fillRect(i*16,0,16,hh); } }); t.wrapS = T.RepeatWrapping; stripes[key] = t; return t; }
-  let bendayT = null; function benday(){ if (bendayT) return bendayT; bendayT = canvasTex(256,128,(g,w,hh) => { g.fillStyle = '#FFFFFF'; g.fillRect(0,0,w,hh); g.fillStyle = '#C4C4C4'; for (let y = 6; y < hh; y += 12) for (let x = ((y-6)/12 % 2 ? 12 : 6); x < w; x += 12){ g.beginPath(); g.arc(x,y,3.2,0,Math.PI*2); g.fill(); } }); bendayT.wrapS = bendayT.wrapT = T.RepeatWrapping; bendayT.repeat.set(3,2); return bendayT; }
-  const dots = {}; function dotTex(hex){ if (dots[hex]) return dots[hex]; const t = canvasTex(256,256,(g,w,hh) => { g.fillStyle = '#FFF6E0'; g.fillRect(0,0,w,hh); g.fillStyle = hex; g.globalAlpha = .55; for (let y = 8; y < hh; y += 16) for (let x = (y/16 % 2 ? 16 : 8); x < w; x += 16){ g.beginPath(); g.arc(x,y,4,0,Math.PI*2); g.fill(); } }); dots[hex] = t; return t; }
-  const starShape = new T.Shape(); for (let i = 0; i < 10; i++){ const r = i % 2 ? 0.45 : 1, a = i/10*Math.PI*2 + Math.PI/2; const x = Math.cos(a)*r, y = Math.sin(a)*r; if (i) starShape.lineTo(x, y); else starShape.moveTo(x, y); } starShape.closePath();
-  const starGeo = new T.ExtrudeGeometry(starShape, {depth: 0.3, bevelEnabled: false}); starGeo.center();
-  const starTex = canvasTex(128,128,(g) => { g.translate(64,64); g.beginPath(); for (let i = 0; i < 10; i++){ const r = i % 2 ? 22 : 54, a = i/10*Math.PI*2 - Math.PI/2; g.lineTo(Math.cos(a)*r, Math.sin(a)*r); } g.closePath(); g.fillStyle = '#FFC72C'; g.fill(); g.lineWidth = 7; g.lineJoin = 'round'; g.strokeStyle = '#22114A'; g.stroke(); });
-  const heartTex = canvasTex(128,128,(g) => { g.translate(64,66); g.beginPath(); g.moveTo(0,40); g.bezierCurveTo(-62,0,-40,-52,0,-22); g.bezierCurveTo(40,-52,62,0,0,40); g.closePath(); g.fillStyle = '#E0187A'; g.fill(); g.lineWidth = 7; g.lineJoin = 'round'; g.strokeStyle = '#22114A'; g.stroke(); });
+  const keepTex = (w, hgt, draw) => { const t = canvasTex(w, hgt, draw); t.userData.keep = true; return t; };
+  function canvasTex(w, hgt, draw){ const c = document.createElement('canvas'); c.width = w; c.height = hgt; draw(c.getContext('2d'), w, hgt); const t = new T.CanvasTexture(c); t.userData = {}; t.anisotropy = 4; return t; }
+  const stripes = {}; function stripeTex(a, b){ const key = a + b; if (stripes[key]) return stripes[key]; const t = canvasTex(256, 32, (g,w,hh) => { for (let i = 0; i < 16; i++){ g.fillStyle = i % 2 ? b : a; g.fillRect(i*16,0,16,hh); } }); t.wrapS = T.RepeatWrapping; t.userData.keep = true; stripes[key] = t; return t; }
+  let bendayT = null; function benday(){ if (bendayT) return bendayT; bendayT = canvasTex(256,128,(g,w,hh) => { g.fillStyle = '#FFFFFF'; g.fillRect(0,0,w,hh); g.fillStyle = '#C4C4C4'; for (let y = 6; y < hh; y += 12) for (let x = ((y-6)/12 % 2 ? 12 : 6); x < w; x += 12){ g.beginPath(); g.arc(x,y,3.2,0,Math.PI*2); g.fill(); } }); bendayT.wrapS = bendayT.wrapT = T.RepeatWrapping; bendayT.repeat.set(3,2); bendayT.userData.keep = true; return bendayT; }
+  const dots = {}; function dotTex(hex){ if (dots[hex]) return dots[hex]; const t = canvasTex(256,256,(g,w,hh) => { g.fillStyle = '#FFF6E0'; g.fillRect(0,0,w,hh); g.fillStyle = hex; g.globalAlpha = .55; for (let y = 8; y < hh; y += 16) for (let x = (y/16 % 2 ? 16 : 8); x < w; x += 16){ g.beginPath(); g.arc(x,y,4,0,Math.PI*2); g.fill(); } }); t.userData.keep = true; dots[hex] = t; return t; }
+  const starTex = keepTex(128,128,(g) => { g.translate(64,64); g.beginPath(); for (let i = 0; i < 10; i++){ const r = i % 2 ? 22 : 54, a = i/10*Math.PI*2 - Math.PI/2; g.lineTo(Math.cos(a)*r, Math.sin(a)*r); } g.closePath(); g.fillStyle = '#FFC72C'; g.fill(); g.lineWidth = 7; g.lineJoin = 'round'; g.strokeStyle = '#22114A'; g.stroke(); });
+  const heartTex = keepTex(128,128,(g) => { g.translate(64,66); g.beginPath(); g.moveTo(0,40); g.bezierCurveTo(-62,0,-40,-52,0,-22); g.bezierCurveTo(40,-52,62,0,0,40); g.closePath(); g.fillStyle = '#E0187A'; g.fill(); g.lineWidth = 7; g.lineJoin = 'round'; g.strokeStyle = '#22114A'; g.stroke(); });
   const texCache = {}; const loader = new T.TextureLoader();
-  function blobTex(id){ if (!texCache[id]){ texCache[id] = loader.load(MEDIA(id)); } return texCache[id]; }
+  function blobTex(id){ if (!texCache[id]){ texCache[id] = loader.load(MEDIA(id)); texCache[id].userData = {keep: true}; } return texCache[id]; }
 
   // static scenery
   const water = new T.Mesh(new T.PlaneGeometry(3000,3000), new T.MeshToonMaterial({color:'#3CC6E8', gradientMap:grad})); water.rotation.x = -Math.PI/2; water.position.y = -1; water.receiveShadow = true; scene.add(water);
@@ -1095,8 +946,10 @@ function initWorld(){
     g.fillStyle = 'rgba(214,31,105,.35)'; g.beginPath(); g.arc(-95,40,22,0,Math.PI*2); g.fill(); g.beginPath(); g.arc(95,40,22,0,Math.PI*2); g.fill();
   });
   const skySun = new T.Sprite(new T.SpriteMaterial({map:faceTex, transparent:true, fog:false})); skySun.scale.set(60,60,1); skySun.position.set(160,150,-260); scene.add(skySun);
-  const clouds = [];
-  for (let i = 0; i < 10; i++){ const c = new T.Group(); for (let j = 0; j < 4; j++){ const s = new T.Mesh(new T.SphereGeometry(3 + Math.random()*2.5, 12, 10), toon('#FFFFFF')); s.position.set(j*3.6 - 5, Math.random()*1.5, Math.random()*2); c.add(s); } c.position.set(Math.random()*400 - 200, 38 + Math.random()*20, Math.random()*400 - 200); scene.add(c); clouds.push(c); }
+  const clouds = [], cloudMesh = new T.InstancedMesh(new T.SphereGeometry(1, 12, 9), toon('#FFFFFF'), 40), cm4 = new T.Matrix4(), cq = new T.Quaternion(), cv3 = new T.Vector3(), cs3 = new T.Vector3();
+  for (let i = 0; i < 10; i++) clouds.push({x: Math.random()*400 - 200, y: 38 + Math.random()*20, z: Math.random()*400 - 200, parts: [0,1,2,3].map(j => [j*3.6 - 5, Math.random()*1.5, Math.random()*2, 3 + Math.random()*2.5])});
+  const placeClouds = () => { let n = 0; clouds.forEach(c => c.parts.forEach(pt => { cm4.compose(cv3.set(c.x + pt[0], c.y + pt[1], c.z + pt[2]), cq, cs3.set(pt[3], pt[3], pt[3])); cloudMesh.setMatrixAt(n++, cm4); })); cloudMesh.instanceMatrix.needsUpdate = true; };
+  placeClouds(); cloudMesh.frustumCulled = false; scene.add(cloudMesh);
 
   // people (avatar + NPCs)
   const SKIN = ['#F6D3B3','#D9A47A','#A86B43','#6B4428'];
@@ -1141,6 +994,109 @@ function initWorld(){
     return {g, legs, tail};
   }
 
+  // ---- crowd: lightweight merged models (about 6 draw calls a person) ----
+  function mergeParts(parts, grow){
+    const pos = [], nor = [], col = [], m = new T.Matrix4(), q0 = new T.Quaternion(), e = new T.Euler(), nm = new T.Matrix3(), c = new T.Color(), v0 = new T.Vector3();
+    parts.forEach(pt => { if (grow && pt.noOutline) return; const g = pt.geo.index ? pt.geo.toNonIndexed() : pt.geo, k = grow || 1, sc = [].concat(pt.s || 1);
+      m.compose(v0.set(pt.p[0], pt.p[1], pt.p[2]), q0.setFromEuler(e.set(...(pt.r || [0,0,0]))), new T.Vector3(sc[0]*k, (sc[1] ?? sc[0])*k, (sc[2] ?? sc[0])*k));
+      nm.getNormalMatrix(m); c.set(pt.c || '#FFFFFF'); const pa = g.attributes.position, na = g.attributes.normal;
+      for (let i = 0; i < pa.count; i++){ v0.fromBufferAttribute(pa, i).applyMatrix4(m); pos.push(v0.x, v0.y, v0.z); v0.fromBufferAttribute(na, i).applyMatrix3(nm).normalize(); nor.push(v0.x, v0.y, v0.z); col.push(c.r, c.g, c.b); } });
+    const out = new T.BufferGeometry(); out.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); out.setAttribute('normal', new T.Float32BufferAttribute(nor, 3)); out.setAttribute('color', new T.Float32BufferAttribute(col, 3)); out.computeBoundingSphere(); return out;
+  }
+  function bodyMesh(parts){
+    const g = new T.Group(), body = new T.Mesh(mergeParts(parts), toon('#FFFFFF', {vertexColors: true})), ol = new T.Mesh(mergeParts(parts, 1.09), OUT);
+    body.castShadow = true; g.add(body, ol); return g;
+  }
+  const HAIR = ['#2A1A12','#6B3E1E','#C9A26B','#B8BCC4','#E0187A','#1A1A1A'];
+  function npcModel(o){
+    const g = new T.Group(), P = {g, type: o.type, legs: [], arms: [], wheels: []}, hood = o.hood, skin = SKIN[o.skin], jeans = o.jeans, hair = o.hair;
+    const lm = col => toon(col), cyl = (r1, r2, h, n) => new T.CylinderGeometry(r1, r2, h, n || 8), sph = (r, a, b) => new T.SphereGeometry(r, a || 10, b || 8);
+    const hairG = new T.SphereGeometry(0.48, 10, 5, 0, Math.PI*2, 0, Math.PI/2.1);
+    const limb = (len, r, mat) => { const piv = new T.Group(), m = new T.Mesh(cyl(r, r, len, 6), mat); m.position.y = -len/2; piv.add(m); return piv; };
+    if (o.type === 'chair'){
+      g.add(bodyMesh([{geo: new T.BoxGeometry(1.3,0.22,1.2), p:[0,1,0], c:'#3B3355'}, {geo: new T.BoxGeometry(1.3,1.2,0.16), p:[0,1.62,-0.6], c:'#3B3355'},
+        {geo: sph(0.17, 6, 4), p:[-0.5,0.17,0.62], c:'#22114A', noOutline:true}, {geo: sph(0.17, 6, 4), p:[0.5,0.17,0.62], c:'#22114A', noOutline:true},
+        {geo: cyl(0.5,0.58,1.1,10), p:[0,1.7,-0.18], c: hood}, {geo: new T.BoxGeometry(0.9,0.36,0.9), p:[0,1.26,0.3], c: jeans}, {geo: new T.BoxGeometry(0.85,0.75,0.32), p:[0,0.82,0.68], c: jeans},
+        {geo: sph(0.44), p:[0,2.55,-0.15], c: skin}, {geo: hairG, p:[0,2.61,-0.17], c: hair, noOutline:true}]));
+      const wgeo = mergeParts([{geo: new T.TorusGeometry(0.72,0.09,6,18), p:[0,0,0], r:[0,Math.PI/2,0], c:'#22114A'}, {geo: new T.BoxGeometry(0.06,1.4,0.06), p:[0,0,0], c:'#C9B8F2'}, {geo: new T.BoxGeometry(0.06,1.4,0.06), p:[0,0,0], r:[Math.PI/2,0,0], c:'#C9B8F2'}]);
+      const wmat = toon('#FFFFFF', {vertexColors: true});
+      [-0.78, 0.78].forEach(x => { const w = new T.Mesh(wgeo, wmat); w.position.set(x, 0.78, -0.1); g.add(w); P.wheels.push(w); });
+      const am = lm(hood); [-0.66, 0.66].forEach(x => { const a = limb(0.85, 0.15, am); a.position.set(x, 2.05, -0.15); a.rotation.x = -0.5; g.add(a); P.arms.push(a); });
+    } else {
+      const parts = [{geo: cyl(0.52,0.6,1.2,10), p:[0,1.68,0], c: hood}, {geo: sph(0.45), p:[0,2.65,0], c: skin}, {geo: hairG, p:[0,2.71,0], c: hair, noOutline:true}];
+      if (o.type === 'cane') parts.push({geo: cyl(0.06,0.06,1.9,6), p:[0.98,0.95,0.35], r:[0.12,0,0], c:'#FFFFFF'}, {geo: cyl(0.065,0.065,0.25,6), p:[0.98,0.15,0.46], r:[0.12,0,0], c:'#E0187A'});
+      g.add(bodyMesh(parts));
+      const jm = lm(jeans), am = lm(hood);
+      [-0.25, 0.25].forEach(x => { const l = limb(1.1, 0.21, jm); l.position.set(x, 1.1, 0); g.add(l); P.legs.push(l); });
+      [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, am); a.position.set(x, 2.18, 0); g.add(a); P.arms.push(a); });
+    }
+    return P;
+  }
+  function npcDog(){
+    const g = new T.Group(), gold = '#E3A857';
+    g.add(bodyMesh([{geo: new T.BoxGeometry(0.55,0.5,1.1), p:[0,0.62,0], c: gold}, {geo: new T.BoxGeometry(0.48,0.44,0.5), p:[0,0.98,0.66], c: gold}, {geo: new T.BoxGeometry(0.28,0.2,0.26), p:[0,0.9,0.98], c:'#C98B3F'},
+      {geo: new T.BoxGeometry(0.12,0.3,0.2), p:[-0.2,1.1,0.6], c:'#C98B3F'}, {geo: new T.BoxGeometry(0.12,0.3,0.2), p:[0.2,1.1,0.6], c:'#C98B3F'},
+      {geo: new T.ConeGeometry(0.34,0.46,3), p:[0,0.62,0.62], r:[Math.PI,0,0], s:[1,1,0.35], c:'#5B2DB0'}, {geo: new T.CylinderGeometry(0.05,0.07,0.5,6), p:[0,0.9,-0.65], r:[-0.8,0,0], c: gold}]));
+    const lm = toon(gold), legs = []; [[-0.18,0.38],[0.18,0.38],[-0.18,-0.38],[0.18,-0.38]].forEach(p => { const l = new T.Mesh(new T.CylinderGeometry(0.09,0.09,0.42,6), lm); l.position.set(p[0], 0.21, p[1]); g.add(l); legs.push(l); });
+    return {g, legs};
+  }
+  // walking network: a ring around the plaza edge plus the story trail
+  let npcs = [];
+  const RING = 11.5, angOf = p => Math.atan2(p.z, p.x);
+  function buildCrowd(spots, specials, rnd){
+    npcs = [];
+    const dests = spots.map(sp => ({type:'trail', k: sp.sample, face: sp.pos}))
+      .concat(specials.map(sp => ({type:'ring', a: angOf(sp.door), face: sp.pos})))
+      .concat([0.6, 2.2, 3.8, 5.2].map(a => ({type:'ring', a, face: new T.Vector3(0, 0, 0)})));
+    const trailA = samples.length ? angOf(samples[0]) : 0;
+    const arc = (a0, a1) => { let d = a1 - a0; d = Math.atan2(Math.sin(d), Math.cos(d)); const n = Math.max(1, Math.ceil(Math.abs(d)/0.15)), pts = [];
+      for (let i = 1; i <= n; i++){ const a = a0 + d*i/n; pts.push(new T.Vector3(Math.cos(a)*RING, 0, Math.sin(a)*RING)); } return pts; };
+    const along = (k0, k1) => { const pts = [], st = k0 <= k1 ? 2 : -2; for (let k = k0; st > 0 ? k <= k1 : k >= k1; k += st) pts.push(samples[k].clone()); pts.push(samples[k1].clone()); return pts; };
+    const route = (from, to) => {
+      if (from.type === 'trail' && to.type === 'trail') return along(from.k, to.k);
+      if (from.type === 'trail') return along(from.k, 0).concat(arc(trailA, to.a));
+      if (to.type === 'trail') return arc(from.a, trailA).concat(along(0, to.k));
+      return arc(from.a, to.a);
+    };
+    const where = d => d.type === 'trail' ? samples[d.k].clone() : new T.Vector3(Math.cos(d.a)*RING, 0, Math.sin(d.a)*RING);
+    const hoods = ['#E0187A','#1FA9E1','#FFC72C','#5B2DB0','#7CCB52','#FF8A1F'], jeansC = ['#2E3A8C','#22114A','#3E7C59','#6B4F9E'];
+    const types = ['walk','chair','walk','cane','walk','chair','walk','walk','cane','chair','walk','walk'];
+    const usable = dests.filter(d => d.type !== 'trail' || samples.length);
+    const count = Math.min(12, 6 + spots.length);
+    for (let i = 0; i < count; i++){
+      const P = npcModel({type: types[i % types.length], hood: hoods[i % 6], skin: Math.floor(rnd()*4), jeans: jeansC[i % 4], hair: HAIR[Math.floor(rnd()*HAIR.length)]});
+      const at = usable[Math.floor(rnd()*usable.length)], n = {P, g: P.g, at, path: [], wait: rnd()*5, speed: P.type === 'chair' ? 2.2 : 1.8 + rnd()*1.2, phase: rnd()*6, yaw: 0,
+        off: false, jit: new T.Vector3((rnd()-0.5)*1.6, 0, (rnd()-0.5)*1.6), pos: null};
+      n.pos = where(at).add(n.jit); n.g.position.copy(n.pos); n.g.rotation.y = Math.atan2(at.face.x - n.pos.x, at.face.z - n.pos.z);
+      if (i === 2 || i === 7){ n.dog = npcDog(); n.dogPos = n.pos.clone().add(new T.Vector3(1.2, 0, 1.2)); n.dog.g.position.copy(n.dogPos); dyn.add(n.dog.g); }
+      n.plan = () => { let to = n.at; for (let t = 0; t < 6 && to === n.at; t++) to = usable[Math.floor(Math.random()*usable.length)];
+        n.path = route(n.at, to).map(pt => pt.add(n.jit)); n.next = to; };
+      dyn.add(n.g); npcs.push(n);
+    }
+  }
+  function stepCrowd(dt, t){
+    npcs.forEach(n => {
+      if (n.off) return;
+      let moving = false;
+      if (n.wait > 0){ n.wait -= dt; if (n.wait <= 0) n.plan(); }
+      else if (n.path.length){ const tgt = n.path[0], dx = tgt.x - n.pos.x, dz = tgt.z - n.pos.z, d = Math.hypot(dx, dz), stp = n.speed*dt;
+        if (d <= stp){ n.pos.x = tgt.x; n.pos.z = tgt.z; n.path.shift(); if (!n.path.length){ n.at = n.next; n.wait = 2 + Math.random()*5; n.yawT = Math.atan2(n.at.face.x - n.pos.x, n.at.face.z - n.pos.z); } }
+        else { n.pos.x += dx/d*stp; n.pos.z += dz/d*stp; n.yawT = Math.atan2(dx, dz); }
+        moving = true; }
+      else n.plan();
+      if (n.yawT != null){ let dy = n.yawT - n.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); n.yaw += dy*Math.min(1, dt*6); }
+      n.g.position.set(n.pos.x, 0, n.pos.z); n.g.rotation.y = n.yaw;
+      if (moving) n.phase += dt*n.speed*3.2;
+      const sw = moving ? Math.sin(n.phase)*0.6 : 0, P = n.P;
+      P.legs.forEach((l, i) => l.rotation.x = i ? sw : -sw);
+      if (P.type === 'chair'){ P.wheels.forEach(w => { if (moving) w.rotation.x += n.speed*dt/0.72; }); P.arms.forEach(a => a.rotation.x = -0.5 + (moving ? Math.sin(n.phase)*0.25 : 0)); }
+      else { P.arms.forEach((a, i) => a.rotation.x = i ? -sw*0.8 : sw*0.8); n.g.position.y = moving ? Math.abs(Math.sin(n.phase))*0.1 : 0; }
+      if (n.dog){ const fx = Math.sin(n.yaw), fz = Math.cos(n.yaw), wx = n.pos.x - fx*1.4 + fz*1.2, wz = n.pos.z - fz*1.4 - fx*1.2, ddx = wx - n.dogPos.x, ddz = wz - n.dogPos.z, dd = Math.hypot(ddx, ddz);
+        if (dd > 0.05){ const mv = Math.min(dd, Math.max(3, dd*3)*dt); n.dogPos.x += ddx/dd*mv; n.dogPos.z += ddz/dd*mv; n.dog.g.rotation.y = Math.atan2(ddx, ddz); }
+        n.dog.g.position.copy(n.dogPos); const dw = dd > 0.2 ? Math.sin(t*12)*0.5 : 0; n.dog.legs.forEach((l, i) => l.rotation.x = i % 2 ? dw : -dw); }
+    });
+  }
+
   // avatar
   const av = { pos: new T.Vector3(0,0,8), yaw: Math.PI, path: [], onArrive: null, P: null, dog: null, dogPos: new T.Vector3(1.5,0,9), moving: false, phase: 0 };
   function buildAvatar(){
@@ -1161,12 +1117,14 @@ function initWorld(){
   });
   function mascot(sc){
     const g = new T.Group(), body = new T.Group(); g.add(body); body.scale.setScalar(sc);
-    body.add(mk(new T.SphereGeometry(1.3, 32, 24), '#FFC72C', true, 1.05));
+    // body, 12 rays, legs and shoes merged into one mesh (+ one outline) instead of ~34 separate meshes
+    const ray = new T.ConeGeometry(0.3, 0.85, 8), parts = [{geo: new T.SphereGeometry(1.3, 28, 20), p:[0,0,0], c:'#FFC72C'}];
+    for (let i = 0; i < 12; i++){ const a = i/12*Math.PI*2; parts.push({geo: ray, p:[Math.cos(a)*1.72, Math.sin(a)*1.72, -0.15], r:[0, 0, a - Math.PI/2], c: i % 2 ? '#FF8A1F' : '#FFB21E'}); }
+    [-0.45, 0.45].forEach(x => parts.push({geo: new T.CylinderGeometry(0.1,0.1,0.55,8), p:[x,-1.45,0], c:'#FFB21E'}, {geo: new T.BoxGeometry(0.5,0.32,0.75), p:[x,-1.82,0.12], c:'#E0187A'}));
+    body.add(bodyMesh(parts));
     body.add(new T.Mesh(new T.SphereGeometry(1.315, 32, 16, Math.PI/2 - 0.95, 1.9, Math.PI/2 - 0.95, 1.9), new T.MeshBasicMaterial({map: sunFace, transparent: true, depthWrite: false})));
-    for (let i = 0; i < 12; i++){ const a = i/12*Math.PI*2; const r = mk(new T.ConeGeometry(0.3,0.85,8), i % 2 ? '#FF8A1F' : '#FFB21E', true, 1.12); r.position.set(Math.cos(a)*1.72, Math.sin(a)*1.72, -0.15); r.rotation.z = a - Math.PI/2; body.add(r); }
-    const arm = side => { const p = new T.Group(); p.position.set(side*1.2, -0.45, 0.25); const a = mk(new T.CylinderGeometry(0.11,0.11,0.8,8), '#FFB21E', true, 1.2); a.position.y = -0.4; p.add(a); const hd = mk(new T.SphereGeometry(0.26,12,10), '#FFFFFF'); hd.position.y = -0.85; p.add(hd); p.rotation.z = side*0.5; body.add(p); return p; };
+    const arm = side => { const p = new T.Group(); p.position.set(side*1.2, -0.45, 0.25); p.add(bodyMesh([{geo: new T.CylinderGeometry(0.11,0.11,0.8,8), p:[0,-0.4,0], c:'#FFB21E'}, {geo: new T.SphereGeometry(0.26,12,10), p:[0,-0.85,0], c:'#FFFFFF'}])); p.rotation.z = side*0.5; body.add(p); return p; };
     const armL = arm(-1), armR = arm(1);
-    [-0.45, 0.45].forEach(x => { const leg = mk(new T.CylinderGeometry(0.1,0.1,0.55,8), '#FFB21E', true, 1.2); leg.position.set(x,-1.45,0); body.add(leg); const shoe = mk(new T.BoxGeometry(0.5,0.32,0.75), '#E0187A'); shoe.position.set(x,-1.82,0.12); body.add(shoe); });
     return {g, body, armL, armR};
   }
   const statue = mascot(2.0); statue.g.position.set(0, 3.4 + 1.98*2.0, 0); statue.armR.rotation.z = 2.4; statue.armL.rotation.z = -2.4; plaza.add(statue.g);
@@ -1183,11 +1141,17 @@ function initWorld(){
 
   // dynamic world (rebuilt from chapters)
   let dyn = new T.Group(); scene.add(dyn);
-  let island = null, R = 60, samples = [], pick = [], anim = [], beacons = [];
+  let island = null, R = 60, samples = [], pick = [], anim = [], beacons = [], toppers = [];
   function seeded(seed){ let s = seed; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+  function disposeTree(root){
+    root.traverse(o => {
+      if (o.geometry && !(o.geometry.userData || {}).keep) o.geometry.dispose();
+      (o.material ? [].concat(o.material) : []).forEach(m => { if (m.userData.keep) return; ['map','emissiveMap'].forEach(k => { if (m[k] && !(m[k].userData || {}).keep) m[k].dispose(); }); m.dispose(); });
+    });
+  }
   function layout(chs){
-    scene.remove(dyn); dyn.traverse(o => { if (o.geometry) o.geometry.dispose(); });
-    dyn = new T.Group(); scene.add(dyn); pick = []; anim = []; beacons = [];
+    scene.remove(dyn); disposeTree(dyn);
+    dyn = new T.Group(); scene.add(dyn); pick = []; anim = []; beacons = []; toppers = [];
     const spots = chs.map((c,i) => { const a = i*1.05 + 0.4, r = 22 + i*6.5; const pos = new T.Vector3(Math.cos(a)*r, 0, Math.sin(a)*r); const inward = pos.clone().multiplyScalar(-1).normalize(); return {c, pos, door: pos.clone().add(inward.clone().multiplyScalar(6.6)), inward}; });
     R = Math.max(60, (spots.length ? 22 + (spots.length-1)*6.5 : 0) + 30);
     island = new T.Group();
@@ -1210,18 +1174,18 @@ function initWorld(){
     // tents
     spots.forEach(s => dyn.add(tent(s)));
     // landmark tents beside the plaza: Partners pavilion and Play Tent
-    const specials = [['partners', Math.PI + 0.15, 'Partners', 'Thank you', '\u2605'], ['play', Math.PI + 1.0, 'Play Tent', 'Sensory games', '\u266B']].map(([kind, a, name, sub, badge]) => {
+    const specials = [['partners', Math.PI + 0.15, 'Partners', 'Sponsors and supporters'], ['play', Math.PI + 1.0, 'Play Tent', 'Sensory games']].map(([kind, a, name, sub]) => {
       const pos = new T.Vector3(Math.cos(a)*18.5, 0, Math.sin(a)*18.5), inward = pos.clone().multiplyScalar(-1).normalize();
-      const sp = {kind, name, sub, badge, pos, door: pos.clone().add(inward.multiplyScalar(6.6)), anchor: pos.clone().add(new T.Vector3(0, kind === 'play' ? 10.8 : 10.1, 0))};
+      const sp = {kind, name, sub, pos, door: pos.clone().add(inward.multiplyScalar(6.6)), anchor: pos.clone().add(new T.Vector3(0, kind === 'play' ? 11.2 : 10.8, 0))};
       dyn.add(specialTent(sp)); return sp; });
     const blockers = spots.map(s => s.pos).concat(specials.map(s => s.pos));
     // trees: pop-art puffs, lollipops and stacked pines with Ben-Day dots and thick ink outlines
     const rnd = seeded(7 + spots.length*13), treeN = Math.floor(R*1.6), UP = new T.Vector3(0,1,0);
-    const unitS = new T.SphereGeometry(1, 18, 14), unitC = new T.ConeGeometry(1, 1.3, 14), trunkG = new T.CylinderGeometry(0.22,0.34,1,8);
+    const unitS = new T.SphereGeometry(1, 12, 9), unitSo = new T.SphereGeometry(1, 9, 6), unitC = new T.ConeGeometry(1, 1.3, 10), unitCo = new T.ConeGeometry(1, 1.3, 8), trunkG = new T.CylinderGeometry(0.22,0.34,1,6);
     const leafMat = toon('#FFFFFF', {map: benday()});
     const trunks = new T.InstancedMesh(trunkG, toon('#8A5A3B'), treeN), tOut = new T.InstancedMesh(trunkG, OUT, treeN);
-    const puffs = new T.InstancedMesh(unitS, leafMat, treeN*4), pOut = new T.InstancedMesh(unitS, OUT, treeN*4);
-    const cones = new T.InstancedMesh(unitC, leafMat, treeN*3), cOut = new T.InstancedMesh(unitC, OUT, treeN*3);
+    const puffs = new T.InstancedMesh(unitS, leafMat, treeN*4), pOut = new T.InstancedMesh(unitSo, OUT, treeN*4);
+    const cones = new T.InstancedMesh(unitC, leafMat, treeN*3), cOut = new T.InstancedMesh(unitCo, OUT, treeN*3);
     const m4 = new T.Matrix4(), q = new T.Quaternion(), sc = new T.Vector3(), col = new T.Color(), P3 = new T.Vector3();
     const greens = ['#3FAE49','#6CC24A','#2E9E5B','#94D152'], pops = ['#FF7AB6','#FFC72C','#B79BF2'];
     let nt = 0, np = 0, nc = 0;
@@ -1247,20 +1211,30 @@ function initWorld(){
       }
     }
     trunks.count = tOut.count = nt; puffs.count = pOut.count = np; cones.count = cOut.count = nc;
-    trunks.castShadow = puffs.castShadow = cones.castShadow = true; puffs.receiveShadow = cones.receiveShadow = true;
+    trunks.castShadow = puffs.castShadow = cones.castShadow = true;
     dyn.add(trunks, tOut, puffs, pOut, cones, cOut);
     // flowers + floating stars and hearts
     const fn = Math.floor(R*5), flowers = new T.InstancedMesh(new T.SphereGeometry(0.2,6,4), toon('#FFFFFF'), fn), fcols = ['#FF7AB6','#FFC72C','#FFFFFF','#7FD8F5','#B79BF2']; let fp = 0;
     for (let tries = 0; tries < fn*3 && fp < fn; tries++){ const a = rnd()*Math.PI*2, r = 13 + rnd()*(R-14), x = Math.cos(a)*r, z = Math.sin(a)*r; if (blockers.some(b => (b.x-x)*(b.x-x) + (b.z-z)*(b.z-z) < 90)) continue; m4.makeTranslation(x, 0.12, z); flowers.setMatrixAt(fp, m4); col.set(fcols[fp % 5]); flowers.setColorAt(fp, col); fp++; }
     flowers.count = fp; dyn.add(flowers);
-    for (let i = 0; i < 30; i++){ const sp = new T.Sprite(new T.SpriteMaterial({map: i % 3 === 0 ? heartTex : starTex, transparent: true})); const a = rnd()*Math.PI*2, r = 10 + rnd()*(R-12), k2 = 1.2 + rnd()*1.4; sp.scale.set(k2,k2,1); sp.position.set(Math.cos(a)*r, 9 + rnd()*9, Math.sin(a)*r); dyn.add(sp); anim.push({o:sp, k:'float', ph: rnd()*6, y: sp.position.y}); }
+    [[starTex, 20], [heartTex, 10]].forEach(([tx, n]) => { const arr = new Float32Array(n*3), base = [], ph = [];
+      for (let i = 0; i < n; i++){ const a = rnd()*Math.PI*2, r = 10 + rnd()*(R-12); arr[i*3] = Math.cos(a)*r; arr[i*3+1] = 9 + rnd()*9; arr[i*3+2] = Math.sin(a)*r; base.push(arr[i*3+1]); ph.push(rnd()*6); }
+      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(arr, 3));
+      dyn.add(new T.Points(geo, new T.PointsMaterial({map: tx, size: 2.2, sizeAttenuation: true, transparent: true, alphaTest: 0.35, depthWrite: false})));
+      anim.push({k:'points', geo, base, ph}); });
     // lilac city skyline all around, like the posters
     const sky = new T.Group(), shades = ['#B9A3EE','#A68BE6','#C8B6F2','#9A7BE0'];
     const winTex = shades.map(cc => canvasTex(64,128,(g,w,hh) => { g.fillStyle = cc; g.fillRect(0,0,w,hh); g.fillStyle = 'rgba(255,255,255,.35)'; for (let y = 8; y < hh-8; y += 14) for (let x = 8; x < w-8; x += 14) g.fillRect(x,y,7,8); }));
-    for (let i = 0; i < 110; i++){ const a = i/110*Math.PI*2 + rnd()*0.03, d = R + 40 + rnd()*35, w = 5 + rnd()*7, hh = 16 + rnd()*48, k = i % 4;
-      const b = new T.Mesh(new T.BoxGeometry(w, hh, w), new T.MeshBasicMaterial({color:'#FFFFFF', map: winTex[k]})); b.position.set(Math.cos(a)*d, hh/2 - 1, Math.sin(a)*d); sky.add(b);
-      if (rnd() < 0.25){ const sp = new T.Mesh(new T.ConeGeometry(w*0.35, hh*0.25, 4), new T.MeshBasicMaterial({color: shades[k]})); sp.position.set(b.position.x, hh - 1 + hh*0.125, b.position.z); sky.add(sp); } }
+    const towers = [[], [], [], []], spires = [[], [], [], []];
+    for (let i = 0; i < 110; i++){ const a = i/110*Math.PI*2 + rnd()*0.03, d = R + 40 + rnd()*35, w = 5 + rnd()*7, hh = 16 + rnd()*48, k = i % 4, x = Math.cos(a)*d, z = Math.sin(a)*d;
+      towers[k].push([x, hh/2 - 1, z, w, hh]); if (rnd() < 0.25) spires[k].push([x, hh - 1 + hh*0.125, z, w*0.35, hh*0.25]); }
+    const boxG = new T.BoxGeometry(1, 1, 1), coneG = new T.ConeGeometry(1, 1, 4);
+    const fillInst = (geo, mat, list) => { if (!list.length) return; const im = new T.InstancedMesh(geo, mat, list.length);
+      list.forEach((b, i) => { m4.compose(P3.set(b[0], b[1], b[2]), q.identity(), sc.set(b[3], b[4], b[3])); im.setMatrixAt(i, m4); }); sky.add(im); };
+    shades.forEach((cc, k) => { fillInst(boxG, new T.MeshBasicMaterial({color:'#FFFFFF', map: winTex[k]}), towers[k]); fillInst(coneG, new T.MeshBasicMaterial({color: cc}), spires[k]); });
     dyn.add(sky);
+    buildCrowd(spots, specials, seeded(31 + spots.length));
+    if (W.quality === 'low') npcs.forEach((n, i) => { n.off = i % 2 === 1; n.g.visible = !n.off; if (n.dog) n.dog.g.visible = !n.off; });
     W.spots = spots; W.specials = specials;
     buildLabels(spots, specials);
   }
@@ -1304,7 +1278,7 @@ function initWorld(){
     const paint = () => { const x = cv.getContext('2d'); x.clearRect(0, 0, cv.width, cv.height); draw(x, cv.width, cv.height); tex.needsUpdate = true; };
     paint(); if (document.fonts && document.fonts.load) document.fonts.load('400 100px "Lilita One"').then(paint).catch(() => {});
     const sp = new T.Sprite(new T.SpriteMaterial({map: tex, transparent: true, fog: false}));
-    sp.scale.set(w, hgt, 1); sp.position.y = y; g.add(sp); anim.push({o: sp, k: 'float', ph: Math.random() * 6, y});
+    sp.scale.set(w, hgt, 1); sp.position.y = y; g.add(sp); anim.push({o: sp, k: 'float', ph: Math.random() * 6, y}); toppers.push(sp);
     return sp;
   }
   const TOPFONT = '"Lilita One", Nunito, "Arial Black", sans-serif';
@@ -1320,18 +1294,30 @@ function initWorld(){
       x.fillStyle = ink; x.fillText(c.num, cx, cy + 6);
     });
   }
-  function badgeTopper(g, y, label, bg, fg, bulbs){
-    return topper(g, y, 6, 2.1, (x, W2, H2) => {
-      const pad = 18, rr = 40;
-      const rect = (ox, oy) => { x.beginPath(); x.moveTo(pad+rr+ox, pad+oy); x.arcTo(W2-pad+ox, pad+oy, W2-pad+ox, H2-pad+oy, rr); x.arcTo(W2-pad+ox, H2-pad+oy, pad+ox, H2-pad+oy, rr); x.arcTo(pad+ox, H2-pad+oy, pad+ox, pad+oy, rr); x.arcTo(pad+ox, pad+oy, W2-pad+ox, pad+oy, rr); x.closePath(); };
-      x.fillStyle = '#22114A'; rect(8, 10); x.fill();
-      if (Array.isArray(bg)){ const gr = x.createLinearGradient(pad, 0, W2-pad, 0); bg.forEach((c, i) => gr.addColorStop(i/(bg.length-1), c)); x.fillStyle = gr; } else x.fillStyle = bg;
-      rect(0, 0); x.fill(); x.lineWidth = 12; x.strokeStyle = '#22114A'; x.stroke();
-      if (bulbs){ x.fillStyle = '#FFF3B0'; const n = 14; for (let i = 0; i < n; i++){ const bx = pad + 34 + i*(W2 - 2*pad - 68)/(n-1); [pad + 20, H2 - pad - 20].forEach(by => { x.beginPath(); x.arc(bx, by, 7, 0, Math.PI*2); x.fill(); }); } }
-      x.font = '400 ' + Math.round(H2*0.42) + 'px ' + TOPFONT; x.textAlign = 'center'; x.textBaseline = 'middle';
-      x.lineJoin = 'round'; x.lineWidth = 14; x.strokeStyle = '#22114A'; x.strokeText(label, W2/2, H2/2 + 4);
-      x.fillStyle = fg; x.fillText(label, W2/2, H2/2 + 4);
+  function iconTopper(g, y, kind){
+    return topper(g, y, 3.2, 3.2, (x, W2, H2) => {
+      const cx = W2/2, cy = H2/2, r = W2*0.40;
+      x.fillStyle = '#22114A'; x.beginPath(); x.arc(cx + 10, cy + 12, r, 0, Math.PI*2); x.fill();
+      if (kind === 'play'){ const cols = ['#E0187A','#FF8A1F','#FFC72C','#7CCB52','#1FA9E1','#5B2DB0']; for (let i = 0; i < 12; i++){ x.fillStyle = cols[i % 6]; x.beginPath(); x.moveTo(cx, cy); x.arc(cx, cy, r, i/12*Math.PI*2, (i+1)/12*Math.PI*2); x.closePath(); x.fill(); } }
+      else { x.fillStyle = '#22114A'; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI*2); x.fill(); }
+      x.lineWidth = 18; x.strokeStyle = '#22114A'; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI*2); x.stroke();
+      x.lineWidth = 10; x.strokeStyle = kind === 'play' ? '#FFFFFF' : '#FFC72C'; x.beginPath(); x.arc(cx, cy, r - 26, 0, Math.PI*2); x.stroke();
+      const path = new Path2D(kind === 'play' ? 'M9.5 17.6a3 3 0 1 1-2-2.8V5.2L19 3v11.6a3 3 0 1 1-2-2.8V7.3l-7.5 1.5z' : 'M12 2.6l2.8 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.8 3.2 1.3-6.5-4.9-4.5 6.6-.8z');
+      const k = r*1.25/24; x.save(); x.translate(cx - 12*k, cy - 12*k + (kind === 'play' ? 4 : 0)); x.scale(k, k);
+      x.lineJoin = 'round'; x.lineWidth = 2.2; x.strokeStyle = '#22114A'; x.fillStyle = kind === 'play' ? '#FFFFFF' : '#FFC72C'; x.fill(path); x.stroke(path); x.restore();
     });
+  }
+  // six balloons (+ outlines + strings) in three draw calls; bobbing handled in the frame loop
+  function balloons(g, cols){
+    const bg = new T.SphereGeometry(0.42, 12, 9), b = new T.InstancedMesh(bg, toon('#FFFFFF'), 6), bo = new T.InstancedMesh(bg, OUT, 6), st = new T.InstancedMesh(new T.CylinderGeometry(0.015, 0.015, 2.4, 4), new T.MeshBasicMaterial({color:'#22114A'}), 6);
+    const items = [], col = new T.Color();
+    [-1.9, 1.9].forEach((x, j) => { for (let k = 0; k < 3; k++){ const i = items.length; items.push({x: x + (k-1)*0.45, y: 3.4 + (k%2)*0.5, ph: k + j*2}); b.setColorAt(i, col.set(cols[(k + j) % 3])); } });
+    const m = new T.Matrix4(), q0 = new T.Quaternion(), v0 = new T.Vector3(), sc = new T.Vector3();
+    const place = t => { items.forEach((it, i) => { const y = it.y + (t ? Math.sin(t*1.5 + it.ph)*0.15 : 0);
+      m.compose(v0.set(it.x, y, 4.6), q0, sc.set(1, 1.18, 1)); b.setMatrixAt(i, m); m.compose(v0, q0, sc.set(1.08, 1.27, 1.08)); bo.setMatrixAt(i, m);
+      m.compose(v0.set(it.x, y - 1.6, 4.6), q0, sc.set(1, 1, 1)); st.setMatrixAt(i, m); });
+      b.instanceMatrix.needsUpdate = bo.instanceMatrix.needsUpdate = st.instanceMatrix.needsUpdate = true; };
+    place(0); b.castShadow = true; g.add(b, bo, st); anim.push({k:'balloons', place});
   }
   function tent(s){
     const c = s.c, g = new T.Group(), pair = TENT[c.color] || TENT.purple, soon = c.status === 'soon';
@@ -1346,16 +1332,15 @@ function initWorld(){
     haloRing(g, pair[0]);
     signBoard(g, signTex('CHAPTER ' + c.num, c.name.toUpperCase(), soon ? '#9A7BE0' : pair[0]), -4.3, 2.6, -0.6);
     const vcols = ['#E0187A','#FFC72C','#1FA9E1','#5B2DB0'], scal = new T.SphereGeometry(0.44, 10, 6, 0, Math.PI*2, Math.PI/2, Math.PI/2);
-    for (let i = 0; i < 20; i++){ const a = i/20*Math.PI*2; const p = new T.Mesh(scal, toon(vcols[i%4], ghost)); p.position.set(Math.cos(a)*4.0, 3.72, Math.sin(a)*4.0); g.add(p); }
+    const scM = new T.InstancedMesh(scal, toon('#FFFFFF', ghost), 20), tm4 = new T.Matrix4(), tcol = new T.Color();
+    for (let i = 0; i < 20; i++){ const a = i/20*Math.PI*2; tm4.makeTranslation(Math.cos(a)*4.0, 3.72, Math.sin(a)*4.0); scM.setMatrixAt(i, tm4); scM.setColorAt(i, tcol.set(vcols[i%4])); } g.add(scM);
     const door = mk(new T.BoxGeometry(1.8,2.4,0.4), '#22114A', false); door.position.set(0,1.8,3.35); g.add(door);
     const arch = mk(new T.TorusGeometry(1.1,0.2,8,20,Math.PI), '#FFC72C'); arch.position.set(0,2.95,3.55); g.add(arch);
     const pole = mk(new T.CylinderGeometry(0.07,0.07,1.8,6), '#22114A', false); pole.position.y = 7.9; g.add(pole);
     const flag = mk(new T.ConeGeometry(0.5,1.3,3), '#E0187A', false); flag.rotation.z = -Math.PI/2; flag.position.set(0.62,8.3,0); g.add(flag); anim.push({o:flag, k:'flag'});
     const tp = chapterTopper(g, c, soon ? '#C9B8F2' : pair[0], (c.color === 'amber' || soon) ? '#FFFFFF' : '#FFC72C');
     if (c.status === 'next' || c.status === 'live') tp.scale.set(3.6, 3.6, 1);
-    if (!soon){ const bc = [pair[0], '#FFC72C', '#1FA9E1'];
-      [-1.9, 1.9].forEach((x, j) => { for (let k = 0; k < 3; k++){ const bl = mk(new T.SphereGeometry(0.42, 14, 10), bc[(k + j) % 3], true, 1.08); bl.scale.y = 1.18; bl.position.set(x + (k-1)*0.45, 3.4 + (k%2)*0.5, 4.6); g.add(bl); anim.push({o:bl, k:'balloon', ph: k + j*2, y: bl.position.y});
-        const st = new T.Mesh(new T.CylinderGeometry(0.015,0.015,2.4,4), new T.MeshBasicMaterial({color:'#22114A'})); st.position.set(bl.position.x, bl.position.y - 1.6, 4.6); g.add(st); } }); }
+    if (!soon) balloons(g, [pair[0], '#FFC72C', '#1FA9E1']);
     if (c.posterId){
       const tex = blobTex(c.posterId);
       const board = mk(new T.BoxGeometry(2.3,3.1,0.15), '#22114A', false); board.position.set(3.9,2.3,2.3); board.rotation.y = 0.6; g.add(board);
@@ -1365,8 +1350,6 @@ function initWorld(){
     if (c.status === 'wrapped' || c.status === 'live'){
       c.snaps.slice(0,3).forEach((sn, i) => { const fr = mk(new T.BoxGeometry(1.9,1.5,0.12), '#FFFFFF', true, 1.04); const a = -1.1 - i*0.55; fr.position.set(Math.cos(a)*4.3, 1.6, Math.sin(a)*4.3 + 1); fr.rotation.set(-0.15, -0.9 + i*0.5, 0);
         const ph = new T.Mesh(new T.PlaneGeometry(1.7,1.3), new T.MeshBasicMaterial({map: blobTex(sn.assetId)})); ph.position.z = 0.07; fr.add(ph); g.add(fr); });
-      const crowd = [{type:'walk',hood:'pink',skin:0},{type:'chair',hood:'teal',skin:2},{type:'walk',hood:'amber',skin:3},{type:'cane',hood:'purple',skin:1}];
-      crowd.forEach((o, i) => { const p = person(o); const a = 0.9 + i*0.45; p.g.position.set(Math.cos(a)*4.6 - 2, 0.6, Math.sin(a)*1.2 + 4.2); p.g.rotation.y = Math.PI + (i-1.5)*0.4; p.g.scale.setScalar(0.85); g.add(p.g); anim.push({o:p.g, k:'bob', ph:i}); });
     }
     if (c.status === 'next' || c.status === 'live'){
       const beam = new T.Mesh(new T.CylinderGeometry(1.4,2.4,60,20,1,true), new T.MeshBasicMaterial({color:'#FFE066', transparent:true, opacity:0.22, depthWrite:false, side:T.DoubleSide, fog:false}));
@@ -1412,7 +1395,7 @@ function initWorld(){
       signBoard(g, signTex('SENSORY GAMES', 'PLAY TENT', '#1FA9E1'), -4.3, 2.6, -0.6);
       const door = mk(new T.BoxGeometry(1.8,2.2,0.5), '#22114A', false); door.position.set(0,1.7,3.5); g.add(door);
       const arch = mk(new T.TorusGeometry(1.1,0.2,8,20,Math.PI), '#FFC72C'); arch.position.set(0,2.8,3.75); g.add(arch);
-      badgeTopper(g, 9.3, 'PLAY \u266B', ['#E0187A','#FF8A1F','#FFC72C','#7CCB52','#1FA9E1','#5B2DB0'], '#FFFFFF', false);
+      iconTopper(g, 9.2, 'play');
       const bcol = ['#BDEFFF','#FFD1E8','#FFF1B8','#D9CCFF'];
       for (let i = 0; i < 7; i++){ const a = i/7*Math.PI*2; const b = new T.Mesh(new T.SphereGeometry(0.35 + (i%3)*0.18, 16, 12), toon(bcol[i%4], {transparent:true, opacity:0.7})); b.position.set(Math.cos(a)*3.2, 5 + (i%3)*0.9, Math.sin(a)*3.2); g.add(b); anim.push({o:b, k:'float', ph:i, y:b.position.y}); }
     } else {
@@ -1429,7 +1412,7 @@ function initWorld(){
         const fl = mk(new T.ConeGeometry(0.4,1,3), ['#E0187A','#1FA9E1','#7CCB52','#FF8A1F'][i], false); fl.rotation.z = -Math.PI/2; fl.position.set(x + 0.5, 4.1, z); g.add(fl); });
       const board = mk(new T.BoxGeometry(4.4,2.6,0.2), '#22114A', false); board.position.set(0, 2.2, 0.4); g.add(board);
       const face = new T.Mesh(new T.PlaneGeometry(4.2,2.45), new T.MeshBasicMaterial({map: partnerBoard()})); face.position.z = 0.11; board.add(face);
-      badgeTopper(g, 8.6, '\u2605 PARTNERS \u2605', '#22114A', '#FFC72C', true);
+      iconTopper(g, 8.8, 'partners');
     }
     g.traverse(o => { if (o.isMesh || o.isSprite) o.userData.special = sp.kind; }); pick.push(g);
     return g;
@@ -1448,7 +1431,7 @@ function initWorld(){
   function buildLabels(spots, specials){
     const box = $('#labels'); box.replaceChildren();
     const extra = (specials || []).map(sp => { const b = h('button', {class:'tag', tabindex:'-1', onclick: () => goSpecial(sp.kind), 'aria-label': 'Go to the ' + sp.name},
-      h('span', {class:'num ' + (sp.kind === 'play' ? 'bg-teal' : 'bg-amber')}, sp.badge), h('span', {class:'meta'}, h('span', {class:'nm'}, sp.name), h('small', null, sp.sub)));
+      h('span', {class:'num ' + (sp.kind === 'play' ? 'bg-rainbow' : 'bg-navy')}, icon(sp.kind === 'play' ? 'note' : 'star', 22, sp.kind === 'play' ? '#FFFFFF' : '#FFC72C')), h('span', {class:'meta'}, h('span', {class:'nm'}, sp.name), h('small', null, sp.sub)));
       box.append(b); return {b, s: sp}; });
     tags = extra.concat(spots.map(s => { const c = s.c;
       const b = h('button', {class:'tag', tabindex:'-1', onclick: () => goChapter(c.id), 'aria-label': 'Travel to chapter ' + c.num + ', ' + c.name},
@@ -1537,20 +1520,24 @@ function initWorld(){
     const k = calm ? 1 : Math.min(1, dt*5); cam.yaw += (cam.yawT - cam.yaw)*k; cam.dist += (cam.distT - cam.dist)*k; placeCam();
     sun.position.set(av.pos.x + 30, 60, av.pos.z + 20); sun.target.position.copy(av.pos);
     // ambient life
-    if (!calm){ clouds.forEach(c => { c.position.x += dt*1.2; if (c.position.x > 220) c.position.x = -220; });
-      anim.forEach(a => { if (a.k === 'spin') a.o.rotation.y += dt*1.5; else if (a.k === 'bob') a.o.position.y = 0.6 + Math.abs(Math.sin(t*3 + a.ph))*0.18; else if (a.k === 'flag') a.o.rotation.x = Math.sin(t*3)*0.25; else if (a.k === 'float' || a.k === 'balloon') a.o.position.y = a.y + Math.sin(t*1.5 + a.ph)*(a.k === 'float' ? 0.6 : 0.15); });
-      beacons.forEach(b => b.material.opacity = 0.16 + Math.sin(t*2)*0.08); marker.rotation.z += dt*2; }
+    if (!calm){ clouds.forEach(c => { c.x += dt*1.2; if (c.x > 220) c.x = -220; }); placeClouds();
+      anim.forEach(a => { if (a.k === 'flag') a.o.rotation.x = Math.sin(t*3)*0.25; else if (a.k === 'float') a.o.position.y = a.y + Math.sin(t*1.5 + a.ph)*0.6;
+        else if (a.k === 'balloons') a.place(t);
+        else if (a.k === 'points'){ const arr = a.geo.attributes.position.array; for (let i = 0; i < a.base.length; i++) arr[i*3+1] = a.base[i] + Math.sin(t*1.5 + a.ph[i])*0.6; a.geo.attributes.position.needsUpdate = true; } });
+      beacons.forEach(b => b.material.opacity = 0.16 + Math.sin(t*2)*0.08); marker.rotation.z += dt*2; stepCrowd(dt, t); }
     const rx = Math.cos(cam.yaw), rz = -Math.sin(cam.yaw), sk = calm ? 1 : Math.min(1, dt*3.5);
     sunny.g.position.x += (av.pos.x + rx*2.6 - sunny.g.position.x)*sk; sunny.g.position.z += (av.pos.z + rz*2.6 - sunny.g.position.z)*sk;
     sunny.g.position.y += (2.7 + (calm ? 0 : Math.sin(t*2.2)*0.25) - sunny.g.position.y)*sk; sunny.g.rotation.y = cam.yaw;
     sunny.armR.rotation.z = calm ? 0.5 : (bub.el.hidden ? 0.5 + Math.sin(t*2)*0.1 : 2.4 + Math.sin(t*9)*0.45);
-    renderer.render(scene, camera);
+    toppers.forEach(sp => { const d = camera.position.distanceTo(sp.getWorldPosition(v)); sp.material.opacity = Math.min(1, Math.max(0.15, (d - 14) / 12)); });
+    renderer.render(scene, camera); W.sampleQuality(dt);
     // labels
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    tags.forEach(tg => { v.copy(tg.s.anchor).project(camera); const dist = camera.position.distanceTo(tg.s.anchor);
-      if (v.z > 1 || v.x < -1.2 || v.x > 1.2 || v.y < -1.2 || v.y > 1.2 || dist > 150){ tg.b.style.visibility = 'hidden'; return; }
-      tg.b.style.visibility = 'visible'; tg.b.style.opacity = dist > 95 ? 0.55 : 1;
-      tg.b.style.transform = 'translate(' + ((v.x*0.5+0.5)*cw).toFixed(1) + 'px,' + ((-v.y*0.5+0.5)*ch).toFixed(1) + 'px) translate(-50%,-100%)'; });
+    tags.forEach(tg => { v.copy(tg.s.anchor).project(camera); const dist = camera.position.distanceTo(tg.s.anchor), st = tg.b.style;
+      const show = !(v.z > 1 || v.x < -1.2 || v.x > 1.2 || v.y < -1.2 || v.y > 1.2 || dist > 150);
+      if (show !== tg.show){ tg.show = show; st.visibility = show ? 'visible' : 'hidden'; } if (!show) return;
+      const op = dist > 95 ? '0.55' : '1'; if (op !== tg.op){ tg.op = op; st.opacity = op; }
+      const tr = 'translate(' + ((v.x*0.5+0.5)*cw).toFixed(0) + 'px,' + ((-v.y*0.5+0.5)*ch).toFixed(0) + 'px) translate(-50%,-100%)'; if (tr !== tg.tr){ tg.tr = tr; st.transform = tr; } });
     if (!bub.el.hidden){ if (performance.now() > bub.until) bub.el.hidden = true; else { v.copy(sunny.g.position); v.y += 1.7; v.project(camera); const bx = Math.max(8, Math.min(cw - 260, (v.x*0.5+0.5)*cw - 22)); bub.el.style.transform = 'translate(' + bx.toFixed(1) + 'px,' + ((-v.y*0.5+0.5)*ch - 14).toFixed(1) + 'px) translateY(-100%)'; } }
     // proximity
     nearT -= dt; if (nearT <= 0){ nearT = 0.25; updateNear(); }
@@ -1566,7 +1553,15 @@ function initWorld(){
   W.nearestIdx = () => { let bi = -1, bd = 1e9; (W.spots||[]).forEach((s,i) => { const d = av.pos.distanceTo(s.pos); if (d < bd){ bd = d; bi = i; } }); return bd < 40 ? bi : -1; };
   W.nearSpecial = () => (W.specials || []).find(sp => av.pos.distanceTo(sp.door) < 8) || null;
   W.layout = layout; W.rebuildAvatar = () => { buildAvatar(); };
-  W.ok = true;
+  const Q = {n: 0, sum: 0, done: false, forced: store.get('quality', '')};
+  function setQuality(level){
+    W.quality = level; const low = level === 'low';
+    renderer.setPixelRatio(low ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)); sun.castShadow = !low;
+    npcs.forEach((n, i) => { n.off = low && i % 2 === 1; n.g.visible = !n.off; if (n.dog) n.dog.g.visible = !n.off; });
+  }
+  W.sampleQuality = dt => { if (Q.done || !S.loaded) return; if (Q.forced){ Q.done = true; setQuality(Q.forced); return; }
+    if (++Q.n > 30){ Q.sum += dt; if (Q.n >= 120){ Q.done = true; if (Q.sum / 90 > 0.034) setQuality('low'); } } };
+  W.ok = true; W.quality = 'high';
   frame();
 }
 function updateHere(force){
@@ -1604,7 +1599,6 @@ function refresh(){
   if (S.special) renderSpecial();
   if (S.page) renderPage();
   if (!$('#tickets').hidden) renderTickets();
-  if (!$('#studio').hidden && editing === null) renderStudio();
 }
 
 /* ---------- me popover ---------- */
@@ -1631,7 +1625,6 @@ function wire(){
   $('#b-zones').onclick = () => S.page === 'zones' ? closePage() : openPage('zones');
   $('#lv-zones').onclick = () => openPage('zones');
   $('#hint-tix').onclick = () => { $('#hint').hidden = true; store.set('hint', true); openTickets(); };
-  $('#b-studio').onclick = () => openStudio();
   $('#b-connect').onclick = () => $('#connect').hidden ? openConnect() : closePanel('connect');
   $('#b-me').onclick = () => { const p = $('#me-pop'); p.hidden = !p.hidden; $('#b-me').setAttribute('aria-expanded', String(!p.hidden)); if (!p.hidden) p.querySelector('input').focus(); };
   $('#me-x').onclick = () => { $('#me-pop').hidden = true; $('#b-me').setAttribute('aria-expanded','false'); $('#b-me').focus(); };
@@ -1644,7 +1637,6 @@ function wire(){
     if (!$('#game').hidden) return closeGame();
     if (!$('#lightbox').hidden) return closeLb();
     if (!$('#me-pop').hidden) return $('#me-x').click();
-    if (!$('#studio').hidden) return closePanel('studio');
     if (!$('#connect').hidden) return closePanel('connect');
     if (!$('#guide').hidden) return closePanel('guide');
     if (!$('#tickets').hidden) return closeTickets();
@@ -1658,7 +1650,7 @@ function setList(on, thenId){
   if (!on && !W.ok){ toast('3D is not available on this device.'); return; }
   if (S.page) closePage();
   S.list = on; store.set('list', on); applyPrefs();
-  if (!on){ lastSig = ''; refresh(); window.dispatchEvent(new Event('resize')); $('#world').focus(); if (thenId) goChapter(thenId); }
+  if (!on){ refresh(); window.dispatchEvent(new Event('resize')); $('#world').focus(); if (thenId) goChapter(thenId); }
 }
 function routeHash(){ if (location.hash === '#zones'){ if (S.page !== 'zones') openPage('zones'); return; } if (location.hash === '#our-partners'){ if (S.page !== 'partners') openPage('partners'); return; } if (location.hash === '#tickets'){ if ($('#tickets').hidden) openTickets(); return; } if (location.hash === '#play' || location.hash === '#partners'){ const k = location.hash.slice(1); if (S.special !== k) goSpecial(k); return; } const m = /^#ch-([A-Za-z0-9-]+)$/.exec(location.hash); if (m && chById(m[1]) && S.openId !== m[1]) goChapter(m[1]); }
 
@@ -1667,8 +1659,6 @@ applyPrefs(); buildMe(); wire(); wireGame(); renderMeta(); renderGuide(); render
 try { initWorld(); } catch(e){ W.ok = false; S.list = true; applyPrefs(); $('#b-list').disabled = true; $('#cam').hidden = true; toast('3D is not available on this device, so you are in list view.'); }
 if (W.ok){ W.layout([]); applyPrefs(); }
 (async function(){
-  S.downloads = { save: ({filename, data}) => saveBlob(data instanceof Blob ? data : new Blob([data]), filename) };
-  S.canEdit = false; $('#b-studio').hidden = true;
   let site = null;
   try { const res = await fetch('data/site.json', {cache:'no-cache'}); if (res.ok) site = await res.json(); } catch(e){}
   if (!site){ S.loaded = true; S.loadError = true; refresh(); $('#series-count').textContent = 'Chapters could not load'; return; }
