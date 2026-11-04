@@ -47,6 +47,14 @@ Partners and sponsors: add one block per organisation to "partners":
   logo board and in its panel) and on ableshine.com.au/partners/. Only add organisations
   that have agreed to be named.
 
+Wellbeing tent (Artful Yoga): the "wellness" block in site.json fills the green
+pavilion with the lotus on top, out along the path of hearts. Change "name",
+"about", "offers" (the list of sessions people can ask about), "note", "address",
+"hours", "phone", "email", "url", "instagram" and "facebook" there. The "Connect
+with someone" form opens the visitor's own email app addressed to "email". Nothing
+goes through AbleShine. Delete the whole "wellness" block to remove the tent.
+Only list sessions the organisation has confirmed it offers.
+
 Your Facebook and Instagram pages go in the "config" section ("facebook", "instagram").
 They show in Connect, in every page footer, and tell Google they belong to AbleShine.
 

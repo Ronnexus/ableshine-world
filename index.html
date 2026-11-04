@@ -47,7 +47,30 @@ h1,h2,h3{text-wrap:balance;margin:0}
 .ico{display:inline-grid;place-items:center;line-height:0}
 .tag .num.bg-navy,.crow .num.bg-navy{background:var(--ink);color:#FFC72C}
 .bg-navy{background:var(--ink);color:#FFC72C}
-.bg-rainbow{background:linear-gradient(135deg,#E0187A,#FF8A1F 25%,#FFC72C 45%,#7CCB52 62%,#1FA9E1 80%,#5B2DB0)}
+.bg-play{background:#E0187A repeating-linear-gradient(135deg,transparent 0 9px,rgba(255,199,44,.9) 9px 18px);color:#fff}
+.bg-magic{background:radial-gradient(circle at 70% 25%,#7B4BD6,#2E1470 72%);color:#FFC72C}
+.bg-zen{background:linear-gradient(160deg,#7CCB52,#1FA9E1);color:#fff}
+.mwrap{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,#5B2DB0,#22114A 75%)}
+.mgrid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-content:center;max-width:620px;margin:0 auto;padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.mcard{aspect-ratio:3/4;border:4px solid #22114A;border-radius:16px;background:#FFF6E0;display:grid;place-items:center;box-shadow:5px 5px 0 rgba(0,0,0,.35);transition:transform .45s,opacity .45s}
+.mcard .ico svg{width:min(15vw,76px);height:auto}
+.mgrid.flip .mcard{transform:rotateY(90deg);opacity:.2}
+.cups{position:absolute;left:50%;top:44%;width:min(640px,94%);height:min(300px,50%);transform:translate(-50%,-50%)}
+.cup{position:absolute;bottom:0;width:28%;height:80%;padding:0;border:0;background:none;cursor:pointer;transform:translateX(-50%);transition:left .55s ease-in-out,transform .35s ease;z-index:2}
+.cup.up{transform:translate(-50%,-52%)}
+.cup::before{content:"";position:absolute;inset:-5px -5px 0;background:#22114A;clip-path:polygon(15% 0,85% 0,100% 100%,0 100%)}
+.cup i{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E0187A 0 14px,#FF5FA8 14px 28px);clip-path:polygon(17% 0,83% 0,100% 100%,0 100%)}
+.cup b{position:absolute;left:-6%;right:-6%;bottom:-4px;height:14%;background:#FFC72C;border:4px solid #22114A;border-radius:10px}
+.cup[aria-disabled=true]{cursor:wait}
+.cstar{position:absolute;bottom:4%;transform:translateX(-50%);z-index:1;transition:left .55s ease-in-out}
+.cstar.hide{visibility:hidden}
+.cups.slow .cup{transition-duration:1.1s,.35s}.cups.slow .cstar{transition-duration:1.1s}
+.calm .cup,.calm .cstar,.calm .mcard{transition:none}
+.offer{display:flex;flex-wrap:wrap;gap:.45rem;list-style:none;margin:0;padding:0}
+.wform{display:flex;flex-direction:column;gap:.6rem}
+.wform label.t{display:flex;flex-direction:column;gap:.25rem;font-weight:800}
+.wform input[type=text],.wform textarea{font:inherit;padding:.6rem .7rem;border:3px solid var(--ink);border-radius:12px;min-height:44px;background:#fff}
+.links{display:flex;flex-wrap:wrap;gap:.5rem}
 .tag:hover{transform-origin:bottom center}
 .tag:hover .meta .nm{text-decoration:underline;text-underline-offset:3px}
 .crow-c{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;border:2px solid var(--ink);border-radius:14px;padding:.7rem .8rem;background:var(--cream)}
@@ -319,6 +342,7 @@ legend{font-family:var(--f-head);font-weight:900;margin-bottom:.4rem;padding:0}
     <fieldset id="f-hood"><legend>Hoodie</legend></fieldset>
     <fieldset id="f-skin"><legend>Skin tone</legend></fieldset>
     <label class="check"><input type="checkbox" id="f-dog"> Bring my assistance dog</label>
+    <fieldset id="f-gest"><legend>Say hello (or tap your character)</legend></fieldset>
     <button class="btn sm" id="me-x">Done</button>
   </div>
 
@@ -376,7 +400,13 @@ const ICONS = {
   pads: '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
   sun: '<circle cx="12" cy="12" r="5.2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" fill="none"/>',
   ticket: '<path d="M3 6.5h18v4a2 2 0 0 0 0 3v4H3v-4a2 2 0 0 0 0-3z"/>',
-  chat: '<path d="M3.5 4.5h17v11H9.5l-5 4z"/>'
+  chat: '<path d="M3.5 4.5h17v11H9.5l-5 4z"/>',
+  moon: '<path d="M15.5 3.2a8.8 8.8 0 1 0 5.3 13.9A7.2 7.2 0 0 1 15.5 3.2z"/>',
+  hat: '<path d="M7.5 3.5h9v11.5h-9z"/><path d="M2.5 15h19v3.5h-19z"/><path d="M7.5 11h9v2.4h-9z" fill="#E0187A"/>',
+  card: '<rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M12 8.2l1.2 2.5 2.7.3-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.3z" fill="#FFC72C"/>',
+  cups: '<path d="M1.8 20.5L4.2 8.5h5.6l2.4 12zM11.8 20.5l2.4-12h5.6l2.4 12z"/>',
+  wand: '<path d="M3.2 19.4L14.6 8l1.9 1.9L5.1 21.3z"/><path d="M18.5 2.2l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z" fill="#FFC72C"/>',
+  lotus: '<path d="M12 3.5c2.3 2.4 3 5.4 1.9 8.8-.5 1.6-1.1 2.7-1.9 3.9-.8-1.2-1.4-2.3-1.9-3.9C9 8.9 9.7 5.9 12 3.5z"/><path d="M2.5 9.5c3.3.2 5.8 1.9 7.2 4.7.6 1.3 1 2.5 1.2 3.7-1.5-.2-2.9-.7-4.1-1.4-2.8-1.6-4.1-4-4.3-7z"/><path d="M21.5 9.5c-3.3.2-5.8 1.9-7.2 4.7-.6 1.3-1 2.5-1.2 3.7 1.5-.2 2.9-.7 4.1-1.4 2.8-1.6 4.1-4 4.3-7z"/>'
 };
 function icon(name, size, fill){
   const sp = document.createElement('span'); sp.className = 'ico'; sp.setAttribute('aria-hidden', 'true');
@@ -472,8 +502,8 @@ function renderGuide(){
     numBadge(c), h('span',{class:'txt'}, h('strong',null,c.name), h('span',null, fmtShort(c.date) + ' · ' + (c.venue || 'Venue TBC'))),
     h('span',{class:'chip ' + c.status}, STATUS[c.status])))));
   ol.append(h('li', null, h('h3', {style:'font-family:var(--f-head);font-weight:900;margin:.6rem 0 0'}, 'Around the island')));
-  SPECIALS.forEach(sp => ol.append(h('li', null, h('button', {class:'crow', onclick: () => { closePanel('guide'); goSpecial(sp.kind); }},
-    h('span', {class:'num ' + sp.bg, 'aria-hidden':'true'}, icon(sp.icon, 26, sp.kind === 'partners' ? '#FFC72C' : '#FFFFFF')), h('span',{class:'txt'}, h('strong',null,sp.name), h('span',null, sp.line))))));
+  liveSpecials().forEach(sp => ol.append(h('li', null, h('button', {class:'crow', onclick: () => { closePanel('guide'); goSpecial(sp.kind); }},
+    h('span', {class:'num ' + sp.bg, 'aria-hidden':'true'}, icon(sp.icon, 26, sp.fill)), h('span',{class:'txt'}, h('strong',null,sp.name), h('span',null, sp.line))))));
 }
 function renderCards(){
   const box = $('#cards'); box.replaceChildren();
@@ -486,8 +516,8 @@ function renderCards(){
       h('span', {class:'cbody'}, h('span',{class:'chip ' + c.status, style:'align-self:flex-start'}, STATUS[c.status]),
         h('strong', null, 'Chapter ' + c.num + ': ' + c.name), h('span', null, fmtLong(c.date)), h('span', null, c.venue || 'Venue to be confirmed'))));
   });
-  SPECIALS.forEach(sp => box.append(h('button', {class:'card panel', onclick: () => openSpecial(sp.kind)},
-    h('span', {class:'cover ' + sp.bg}, icon(sp.icon, 96, sp.kind === 'partners' ? '#FFC72C' : '#FFFFFF')),
+  liveSpecials().forEach(sp => box.append(h('button', {class:'card panel', onclick: () => openSpecial(sp.kind)},
+    h('span', {class:'cover ' + sp.bg}, icon(sp.icon, 96, sp.fill)),
     h('span', {class:'cbody'}, h('strong', null, sp.name), h('span', null, sp.line)))));
 }
 
@@ -707,10 +737,13 @@ function renderPage(){
   const ev = S.chapters.map(c => { const t = tix(c);
     return zCard({badge: c.num, bg: 'bg-' + c.color, chip: STATUS[c.status], chipCls: c.status, title: 'Chapter ' + c.num + ': ' + c.name, lines: [fmtLong(c.date), c.venue || 'Venue to be confirmed'],
       acts: [h('button', {class:'btn sm purple', onclick: () => openRoom(c.id)}, 'Open'), walkBtn(() => goChapter(c.id)), t ? h('a', {class:'btn sm pink', href: t, target:'_blank', rel:'noopener', 'aria-label':'Get tickets for ' + c.name + ' (opens Eventbrite)'}, 'Get tickets') : null]}); });
-  const play = [zCard({icon: 'note', bg: 'bg-rainbow', title: 'Play Tent', lines: ['The rainbow dome. Gentle sensory games with no scores and no rush.'],
-      acts: [h('button', {class:'btn sm purple', onclick: () => openSpecial('play')}, 'Open'), walkBtn(() => goSpecial('play'))]})]
-    .concat(Object.keys(GAMES).map(k => zCard({icon: {bubbles:'bubbles', paint:'sparkle', pads:'pads', breathe:'sun'}[k], fill: k === 'breathe' ? '#FFFFFF' : undefined, bg: GAMES[k].bg, title: GAMES[k].title, lines: [GAMES[k].blurb],
-      acts: [h('button', {class:'btn sm purple', onclick: () => openGame(k)}, 'Play now')]})));
+  const gameCards = zn => Object.keys(GAMES).filter(k => GAMES[k].zone === zn).map(k => zCard({icon: GAMES[k].icon, fill: GAMES[k].fill, bg: GAMES[k].bg, title: GAMES[k].title, lines: [GAMES[k].blurb],
+      acts: [h('button', {class:'btn sm purple', onclick: () => openGame(k)}, 'Play now')]}));
+  const spCard = (kind, title, line) => { const sp = SPECIALS.find(x => x.kind === kind); return zCard({icon: sp.icon, fill: sp.fill, bg: sp.bg, title, lines: [line],
+      acts: [h('button', {class:'btn sm purple', onclick: () => openSpecial(kind)}, 'Open'), walkBtn(() => goSpecial(kind))]}); };
+  const play = [spCard('play', 'Play Tent', 'The pink and yellow big top. Gentle sensory games with no scores and no rush.')].concat(gameCards('play'));
+  const magic = [spCard('magic', 'Magic Tent', 'The starry wizard hat, out along the sparkly path. Gentle magic tricks where nothing can go wrong.')].concat(gameCards('magic'));
+  const well = S.wellness ? [spCard('wellness', S.wellness.name, 'The calm green pavilion with a lotus on top, out along the path of hearts. Healing and wellbeing sessions, and a way to connect.')] : [];
   const partners = [zCard({icon: 'star', fill: '#FFC72C', bg: 'bg-navy', title: 'Partners tent', lines: ['The gold and navy pavilion. Meet the organisations who make AbleShine happen.'],
       acts: [h('button', {class:'btn sm purple', onclick: () => openPage('partners')}, 'See partners'), walkBtn(() => goSpecial('partners'))]})];
   const help = [
@@ -720,25 +753,37 @@ function renderPage(){
   box.replaceChildren(...parts,
     ...zone('Event tents', 'One striped tent per AbleShine day, in date order along the story trail.', ev.length ? ev : [h('div', {class:'blank'}, h('span', {class:'comic'}, 'First chapter coming soon'))]),
     ...zone('Play zone', 'Quiet games to tap, draw, listen and breathe. Sound is soft and can be turned off.', play),
+    ...zone('Magic zone', 'Out past the plaza along the sparkly path. Tricks to try, with no way to get them wrong.', magic),
+    ...(well.length ? zone('Wellbeing zone', 'A quiet corner for healing, calm and connection.', well) : []),
     ...zone('Partners zone', 'The people and organisations who keep AbleShine free.', partners),
     ...zone('Sunshine Square and help', 'Where you start, and where to get help.', help));
 }
 
 /* ---------- landmark tents: Partners + Play ---------- */
 const SPECIALS = [
-  {kind:'play', name:'Play Tent', icon:'note', bg:'bg-rainbow', line:'Gentle sensory games. No scores, no rush.'},
-  {kind:'partners', name:'Partners', icon:'star', bg:'bg-navy', line:'The organisations who make AbleShine happen.'}
+  {kind:'play', name:'Play Tent', sub:'Sensory games', icon:'note', bg:'bg-play', fill:'#FFFFFF', near:'Enter the Play Tent', say:"Let's play!", line:'Gentle sensory games. No scores, no rush.'},
+  {kind:'magic', name:'Magic Tent', sub:'Magic games', icon:'moon', bg:'bg-magic', fill:'#FFC72C', near:'Enter the Magic Tent', say:'Ooh, magic! Follow the sparkly path.', line:'Gentle magic tricks to try, out along the sparkly path.'},
+  {kind:'wellness', name:'Wellbeing', sub:'Healing and wellbeing', icon:'lotus', bg:'bg-zen', fill:'#FFFFFF', near:'Visit the wellbeing tent', say:"Let's find somewhere calm.", line:'Healing and wellbeing sessions, and a way to connect.'},
+  {kind:'partners', name:'Partners', sub:'Sponsors and supporters', icon:'star', bg:'bg-navy', fill:'#FFC72C', near:'Visit our partners', say:"Let's meet our partners!", line:'The organisations who make AbleShine happen.'}
 ];
+// the wellbeing tent only appears when site.json has a wellness block
+const liveSpecials = () => SPECIALS.filter(sp => sp.kind !== 'wellness' || S.wellness);
+const GESTURES = [
+  {k:'wave', t:'Wave', verb:'waves', say:'Hi there! Lovely to see you.', dur:1.8},
+  {k:'cheer', t:'Cheer', verb:'cheers', say:'Woohoo!', dur:1.8},
+  {k:'clap', t:'Clap', verb:'claps', say:'Yay! Great clapping.', dur:1.8},
+  {k:'dance', t:'Dance', verb:'dances', say:'Nice moves!', dur:3.2}];
 function goSpecial(kind){
   closePanel('guide');
   if (S.list || !W.ok){ openSpecial(kind); return; }
   $('#room').hidden = true; S.openId = null; closePanel('special');
-  const sp = SPECIALS.find(x => x.kind === kind);
+  const sp = SPECIALS.find(x => x.kind === kind); if (!sp || (kind === 'wellness' && !S.wellness)) return;
   announce('Heading to the ' + sp.name);
-  W.say && W.say(kind === 'play' ? "Let's play!" : "Let's meet our partners!", 3000);
+  W.say && W.say(sp.say, 3000);
   W.travelSpecial(kind, () => openSpecial(kind));
 }
 function openSpecial(kind){
+  if (kind === 'wellness' && !S.wellness) return;
   S.special = kind; $('#room').hidden = true; S.openId = null; closePanel('guide'); closePanel('connect'); closePanel('tickets');
   renderSpecial(); const el = $('#special'); el.hidden = false; el.scrollTop = 0; $('#special-title').focus();
   try { history.replaceState(null, '', '#' + kind); } catch(e){}
@@ -746,16 +791,18 @@ function openSpecial(kind){
 function closeSpecial(){ S.special = null; $('#special').hidden = true; try { history.replaceState(null,'',location.pathname + location.search); } catch(e){} $('#world').focus(); }
 function renderSpecial(){
   const kind = S.special, el = $('#special'); if (!kind) return;
-  if (kind === 'play'){
-    const head = h('div', {class:'sheet-head bg-teal'}, h('div', {class:'row'},
-      h('div', null, h('span', {class:'comic brush y kicker'}, 'Sensory games'), h('h2', {class:'comic outline', id:'special-title', tabindex:'-1'}, 'Play Tent')),
+  if (kind === 'play' || kind === 'magic'){
+    const mg = kind === 'magic';
+    const head = h('div', {class:'sheet-head ' + (mg ? 'bg-magic' : 'bg-pink')}, h('div', {class:'row'},
+      h('div', null, h('span', {class:'comic brush y kicker'}, mg ? 'Magic games' : 'Sensory games'), h('h2', {class:'comic outline', id:'special-title', tabindex:'-1'}, mg ? 'Magic Tent' : 'Play Tent')),
       h('button', {class:'btn sm', onclick: closeSpecial}, 'Close')));
     const body = h('div', {class:'sheet-body'},
-      h('p', {style:'margin:0;font-size:1.05rem'}, 'Quiet, gentle games to tap, draw, listen and breathe. No scores, no timers, no losing. Play as long as you like.'),
-      h('div', {class:'gamepick'}, Object.keys(GAMES).map(k => h('button', {class:'gbtn ' + GAMES[k].bg, onclick: () => openGame(k)}, h('strong', null, GAMES[k].title), h('span', null, GAMES[k].blurb)))),
+      h('p', {style:'margin:0;font-size:1.05rem'}, mg ? 'Gentle magic tricks to try with Sunny. Nothing can go wrong, and you can play each one as many times as you like.' : 'Quiet, gentle games to tap, draw, listen and breathe. No scores, no timers, no losing. Play as long as you like.'),
+      h('div', {class:'gamepick'}, Object.keys(GAMES).filter(k => GAMES[k].zone === kind).map(k => h('button', {class:'gbtn ' + GAMES[k].bg, onclick: () => openGame(k)}, h('strong', null, GAMES[k].title), h('span', null, GAMES[k].blurb)))),
       h('p', {class:'note', style:'margin:0'}, 'Sound is soft and can be turned off any time. Calm mode slows everything down.'));
     el.replaceChildren(head, body); return;
   }
+  if (kind === 'wellness'){ renderWellness(el); return; }
   const list = (S.partners || []).filter(p => p && p.name);
   const email = S.config.email || '';
   const head = h('div', {class:'sheet-head bg-amber'}, h('div', {class:'row'},
@@ -779,16 +826,55 @@ function renderSpecial(){
   el.replaceChildren(head, body);
 }
 
+/* ---------- wellbeing tent (content from site.json "wellness") ---------- */
+function renderWellness(el){
+  const w = S.wellness || {}, url = safeUrl(w.url), email = /^[^\s@<>"]+@[^\s@<>"]+\.[A-Za-z]{2,}$/.test(w.email || '') ? w.email : '', tel = String(w.phone || '').replace(/[^\d+]/g, '');
+  const head = h('div', {class:'sheet-head bg-zen'}, h('div', {class:'row'},
+    h('div', null, h('span', {class:'comic brush kicker'}, 'Healing and wellbeing'), h('h2', {class:'comic outline', id:'special-title', tabindex:'-1'}, w.name || 'Wellbeing')),
+    h('button', {class:'btn sm', onclick: closeSpecial}, 'Close')));
+  const body = h('div', {class:'sheet-body'});
+  if (w.about) body.append(h('p', {style:'margin:0;font-size:1.05rem'}, w.about));
+  const offers = (w.offers || []).filter(o => typeof o === 'string' && o);
+  if (offers.length) body.append(h('div', {class:'block'}, h('h3', null, 'Ask them about'), h('ul', {class:'offer'}, offers.map(o => h('li', {class:'chip'}, o)))));
+  if (w.note) body.append(h('p', {class:'note', style:'margin:0'}, w.note));
+  // "Connect" writes an email in the visitor's own mail app. Nothing is sent to, or kept by, AbleShine.
+  if (email){
+    const picks = offers.map(o => { const i = h('input', {type:'checkbox', value: o}); return {i, el: h('label', {class:'check'}, i, ' ' + o)}; });
+    const nm = h('input', {type:'text', maxlength:'80', autocomplete:'name'}), msg = h('textarea', {rows:'3', maxlength:'800'});
+    const go = () => { const want = picks.filter(p => p.i.checked).map(p => p.i.value);
+      const subj = 'Hello from AbleShine' + (want.length ? ': ' + want.join(', ') : '');
+      const txt = 'Hi ' + (w.name || 'there') + ',\n\nI found you through AbleShine and would like to connect' + (want.length ? ' about: ' + want.join(', ') : '') + '.\n\n' + (msg.value.trim() ? msg.value.trim() + '\n\n' : '') + 'Thanks,\n' + nm.value.trim();
+      location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(txt); };
+    body.append(h('div', {class:'block wform'}, h('h3', null, 'Connect with someone'),
+      picks.length ? h('fieldset', null, h('legend', null, 'I would like to talk about'), picks.map(p => p.el)) : null,
+      h('label', {class:'t'}, 'Your name', nm), h('label', {class:'t'}, 'Anything you would like them to know (optional)', msg),
+      h('button', {class:'btn purple', type:'button', style:'align-self:flex-start', onclick: go}, 'Write my email'),
+      h('p', {class:'note', style:'margin:0'}, 'This opens your own email app with the message ready for you to check and send to ' + (w.name || 'them') + '. AbleShine does not see or keep it.')));
+  }
+  const ext = (u, t) => safeUrl(u) ? h('a', {class:'btn sm', href: safeUrl(u), target:'_blank', rel:'noopener', 'aria-label': t + ' (opens in a new tab)'}, t) : null;
+  body.append(h('div', {class:'block'}, h('h3', null, 'Find them'),
+    w.address ? h('p', {style:'margin:0 0 .3rem;font-weight:700'}, w.address) : null,
+    w.hours ? h('p', {class:'note', style:'margin:0 0 .6rem'}, w.hours) : null,
+    h('div', {class:'links'}, tel ? h('a', {class:'btn sm', href:'tel:' + tel}, 'Call ' + w.phone) : null, email ? h('a', {class:'btn sm', href:'mailto:' + email}, 'Email') : null,
+      url ? h('a', {class:'btn sm purple', href: url, target:'_blank', rel:'noopener', 'aria-label':'Website (opens in a new tab)'}, 'Website') : null, ext(w.instagram, 'Instagram'), ext(w.facebook, 'Facebook'))));
+  el.replaceChildren(head, body);
+}
+
 /* ---------- sensory games ---------- */
 const G = { on:false, kind:null, raf:0, ctx:null, w:0, h:0, dpr:1, sound: store.get('sound', true), ac:null, last:0, st:{} };
 const NOTES = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
 const PADCOL = ['#FF7AB6','#FFC72C','#7FD8F5','#9BE07A','#C9B8F2','#FFB066','#FF9ECF','#8FE3F0'];
 const GAMES = {
-  bubbles: {title:'Bubble Pop', bg:'bg-teal', blurb:'Pop floating bubbles. Each one plays a soft note.', tip:'Tap the bubbles. There is no score and no rush.'},
-  paint: {title:'Glow Painter', bg:'bg-purple', blurb:'Draw glowing trails that slowly fade away.', tip:'Draw with your finger or mouse. The light fades by itself.'},
-  pads: {title:'Music Pads', bg:'bg-pink', blurb:'Big colour pads. Every note sounds good together.', tip:'Tap any pad, or press keys 1 to 8.'},
-  breathe: {title:'Breathe with Sunny', bg:'bg-amber', blurb:'A slow breathing guide for a calm moment.', tip:'Breathe in as the sun grows, out as it shrinks.'}
+  bubbles: {zone:'play', icon:'bubbles', title:'Bubble Pop', bg:'bg-teal', blurb:'Pop floating bubbles. Each one plays a soft note.', tip:'Tap the bubbles. There is no score and no rush.'},
+  paint: {zone:'play', icon:'sparkle', title:'Glow Painter', bg:'bg-purple', blurb:'Draw glowing trails that slowly fade away.', tip:'Draw with your finger or mouse. The light fades by itself.'},
+  pads: {zone:'play', icon:'pads', title:'Music Pads', bg:'bg-pink', blurb:'Big colour pads. Every note sounds good together.', tip:'Tap any pad, or press keys 1 to 8.'},
+  breathe: {zone:'play', icon:'sun', title:'Breathe with Sunny', bg:'bg-amber', blurb:'A slow breathing guide for a calm moment.', tip:'Breathe in as the sun grows, out as it shrinks.'},
+  hat: {zone:'magic', icon:'hat', fill:'#FFC72C', title:'Magic Hat', bg:'bg-magic', blurb:'Tap the top hat and see what pops out.', tip:'Tap the hat, or press Space. Something new pops out every time.'},
+  cards: {zone:'magic', icon:'card', title:'Vanishing Card', bg:'bg-purple', blurb:'Think of a card and Sunny makes it disappear.', tip:'Pick one card in your head.'},
+  cups: {zone:'magic', icon:'cups', title:'Cup Shuffle', bg:'bg-pink', blurb:'Follow the star under the cups. Go as slow as you like.', tip:'Watch the star, then tap a cup.'},
+  wand: {zone:'magic', icon:'wand', title:'Wand Reveal', bg:'bg-teal', blurb:'Wave your wand to clear the mist and find a picture.', tip:'Draw over the mist with your finger or mouse, or press Reveal it.'}
 };
+const DOMGAMES = ['pads', 'cards', 'cups'];
 const slow = () => (S.calm || reduce) ? 0.5 : 1;
 function tone(f, dur, vol, type){
   if (!G.sound) return;
@@ -807,8 +893,8 @@ function openGame(kind){
   G.kind = kind; G.on = true; G.st = {}; G.last = 0;
   const gm = GAMES[kind]; $('#game-title').textContent = gm.title; $('#game-tip').textContent = gm.tip; $('#game-tip').className = 'game-tip' + (kind === 'breathe' ? ' sr' : '');
   const acts = $('#game-acts'); acts.replaceChildren();
-  const stage = $('#game-stage'); stage.querySelectorAll('.pads').forEach(n => n.remove());
-  $('#gcv').hidden = kind === 'pads';
+  const stage = $('#game-stage'); stage.querySelectorAll('.pads,.mwrap').forEach(n => n.remove()); clearTimeout(G.tm); G.tok = (G.tok || 0) + 1;
+  $('#gcv').hidden = DOMGAMES.includes(kind);
   if (kind === 'bubbles') acts.append(h('button', {class:'btn sm', onclick: popLowest}, 'Pop one'));
   if (kind === 'paint'){
     const keep = h('button', {class:'btn sm', 'aria-pressed':'false', onclick: () => { G.st.keep = !G.st.keep; keep.setAttribute('aria-pressed', String(!!G.st.keep)); keep.textContent = G.st.keep ? 'Keep drawing: on' : 'Keep drawing: off'; }}, 'Keep drawing: off');
@@ -825,10 +911,11 @@ function openGame(kind){
     const tg = h('button', {class:'btn sm', onclick: () => { G.st.paused = !G.st.paused; tg.textContent = G.st.paused ? 'Start' : 'Pause'; }}, 'Pause');
     acts.append(tg);
   }
+  if (gm.zone === 'magic') setupMagic(kind, acts, stage);
   setSoundBtn(); $('#game').hidden = false; $('#game-title').focus();
   gResize(); cancelAnimationFrame(G.raf); G.raf = requestAnimationFrame(gLoop);
 }
-function closeGame(){ G.on = false; cancelAnimationFrame(G.raf); $('#game').hidden = true; const b = document.querySelector('#special .gbtn'); b && b.focus(); }
+function closeGame(){ G.on = false; clearTimeout(G.tm); G.tok = (G.tok || 0) + 1; cancelAnimationFrame(G.raf); $('#game').hidden = true; const b = document.querySelector('#special .gbtn'); b && b.focus(); }
 function gResize(){ const c = $('#gcv'), r = c.getBoundingClientRect(); G.dpr = Math.min(window.devicePixelRatio || 1, 2); c.width = Math.max(1, r.width * G.dpr); c.height = Math.max(1, r.height * G.dpr); G.w = r.width; G.h = r.height; G.ctx = c.getContext('2d'); G.ctx.setTransform(G.dpr, 0, 0, G.dpr, 0, 0); }
 function hitPad(i){ tone(NOTES[i], 0.9, 0.14, 'triangle'); buzz(12); const b = document.querySelectorAll('#game .pad')[i]; if (b){ b.classList.add('hit'); setTimeout(() => b.classList.remove('hit'), 160); } }
 function playTune(){ [0,2,4,5,4,2,0].forEach((n, k) => setTimeout(() => G.on && hitPad(n), k * 380)); }
@@ -842,7 +929,7 @@ function popLowest(){ if (!G.st.b || !G.st.b.length) return; let li = 0; G.st.b.
 function gLoop(ts){
   if (!G.on) return; G.raf = requestAnimationFrame(gLoop);
   const dt = G.last ? Math.min(0.05, (ts - G.last) / 1000) : 0.016; G.last = ts;
-  const c = G.ctx, W2 = G.w, H2 = G.h, k = slow(); if (!c || G.kind === 'pads') return;
+  const c = G.ctx, W2 = G.w, H2 = G.h, k = slow(); if (!c || DOMGAMES.includes(G.kind)) return;
   if (G.kind === 'bubbles'){
     const st = G.st; st.b = st.b || []; st.parts = st.parts || [];
     const g = c.createLinearGradient(0, 0, 0, H2); g.addColorStop(0, '#BDE8FF'); g.addColorStop(1, '#EFE6FF'); c.fillStyle = g; c.fillRect(0, 0, W2, H2);
@@ -862,6 +949,8 @@ function gLoop(ts){
     st.pts = st.pts.filter(p => st.keep || (p.life -= dt / (4 / k)) > 0);
     st.pts.forEach(p => { const rr = p.r * (0.6 + p.life * 0.4); const rg = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, rr); rg.addColorStop(0, 'hsla(' + p.hue + ',95%,70%,' + (0.9 * p.life) + ')'); rg.addColorStop(1, 'hsla(' + p.hue + ',95%,60%,0)'); c.fillStyle = rg; c.beginPath(); c.arc(p.x, p.y, rr, 0, Math.PI*2); c.fill(); });
     c.globalCompositeOperation = 'source-over';
+  } else if (G.kind === 'hat'){ drawHat(c, W2, H2, dt, k);
+  } else if (G.kind === 'wand'){ drawWand(c, W2, H2, dt);
   } else if (G.kind === 'breathe'){
     const st = G.st; st.t = st.t || 0; if (!st.paused) st.t += dt;
     const cyc = 12, tt = st.t % cyc; let phase, f;
@@ -887,15 +976,159 @@ function wireGame(){
   cv.addEventListener('pointerdown', e => { if (!G.on) return; const [x, y] = pos(e);
     if (G.kind === 'bubbles'){ for (let i = G.st.b ? G.st.b.length - 1 : -1; i >= 0; i--){ const b = G.st.b[i]; if (Math.hypot(x - (b.dx || b.x), y - b.y) <= b.r + 8){ popBubble(i); break; } } }
     if (G.kind === 'paint'){ drawing = true; cv.setPointerCapture(e.pointerId); addPaint(x, y); }
-    if (G.kind === 'breathe'){ G.st.paused = !G.st.paused; G.st.phase = null; } });
-  cv.addEventListener('pointermove', e => { if (!G.on || G.kind !== 'paint' || !drawing) return; const [x, y] = pos(e); addPaint(x, y);
+    if (G.kind === 'breathe'){ G.st.paused = !G.st.paused; G.st.phase = null; }
+    if (G.kind === 'hat') hatPop();
+    if (G.kind === 'wand'){ drawing = true; cv.setPointerCapture(e.pointerId); wandAt(x, y); } });
+  cv.addEventListener('pointermove', e => { if (!G.on || !drawing) return; const [x, y] = pos(e); if (G.kind === 'wand'){ wandAt(x, y); return; } if (G.kind !== 'paint') return; addPaint(x, y);
     const now = performance.now(); if (now - lastNote > 260){ lastNote = now; tone(NOTES[Math.min(7, Math.floor(y / Math.max(1, G.h) * 8))], 0.5, 0.05); } });
   const stop = () => { drawing = false; }; cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
   $('#g-close').onclick = closeGame;
   $('#g-sound').onclick = () => { G.sound = !G.sound; store.set('sound', G.sound); setSoundBtn(); };
   window.addEventListener('resize', () => { if (G.on) gResize(); });
   document.addEventListener('keydown', e => { if (!G.on) return; if (G.kind === 'pads' && /^[1-8]$/.test(e.key)){ hitPad(Number(e.key) - 1); }
-    if (G.kind === 'bubbles' && (e.key === ' ' || e.key === 'Enter') && (e.target === document.body || e.target.id === 'game-title')){ e.preventDefault(); popLowest(); } });
+    const free = e.target === document.body || e.target.id === 'game-title';
+    if (G.kind === 'bubbles' && (e.key === ' ' || e.key === 'Enter') && free){ e.preventDefault(); popLowest(); }
+    if (G.kind === 'hat' && (e.key === ' ' || e.key === 'Enter') && free){ e.preventDefault(); hatPop(); }
+    if (G.kind === 'cups' && /^[1-3]$/.test(e.key) && G.st.pickSlot) G.st.pickSlot(Number(e.key) - 1); });
+}
+
+/* ---------- magic games (Magic Tent): no scores, no timers, nothing to get wrong ---------- */
+const svgImg = {};
+function iconImg(name, fill){ const key = name + fill; if (!svgImg[key]){ const im = new Image();
+  im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96" fill="' + fill + '" stroke="#22114A" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">' + ICONS[name] + '</svg>');
+  svgImg[key] = im; } return svgImg[key]; }
+const still = () => S.calm || reduce;
+const chime = (seq, vol) => seq.forEach((n, i) => setTimeout(() => tone(NOTES[n], 0.5, vol || 0.07), i*90));
+const shuffleArr = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function sparkle(c, x, y, r, a){ c.globalAlpha = Math.max(0, a); c.fillStyle = '#FFC72C'; c.beginPath(); for (let i = 0; i < 8; i++){ const rr = i % 2 ? r*0.35 : r, an = i/8*Math.PI*2; c.lineTo(x + Math.cos(an)*rr, y + Math.sin(an)*rr); } c.closePath(); c.fill(); c.globalAlpha = 1; }
+function nightSky(c, W2, H2){
+  const st = G.st; if (!st.stars || st.sw !== W2){ st.sw = W2; st.stars = Array.from({length: 46}, () => [Math.random()*W2, Math.random()*H2*0.75, Math.random()*1.8 + 0.8, Math.random()*6]); }
+  const g = c.createRadialGradient(W2/2, H2*0.35, 10, W2/2, H2*0.35, Math.max(W2, H2)*0.8); g.addColorStop(0, '#6A3BC8'); g.addColorStop(1, '#22114A'); c.fillStyle = g; c.fillRect(0, 0, W2, H2);
+  const tw = still() ? 0 : performance.now()/600; c.fillStyle = '#FFF6D0';
+  st.stars.forEach(s => { c.globalAlpha = tw ? 0.55 + Math.sin(tw + s[3])*0.4 : 0.8; c.beginPath(); c.arc(s[0], s[1], s[2], 0, Math.PI*2); c.fill(); }); c.globalAlpha = 1;
+}
+function bigWord(c, txt, x, y, W2, col){ let size = Math.max(28, Math.min(68, W2*0.09)); c.font = '400 ' + size + 'px "Lilita One", Nunito, sans-serif';
+  while (c.measureText(txt).width > W2 - 40 && size > 20){ size -= 2; c.font = '400 ' + size + 'px "Lilita One", Nunito, sans-serif'; }
+  c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineJoin = 'round'; c.lineWidth = Math.max(6, size*0.16); c.strokeStyle = '#22114A'; c.strokeText(txt, x, y); c.fillStyle = col; c.fillText(txt, x, y); }
+function drawSun(c, cx, cy, r){ c.save(); c.translate(cx, cy); c.strokeStyle = '#22114A'; c.lineWidth = Math.max(4, r*0.05); c.lineJoin = 'round';
+  for (let i = 0; i < 12; i++){ c.save(); c.rotate(i*Math.PI/6); c.fillStyle = i % 2 ? '#FF8A1F' : '#FFB21E'; c.beginPath(); c.moveTo(-r*0.16, -r*1.05); c.lineTo(0, -r*1.45); c.lineTo(r*0.16, -r*1.05); c.closePath(); c.fill(); c.stroke(); c.restore(); }
+  c.fillStyle = '#FFC72C'; c.beginPath(); c.arc(0, 0, r, 0, Math.PI*2); c.fill(); c.stroke(); c.lineCap = 'round'; c.lineWidth = Math.max(4, r*0.06);
+  c.beginPath(); c.arc(-r*0.32, -r*0.12, r*0.16, Math.PI*1.12, Math.PI*1.88); c.stroke(); c.beginPath(); c.arc(r*0.32, -r*0.12, r*0.16, Math.PI*1.12, Math.PI*1.88); c.stroke();
+  c.beginPath(); c.arc(0, r*0.12, r*0.34, Math.PI*0.15, Math.PI*0.85); c.stroke(); c.restore(); }
+function drawHeart(c, cx, cy, r){ c.save(); c.translate(cx, cy); c.scale(r/56, r/56); c.beginPath(); c.moveTo(0, 40); c.bezierCurveTo(-62, 0, -40, -52, 0, -22); c.bezierCurveTo(40, -52, 62, 0, 0, 40); c.closePath();
+  c.fillStyle = '#E0187A'; c.fill(); c.lineWidth = 6; c.lineJoin = 'round'; c.strokeStyle = '#22114A'; c.stroke(); c.restore(); }
+function drawStar(c, cx, cy, r){ c.beginPath(); for (let i = 0; i < 10; i++){ const rr = i % 2 ? r*0.42 : r, a = i/10*Math.PI*2 - Math.PI/2; c.lineTo(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr); } c.closePath();
+  c.fillStyle = '#FFC72C'; c.fill(); c.lineWidth = Math.max(5, r*0.06); c.lineJoin = 'round'; c.strokeStyle = '#22114A'; c.stroke(); }
+function drawBunny(c, x, y, r){ c.save(); c.translate(x, y); c.lineWidth = 4; c.strokeStyle = '#22114A';
+  [-1, 1].forEach(s => { c.fillStyle = '#FFFFFF'; c.beginPath(); c.ellipse(s*r*0.3, -r*1.0, r*0.2, r*0.55, s*0.18, 0, Math.PI*2); c.fill(); c.stroke();
+    c.fillStyle = '#FF9ECF'; c.beginPath(); c.ellipse(s*r*0.3, -r*0.98, r*0.09, r*0.36, s*0.18, 0, Math.PI*2); c.fill(); });
+  c.fillStyle = '#FFFFFF'; c.beginPath(); c.arc(0, 0, r*0.62, 0, Math.PI*2); c.fill(); c.stroke();
+  c.fillStyle = '#22114A'; [-1, 1].forEach(s => { c.beginPath(); c.arc(s*r*0.22, -r*0.08, r*0.07, 0, Math.PI*2); c.fill(); });
+  c.fillStyle = '#E0187A'; c.beginPath(); c.arc(0, r*0.1, r*0.08, 0, Math.PI*2); c.fill(); c.beginPath(); c.arc(0, r*0.14, r*0.16, 0.2*Math.PI, 0.8*Math.PI); c.stroke(); c.restore(); }
+
+// Magic Hat: every tap pulls out the next surprise
+const SURPRISES = [['heart','#E0187A','A pink heart'], ['star','#FFC72C','A golden star'], [null, null, 'A bunny'], ['note','#1FA9E1','A music note'], ['sparkle','#B79BF2','A sparkle'], ['sun','#FFC72C','A little sun'], ['bubbles','#7FD8F5','Some bubbles']];
+function hatPop(){ const st = G.st; st.items = st.items || []; st.n = st.n == null ? 0 : st.n + 1; const s = SURPRISES[st.n % SURPRISES.length];
+  st.items.push({s}); if (st.items.length > 5) st.items.shift(); st.hop = 1;
+  st.parts = (st.parts || []).concat(Array.from({length: 14}, (_, i) => ({a: i/14*Math.PI*2, r: 0, life: 1})));
+  $('#game-tip').textContent = s[2] + '! Tap again for another surprise.'; chime([0, 2, 4, 7]); buzz(15); }
+function drawHat(c, W2, H2, dt, k){
+  const st = G.st; nightSky(c, W2, H2); st.hop = Math.max(0, (st.hop || 0) - dt*3);
+  const cx = W2/2, base = H2 - 96, hw = Math.min(W2*0.3, 170), hh = hw*0.95;
+  c.fillStyle = 'rgba(255,199,44,.18)'; c.beginPath(); c.ellipse(cx, base + 8, hw*1.6, 26, 0, 0, Math.PI*2); c.fill();
+  const items = st.items || [], n = items.length, gap = Math.min(150, W2/(n + 1)), f = Math.min(1, dt*4*k);
+  items.forEach((it, j) => { const tx = cx + (j - (n - 1)/2)*gap, ty = Math.max(70, base - hh - Math.min(H2*0.3, 190));
+    if (it.x == null){ it.x = cx; it.y = base - hh*0.6; it.z = 0; }
+    it.x += (tx - it.x)*f; it.y += (ty - it.y)*f; it.z += (1 - it.z)*f;
+    const size = 46*it.z, y = it.y + (still() ? 0 : Math.sin(performance.now()/500 + j)*5);
+    if (it.s[0]){ const im = iconImg(it.s[0], it.s[1]); if (im.complete && im.naturalWidth) c.drawImage(im, it.x - size, y - size, size*2, size*2); } else drawBunny(c, it.x, y, size*0.95); });
+  c.save(); c.translate(cx, base); c.scale(1 + st.hop*0.08, 1 - st.hop*0.12); c.lineJoin = 'round'; c.lineWidth = 6; c.strokeStyle = '#FFC72C';
+  c.fillStyle = '#2E1470'; c.beginPath(); c.rect(-hw*0.62, -hh, hw*1.24, hh); c.fill(); c.stroke();
+  c.fillStyle = '#E0187A'; c.fillRect(-hw*0.62 + 3, -hh*0.34, hw*1.24 - 6, hh*0.16);
+  c.fillStyle = '#22114A'; c.beginPath(); c.ellipse(0, -hh, hw*0.62, hh*0.1, 0, 0, Math.PI*2); c.fill(); c.stroke();
+  c.fillStyle = '#2E1470'; c.beginPath(); c.ellipse(0, 0, hw, hh*0.13, 0, 0, Math.PI*2); c.fill(); c.stroke();
+  sparkle(c, -hw*0.3, -hh*0.62, 12, 1); sparkle(c, hw*0.32, -hh*0.72, 9, 1); c.restore();
+  st.parts = (st.parts || []).filter(p => (p.life -= dt*1.3) > 0);
+  st.parts.forEach(p => { p.r += dt*170*k; sparkle(c, cx + Math.cos(p.a)*p.r, base - hh - 10 + Math.sin(p.a)*p.r*0.7, 8*p.life + 3, p.life); });
+  if (!n){ c.fillStyle = '#FFF6E0'; c.font = '400 ' + Math.max(26, Math.min(44, W2*0.05)) + 'px "Lilita One", Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('Tap the hat!', cx, base - hh - 60); }
+}
+
+// Vanishing Card: none of the second set matches the first, so "your" card is always gone
+const CARDS_A = [['heart','#E0187A','Pink heart'], ['star','#FFC72C','Yellow star'], ['note','#1FA9E1','Blue note'], ['sun','#FF8A1F','Orange sun'], ['sparkle','#5B2DB0','Purple sparkle'], ['bubbles','#7CCB52','Green bubbles']];
+const CARDS_B = [['heart','#FFC72C','Yellow heart'], ['star','#E0187A','Pink star'], ['note','#7CCB52','Green note'], ['sun','#5B2DB0','Purple sun'], ['sparkle','#1FA9E1','Blue sparkle']];
+const dealCards = (set, grid) => grid.replaceChildren(...set.map(([ic, col, nm]) => h('div', {class:'mcard', role:'listitem', 'aria-label': nm}, icon(ic, 76, col))));
+
+// Wand Reveal pictures
+const PICS = [
+  {name:'Sunny saying You shine', draw:(c, W2, H2) => { drawSun(c, W2/2, H2*0.4, Math.min(W2, H2)*0.18); bigWord(c, 'YOU SHINE!', W2/2, H2*0.76, W2, '#E0187A'); }},
+  {name:'a big heart that says You are magic', draw:(c, W2, H2) => { drawHeart(c, W2/2, H2*0.4, Math.min(W2, H2)*0.24); bigWord(c, 'YOU ARE MAGIC!', W2/2, H2*0.76, W2, '#FFC72C'); }},
+  {name:'a golden star that says Superstar', draw:(c, W2, H2) => { drawStar(c, W2/2, H2*0.4, Math.min(W2, H2)*0.26); bigWord(c, 'SUPERSTAR!', W2/2, H2*0.76, W2, '#1FA9E1'); }}];
+function wandAt(x, y){ const st = G.st; if (!st.mist) return; const m = st.mist.getContext('2d'), s = 0.25;
+  m.globalCompositeOperation = 'destination-out'; m.beginPath(); m.arc(x*s, y*s, 34*s, 0, Math.PI*2); m.fill(); st.dirty = true;
+  st.spark = st.spark || []; st.spark.push({x, y, life: 1}); if (st.spark.length > 60) st.spark.shift();
+  const now = performance.now(); if (!st.ln || now - st.ln > 240){ st.ln = now; tone(NOTES[4 + Math.floor(Math.random()*4)], 0.4, 0.04); } }
+function drawWand(c, W2, H2, dt){
+  const st = G.st, pic = PICS[st.pic || 0];
+  if (!st.mist || st.mw !== W2 || st.mh !== H2){ st.mw = W2; st.mh = H2; const m = document.createElement('canvas'); m.width = Math.max(1, Math.ceil(W2*0.25)); m.height = Math.max(1, Math.ceil(H2*0.25));
+    const x = m.getContext('2d'); x.fillStyle = '#3A1A86'; x.fillRect(0, 0, m.width, m.height); x.fillStyle = 'rgba(255,246,208,.9)';
+    for (let i = 0; i < 70; i++){ x.beginPath(); x.arc(Math.random()*m.width, Math.random()*m.height, Math.random()*1.1 + 0.4, 0, Math.PI*2); x.fill(); }
+    st.mist = m; st.done = false; st.auto = false; st.chk = 0; st.spark = []; }
+  const g = c.createRadialGradient(W2/2, H2*0.4, 10, W2/2, H2*0.4, Math.max(W2, H2)*0.7); g.addColorStop(0, '#FFFFFF'); g.addColorStop(1, '#D9F2FF'); c.fillStyle = g; c.fillRect(0, 0, W2, H2);
+  pic.draw(c, W2, H2);
+  if (st.auto){ const m = st.mist, mx = m.getContext('2d'); mx.globalCompositeOperation = 'destination-out';
+    if (still()) mx.fillRect(0, 0, m.width, m.height); else for (let i = 0; i < 6; i++){ mx.beginPath(); mx.arc(Math.random()*m.width, Math.random()*m.height, m.width*0.13, 0, Math.PI*2); mx.fill(); }
+    st.dirty = true; }
+  c.imageSmoothingEnabled = true; c.drawImage(st.mist, 0, 0, W2, H2);
+  if (!st.spark.length && !st.auto && !st.done){ c.fillStyle = '#FFF6E0'; c.font = '400 ' + Math.max(24, Math.min(40, W2*0.05)) + 'px "Lilita One", Nunito, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('Wave your wand over the mist', W2/2, H2*0.45); }
+  st.spark = st.spark.filter(p => (p.life -= dt*1.5) > 0); st.spark.forEach(p => sparkle(c, p.x, p.y - (1 - p.life)*20, 10*p.life + 3, p.life));
+  if (st.dirty && (st.chk += dt) > 0.4){ st.chk = 0; st.dirty = false;
+    const m = st.mist, d = m.getContext('2d').getImageData(0, 0, m.width, m.height).data; let clear = 0, n = 0;
+    for (let i = 3; i < d.length; i += 16){ n++; if (d[i] < 40) clear++; } const f = clear/Math.max(1, n);
+    if (!st.done && f > 0.55){ st.done = true; st.auto = true; $('#game-tip').textContent = 'Ta-da! You found ' + pic.name + '. Press New picture for another.'; chime([0, 2, 4, 5, 7]); }
+    if (st.auto && f > 0.97){ st.auto = false; m.getContext('2d').clearRect(0, 0, m.width, m.height); } }
+}
+
+function setupMagic(kind, acts, stage){
+  const st = G.st, tok = G.tok, tip = t => { $('#game-tip').textContent = t; };
+  const later = (fn, ms) => { G.tm = setTimeout(() => { if (G.on && G.tok === tok) fn(); }, ms); };
+  if (kind === 'hat') acts.append(h('button', {class:'btn sm', onclick: hatPop}, 'Tap the hat'));
+  if (kind === 'wand') acts.append(h('button', {class:'btn sm', onclick: () => { st.auto = true; st.dirty = true; }}, 'Reveal it'),
+    h('button', {class:'btn sm', onclick: () => { st.pic = ((st.pic || 0) + 1) % PICS.length; st.mist = null; tip(GAMES.wand.tip); }}, 'New picture'));
+  if (kind === 'cards'){
+    const wrap = h('div', {class:'mwrap'}), grid = h('div', {class:'mgrid', role:'list', 'aria-label':'Cards'}), btn = h('button', {class:'btn sm pink'}, "I'm ready");
+    wrap.append(grid); stage.prepend(wrap);
+    const round = () => { dealCards(shuffleArr(CARDS_A.slice()), grid); grid.classList.remove('flip'); btn.textContent = "I'm ready"; btn.onclick = magic;
+      tip("Pick one card in your head and remember it. Don't tell anyone! Then press I'm ready."); };
+    const magic = () => { btn.disabled = true; tip('Abracadabra...'); chime([7, 4, 2, 0], 0.06); grid.classList.add('flip');
+      later(() => { dealCards(shuffleArr(CARDS_B.slice()), grid); grid.classList.remove('flip'); btn.disabled = false; btn.textContent = 'Again'; btn.onclick = round;
+        tip('Ta-da! I took your card away. Look, is it gone?'); chime([0, 2, 4, 7]); }, still() ? 60 : 700); };
+    acts.append(btn); round();
+  }
+  if (kind === 'cups'){
+    const wrap = h('div', {class:'mwrap'}), box = h('div', {class:'cups'}), star = h('div', {class:'cstar', 'aria-hidden':'true'}, icon('star', 64, '#FFC72C')), SLOT = ['left', 'middle', 'right'];
+    st.slot = [0, 1, 2]; st.ball = Math.floor(Math.random()*3); st.state = 'ready'; st.slow = false;
+    const cups = [0, 1, 2].map(i => { const b = h('button', {class:'cup', type:'button'}, h('i'), h('b')); b.onclick = () => pick(i); box.append(b); return b; });
+    box.append(star); wrap.append(box); stage.prepend(wrap);
+    const place = () => { cups.forEach((b, i) => { b.style.left = (st.slot[i]*33.33 + 16.67) + '%'; b.setAttribute('aria-label', 'The ' + SLOT[st.slot[i]] + ' cup (' + (st.slot[i] + 1) + ')'); }); star.style.left = (st.slot[st.ball]*33.33 + 16.67) + '%'; };
+    const lift = (i, on) => cups[i].classList.toggle('up', on), lowerAll = () => cups.forEach((_, i) => lift(i, false));
+    const busy = on => { st.busy = on; cups.forEach(b => b.setAttribute('aria-disabled', String(on))); };
+    const pick = i => { if (st.busy || st.state !== 'guess') return; lift(i, true);
+      if (i === st.ball){ st.state = 'ready'; tip('You found the star! Press Shuffle to play again.'); chime([0, 2, 4, 7]); buzz(20); }
+      else { tip('Not under this one. Try another cup!'); tone(NOTES[1], 0.3, 0.05); later(() => lift(i, false), 1100); } };
+    st.pickSlot = sl => { const i = st.slot.indexOf(sl); if (i >= 0) pick(i); };
+    const shuffle = () => { if (st.busy) return; busy(true); lowerAll(); tip('Shuffling. Keep your eyes on the star cup!');
+      if (still()){ later(() => { shuffleArr(st.slot); place(); busy(false); st.state = 'guess'; tip('The cups swapped places. Where is the star? Tap a cup, or press 1, 2 or 3.'); }, 400); return; }
+      let left = st.slow ? 4 : 6; const gapMs = st.slow ? 1250 : 700;
+      const step = () => { const a = Math.floor(Math.random()*3), b = (a + 1 + Math.floor(Math.random()*2)) % 3, ia = st.slot.indexOf(a), ib = st.slot.indexOf(b);
+        st.slot[ia] = b; st.slot[ib] = a; place(); tone(NOTES[left % 5], 0.2, 0.04);
+        if (--left > 0) later(step, gapMs); else later(() => { busy(false); st.state = 'guess'; tip('Where is the star? Tap a cup, or press 1, 2 or 3.'); }, gapMs); };
+      later(step, 450); };
+    const show = () => { if (st.busy) return; lift(st.ball, true); st.state = 'ready'; tip('Here it is! Press Shuffle to go again.'); };
+    const slowBtn = h('button', {class:'btn sm', 'aria-pressed':'false'}, 'Slow: off');
+    slowBtn.onclick = () => { st.slow = !st.slow; box.classList.toggle('slow', st.slow); slowBtn.textContent = st.slow ? 'Slow: on' : 'Slow: off'; slowBtn.setAttribute('aria-pressed', String(st.slow)); };
+    acts.append(h('button', {class:'btn sm pink', onclick: shuffle}, 'Shuffle'), slowBtn, h('button', {class:'btn sm', onclick: show}, 'Show me'));
+    place(); lift(st.ball, true); tip('The star is under this cup. Press Shuffle and keep your eyes on it.');
+  }
 }
 
 /* ================= 3D WORLD ================= */
@@ -954,9 +1187,24 @@ function initWorld(){
   // people (avatar + NPCs)
   const SKIN = ['#F6D3B3','#D9A47A','#A86B43','#6B4428'];
   function person(o){
-    const g = new T.Group(), P = {g, type:o.type, legs:[], arms:[], wheels:[]};
-    const hood = HEX[o.hood] || o.hood || '#5B2DB0', skin = SKIN[o.skin != null ? o.skin : 1], jeans = '#2E3A8C';
+    const g = new T.Group(), body = new T.Group(), P = {g, body, type:o.type, legs:[], arms:[], wheels:[], eyes:[]};
+    const hood = HEX[o.hood] || o.hood || '#5B2DB0', skin = SKIN[o.skin != null ? o.skin : 1], jeans = '#2E3A8C', hairC = '#2A1A12';
     const limb = (len, r, col) => { const piv = new T.Group(); const m = mk(new T.CylinderGeometry(r, r, len, 10), col, true, 1.12); m.position.y = -len/2; piv.add(m); return piv; };
+    const hand = (piv, len) => { const hd = mk(new T.SphereGeometry(0.18, 12, 10), skin, true, 1.15); hd.position.y = -len - 0.05; piv.add(hd); };
+    // head on a neck pivot so it can nod, tilt and look around; face with blinking eyes, rosy cheeks and a smile
+    const head = (y, z) => {
+      const hg = new T.Group(); hg.position.set(0, y, z); body.add(hg); P.head = hg;
+      const hd = mk(new T.SphereGeometry(0.45, 18, 14), skin); hd.position.y = 0.4; hg.add(hd);
+      const hair = new T.Mesh(new T.SphereGeometry(0.48, 16, 8, 0, Math.PI*2, 0, Math.PI/2.1), toon(hairC)); hair.position.y = 0.46; hg.add(hair);
+      const ink = new T.MeshBasicMaterial({color:'#22114A'}), blush = new T.MeshBasicMaterial({color:'#FF7AB6', transparent: true, opacity: 0.7}), eg = new T.SphereGeometry(0.075, 10, 8), cg = new T.SphereGeometry(0.085, 10, 6);
+      [-1, 1].forEach(s => { const e = new T.Mesh(eg, ink); e.position.set(s*0.16, 0.41, 0.41); e.scale.z = 0.5; hg.add(e); P.eyes.push(e);
+        const ck = new T.Mesh(cg, blush); ck.position.set(s*0.27, 0.29, 0.34); ck.scale.set(1, 0.7, 0.35); hg.add(ck); });
+      const smile = new T.Mesh(new T.TorusGeometry(0.12, 0.03, 6, 14, Math.PI), ink); smile.rotation.z = Math.PI; smile.position.set(0, 0.27, 0.41); hg.add(smile);
+    };
+    // hoodie hood round the neck and a little AbleShine sun badge on the chest
+    const hoodRing = (y, z) => { const r = mk(new T.TorusGeometry(0.36, 0.14, 8, 18), hood, true, 1.1); r.rotation.x = Math.PI/2; r.position.set(0, y, z); body.add(r); };
+    const badge = (y, z) => { const b = mk(new T.CylinderGeometry(0.15, 0.15, 0.05, 14), '#FFC72C', true, 1.25); b.rotation.x = Math.PI/2; b.position.set(0, y, z); body.add(b); };
+    body.position.y = 1.1; g.add(body);
     if (o.type === 'chair'){
       const frame = '#3B3355';
       const seat = mk(new T.BoxGeometry(1.3,0.22,1.2), frame); seat.position.set(0,1.0,0); g.add(seat);
@@ -964,19 +1212,19 @@ function initWorld(){
       [-0.78, 0.78].forEach(x => { const w = new T.Group(); w.position.set(x,0.78,-0.1); const tor = mk(new T.TorusGeometry(0.72,0.09,8,24), '#22114A', false); tor.rotation.y = Math.PI/2; w.add(tor);
         for (let k = 0; k < 3; k++){ const sp = new T.Mesh(new T.BoxGeometry(0.05,1.4,0.05), toon('#C9B8F2')); sp.rotation.x = k*Math.PI/3; w.add(sp); } g.add(w); P.wheels.push(w); });
       [-0.5, 0.5].forEach(x => { const c = mk(new T.SphereGeometry(0.17,10,8), '#22114A', false); c.position.set(x,0.17,0.62); g.add(c); });
-      const torso = mk(new T.CylinderGeometry(0.5,0.58,1.1,12), hood); torso.position.set(0,1.7,-0.18); g.add(torso);
       const thigh = mk(new T.BoxGeometry(0.9,0.36,0.9), jeans); thigh.position.set(0,1.26,0.3); g.add(thigh);
       const shin = mk(new T.BoxGeometry(0.85,0.75,0.32), jeans); shin.position.set(0,0.82,0.68); g.add(shin);
-      const head = mk(new T.SphereGeometry(0.44,16,12), skin); head.position.set(0,2.55,-0.15); g.add(head);
-      const hair = new T.Mesh(new T.SphereGeometry(0.47,16,8,0,Math.PI*2,0,Math.PI/2.1), toon('#2A1A12')); hair.position.copy(head.position).add(new T.Vector3(0,0.06,-0.02)); g.add(hair);
-      [-0.66, 0.66].forEach(x => { const a = limb(0.85, 0.15, hood); a.position.set(x,2.05,-0.15); a.rotation.x = -0.5; g.add(a); P.arms.push(a); });
+      [-0.22, 0.22].forEach(x => { const sh = mk(new T.BoxGeometry(0.34,0.2,0.5), '#FFFFFF', true, 1.1); sh.position.set(x,0.44,0.82); g.add(sh); });
+      const torso = mk(new T.CylinderGeometry(0.5,0.58,1.1,12), hood); torso.position.set(0,0.6,-0.18); body.add(torso);
+      hoodRing(1.14, -0.22); badge(0.72, 0.36); head(1.05, -0.15);
+      [-0.66, 0.66].forEach(x => { const a = limb(0.85, 0.15, hood); hand(a, 0.85); a.position.set(x,0.95,-0.15); a.rotation.x = -0.5; body.add(a); P.arms.push(a); });
     } else {
-      [-0.25, 0.25].forEach(x => { const l = limb(1.1, 0.21, jeans); l.position.set(x,1.1,0); g.add(l); P.legs.push(l); });
-      const torso = mk(new T.CylinderGeometry(0.52,0.6,1.2,12), hood); torso.position.y = 1.68; g.add(torso);
-      const head = mk(new T.SphereGeometry(0.45,16,12), skin); head.position.y = 2.65; g.add(head);
-      const hair = new T.Mesh(new T.SphereGeometry(0.48,16,8,0,Math.PI*2,0,Math.PI/2.1), toon('#2A1A12')); hair.position.y = 2.71; g.add(hair);
-      [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, hood); a.position.set(x,2.18,0); g.add(a); P.arms.push(a); });
-      if (o.type === 'cane'){ const cane = mk(new T.CylinderGeometry(0.06,0.06,1.9,8), '#FFC72C', true, 1.3); cane.position.set(0.98,0.95,0.35); cane.rotation.x = 0.12; g.add(cane); P.cane = cane; }
+      [-0.25, 0.25].forEach(x => { const l = limb(1.1, 0.21, jeans); const sh = mk(new T.BoxGeometry(0.36,0.22,0.56), '#FFFFFF', true, 1.1); sh.position.set(0,-1.0,0.1); l.add(sh); l.position.set(x,1.1,0); g.add(l); P.legs.push(l); });
+      const torso = mk(new T.CylinderGeometry(0.52,0.6,1.2,12), hood); torso.position.y = 0.58; body.add(torso);
+      hoodRing(1.2, -0.05); badge(0.75, 0.56); head(1.15, 0);
+      [-0.68, 0.68].forEach(x => { const a = limb(0.95, 0.15, hood); hand(a, 0.95); a.position.set(x,1.08,0); body.add(a); P.arms.push(a); });
+      if (o.type === 'cane'){ const cp = new T.Group(); cp.position.set(0.96, 1.3, 0.3); const cane = mk(new T.CylinderGeometry(0.06,0.06,1.35,8), '#FFC72C', true, 1.3); cane.position.y = -0.62; cp.add(cane);
+        const grip = mk(new T.TorusGeometry(0.14, 0.05, 6, 12, Math.PI), '#22114A', false); grip.position.set(0, 0.04, 0.12); grip.rotation.y = Math.PI/2; cp.add(grip); g.add(cp); P.caneP = cp; }
     }
     return P;
   }
@@ -1046,19 +1294,21 @@ function initWorld(){
   function buildCrowd(spots, specials, rnd){
     npcs = [];
     const dests = spots.map(sp => ({type:'trail', k: sp.sample, face: sp.pos}))
-      .concat(specials.map(sp => ({type:'ring', a: angOf(sp.door), face: sp.pos})))
+      .concat(specials.map(sp => ({type:'ring', a: angOf(sp.gate || sp.door), face: sp.pos, spur: sp.walk ? [sp.gate].concat(sp.walk, [sp.walk[sp.walk.length - 1].clone().lerp(sp.door, 0.6)]) : null})))
       .concat([0.6, 2.2, 3.8, 5.2].map(a => ({type:'ring', a, face: new T.Vector3(0, 0, 0)})));
     const trailA = samples.length ? angOf(samples[0]) : 0;
     const arc = (a0, a1) => { let d = a1 - a0; d = Math.atan2(Math.sin(d), Math.cos(d)); const n = Math.max(1, Math.ceil(Math.abs(d)/0.15)), pts = [];
       for (let i = 1; i <= n; i++){ const a = a0 + d*i/n; pts.push(new T.Vector3(Math.cos(a)*RING, 0, Math.sin(a)*RING)); } return pts; };
     const along = (k0, k1) => { const pts = [], st = k0 <= k1 ? 2 : -2; for (let k = k0; st > 0 ? k <= k1 : k >= k1; k += st) pts.push(samples[k].clone()); pts.push(samples[k1].clone()); return pts; };
-    const route = (from, to) => {
+    const core = (from, to) => {
       if (from.type === 'trail' && to.type === 'trail') return along(from.k, to.k);
       if (from.type === 'trail') return along(from.k, 0).concat(arc(trailA, to.a));
       if (to.type === 'trail') return arc(from.a, trailA).concat(along(0, to.k));
       return arc(from.a, to.a);
     };
-    const where = d => d.type === 'trail' ? samples[d.k].clone() : new T.Vector3(Math.cos(d.a)*RING, 0, Math.sin(d.a)*RING);
+    // far tents hang off the ring on their own path ("spur")
+    const route = (from, to) => (from.spur ? from.spur.slice(0, -1).reverse().map(p => p.clone()) : []).concat(core(from, to), to.spur ? to.spur.map(p => p.clone()) : []);
+    const where = d => d.spur ? d.spur[d.spur.length - 1].clone() : d.type === 'trail' ? samples[d.k].clone() : new T.Vector3(Math.cos(d.a)*RING, 0, Math.sin(d.a)*RING);
     const hoods = ['#E0187A','#1FA9E1','#FFC72C','#5B2DB0','#7CCB52','#FF8A1F'], jeansC = ['#2E3A8C','#22114A','#3E7C59','#6B4F9E'];
     const types = ['walk','chair','walk','cane','walk','chair','walk','walk','cane','chair','walk','walk'];
     const usable = dests.filter(d => d.type !== 'trail' || samples.length);
@@ -1080,7 +1330,7 @@ function initWorld(){
       let moving = false;
       if (n.wait > 0){ n.wait -= dt; if (n.wait <= 0) n.plan(); }
       else if (n.path.length){ const tgt = n.path[0], dx = tgt.x - n.pos.x, dz = tgt.z - n.pos.z, d = Math.hypot(dx, dz), stp = n.speed*dt;
-        if (d <= stp){ n.pos.x = tgt.x; n.pos.z = tgt.z; n.path.shift(); if (!n.path.length){ n.at = n.next; n.wait = 2 + Math.random()*5; n.yawT = Math.atan2(n.at.face.x - n.pos.x, n.at.face.z - n.pos.z); } }
+        if (d <= stp){ n.pos.x = tgt.x; n.pos.z = tgt.z; n.path.shift(); if (!n.path.length){ n.at = n.next; n.wait = 2 + Math.random()*5; if (Math.random() < 0.3) n.wave = 1.6; n.yawT = Math.atan2(n.at.face.x - n.pos.x, n.at.face.z - n.pos.z); } }
         else { n.pos.x += dx/d*stp; n.pos.z += dz/d*stp; n.yawT = Math.atan2(dx, dz); }
         moving = true; }
       else n.plan();
@@ -1091,6 +1341,10 @@ function initWorld(){
       P.legs.forEach((l, i) => l.rotation.x = i ? sw : -sw);
       if (P.type === 'chair'){ P.wheels.forEach(w => { if (moving) w.rotation.x += n.speed*dt/0.72; }); P.arms.forEach(a => a.rotation.x = -0.5 + (moving ? Math.sin(n.phase)*0.25 : 0)); }
       else { P.arms.forEach((a, i) => a.rotation.x = i ? -sw*0.8 : sw*0.8); n.g.position.y = moving ? Math.abs(Math.sin(n.phase))*0.1 : 0; }
+      // visitors wave when they arrive somewhere, and say hello when you walk past
+      const ax = av.pos.x - n.pos.x, az = av.pos.z - n.pos.z, ad = ax*ax + az*az;
+      if (!moving && ad < 30 && !n.greeted){ n.greeted = true; n.wave = 1.8; n.yawT = Math.atan2(ax, az); } else if (ad > 200) n.greeted = false;
+      const wa = P.arms[1]; if (n.wave > 0 && !moving){ n.wave -= dt; wa.rotation.x = -0.2; wa.rotation.z = 2.6 + Math.sin(t*11)*0.35; } else { wa.rotation.z = 0; n.wave = 0; }
       if (n.dog){ const fx = Math.sin(n.yaw), fz = Math.cos(n.yaw), wx = n.pos.x - fx*1.4 + fz*1.2, wz = n.pos.z - fz*1.4 - fx*1.2, ddx = wx - n.dogPos.x, ddz = wz - n.dogPos.z, dd = Math.hypot(ddx, ddz);
         if (dd > 0.05){ const mv = Math.min(dd, Math.max(3, dd*3)*dt); n.dogPos.x += ddx/dd*mv; n.dogPos.z += ddz/dd*mv; n.dog.g.rotation.y = Math.atan2(ddx, ddz); }
         n.dog.g.position.copy(n.dogPos); const dw = dd > 0.2 ? Math.sin(t*12)*0.5 : 0; n.dog.legs.forEach((l, i) => l.rotation.x = i % 2 ? dw : -dw); }
@@ -1098,13 +1352,42 @@ function initWorld(){
   }
 
   // avatar
-  const av = { pos: new T.Vector3(0,0,8), yaw: Math.PI, path: [], onArrive: null, P: null, dog: null, dogPos: new T.Vector3(1.5,0,9), moving: false, phase: 0 };
+  const av = { pos: new T.Vector3(0,0,8), yaw: Math.PI, path: [], onArrive: null, P: null, dog: null, dogPos: new T.Vector3(1.5,0,9), moving: false, phase: 0, mv: 0, idle: 0, look: 0, blink: 3, turn: 0, gk: null, gt: 0, gd: 1 };
   function buildAvatar(){
     if (av.P) scene.remove(av.P.g); if (av.dog) scene.remove(av.dog.g);
     av.P = person({type: S.me.type === 'chair' ? 'chair' : S.me.type, hood: S.me.hood, skin: S.me.skin}); scene.add(av.P.g);
-    av.dog = S.me.dog ? dog() : null; if (av.dog) scene.add(av.dog.g);
+    av.dog = S.me.dog ? dog() : null; if (av.dog){ av.dog.g.rotation.order = 'YXZ'; scene.add(av.dog.g); }
   }
   buildAvatar();
+  // gestures: wave, cheer, clap, dance (Me panel buttons, tapping your character, and a wave on arrival)
+  W.gesture = (k, quiet) => { const gs = GESTURES.find(x => x.k === k); if (!gs || !av.P) return; av.gk = k; av.gt = av.gd = gs.dur;
+    if (!av.path.length) av.yawT = cam.yaw;
+    if (quiet) return; W.say && W.say(gs.say, 2200);
+    if (k === 'cheer') [0, 2, 4, 7].forEach((n, i) => setTimeout(() => tone(NOTES[n], 0.35, 0.05), i*90));
+    if (k === 'clap') [0, 1, 2].forEach(i => setTimeout(() => tone(NOTES[6], 0.1, 0.06, 'triangle'), i*220)); };
+  // walking, pushing, idling and gesturing, all eased so poses blend instead of snapping
+  function poseAvatar(P, dt, t, calm){
+    const chair = P.type === 'chair', mv = calm ? 0 : av.mv, ph = av.phase, sw = Math.sin(ph)*0.7*mv, B = P.body;
+    let bob = chair ? 0 : Math.abs(Math.sin(ph))*0.12*mv, lean = (chair ? 0.14 : 0.1)*mv, roll = calm ? 0 : -Math.max(-0.5, Math.min(0.5, av.turn || 0))*0.35*mv, spin = 0;
+    const ax = chair ? [-0.5 + Math.sin(ph)*0.35*mv, -0.5 + Math.sin(ph)*0.35*mv] : [sw*0.8, -sw*0.8], az = [-0.08, 0.08], lg = [-sw, sw];
+    if (P.caneP){ P.caneP.rotation.x = 0.12 + Math.sin(ph)*0.3*mv; ax[1] = -0.25 + Math.sin(ph)*0.3*mv; az[1] = 0.28; }
+    B.scale.y = 1 + (calm ? 0 : Math.sin(t*2.2)*0.018*(1 - mv));
+    const lookT = (!calm && av.idle > 2.5 && !av.gk) ? Math.sin(av.idle*0.7)*0.45 : 0; av.look += (lookT - av.look)*Math.min(1, dt*3);
+    P.head.rotation.set(chair ? 0 : -0.04*mv, av.look, 0);
+    if (!calm){ av.blink -= dt; if (av.blink <= -0.13) av.blink = 2.2 + Math.random()*3; }
+    const shut = !calm && av.blink < 0; P.eyes.forEach(e => e.scale.y = shut ? 0.15 : 1);
+    if (av.gt > 0){ av.gt -= dt;
+      const k = calm ? 1 : Math.max(0, Math.min(1, (av.gd - av.gt)*6, av.gt*6)), e = calm ? 0 : 1, mix = (i, x, z) => { ax[i] += (x - ax[i])*k; az[i] += (z - az[i])*k; };
+      if (av.gk === 'wave'){ mix(1, -0.15, 2.7 + Math.sin(t*12)*0.35*e); P.head.rotation.z = 0.14*k; }
+      else if (av.gk === 'cheer'){ mix(0, 0, -2.75 - Math.sin(t*10)*0.15*e); mix(1, 0, 2.75 + Math.sin(t*10)*0.15*e); bob += (chair ? 0.06 : 0.4)*Math.abs(Math.sin(t*9))*k*e; lean -= 0.1*k; }
+      else if (av.gk === 'clap'){ const c = 0.55 + (0.5 + 0.5*Math.sin(t*15))*0.3*e; mix(0, -1.3, c); mix(1, -1.3, -c); P.head.rotation.x = 0.08*k; }
+      else if (av.gk === 'dance'){ const w = t*7; mix(0, 0, -1.0 - Math.sin(w)*0.9*e); mix(1, 0, 1.0 - Math.sin(w)*0.9*e); roll += Math.sin(w)*0.14*k*e;
+        bob += Math.abs(Math.sin(w))*(chair ? 0.05 : 0.25)*k*e; lg[0] += Math.sin(w)*0.3*k*e; lg[1] -= Math.sin(w)*0.3*k*e; if (chair) spin = Math.sin(t*3.5)*0.45*k*e; P.head.rotation.z = Math.sin(w)*0.18*k*e; }
+      if (av.gt <= 0) av.gk = null; }
+    P.legs.forEach((l, i) => l.rotation.x = lg[i]);
+    P.arms.forEach((a, i) => { a.rotation.x = ax[i]; a.rotation.z = az[i]; });
+    B.rotation.set(lean, 0, roll); P.g.position.y = bob; if (spin) P.g.rotation.y = av.yaw + spin;
+  }
 
   // mascot: the AbleShine sun
   const sunFace = canvasTex(512,512,(g) => {
@@ -1135,7 +1418,9 @@ function initWorld(){
     () => "Hi, I'm " + mascotName() + "! Tap a tent and I'll walk you there.",
     () => 'Need a break from the motion? Calm mode switches it off.',
     () => 'The Chapter guide lists every event. No 3D needed.',
-    () => 'Want to talk to the team? Tap Connect up top.'];
+    () => 'Want to talk to the team? Tap Connect up top.',
+    () => 'Tap your character to wave, cheer, clap or dance.',
+    () => 'There is a Magic Tent out past the plaza. Follow the sparkly path!'];
   setTimeout(() => W.say(TIPS[0](), 6500), 1400);
   const marker = new T.Mesh(new T.RingGeometry(0.6,0.9,24), new T.MeshBasicMaterial({color:'#E0187A'})); marker.rotation.x = -Math.PI/2; marker.visible = false; scene.add(marker);
 
@@ -1174,10 +1459,23 @@ function initWorld(){
     // tents
     spots.forEach(s => dyn.add(tent(s)));
     // landmark tents beside the plaza: Partners pavilion and Play Tent
-    const specials = [['partners', Math.PI + 0.15, 'Partners', 'Sponsors and supporters'], ['play', Math.PI + 1.0, 'Play Tent', 'Sensory games']].map(([kind, a, name, sub]) => {
-      const pos = new T.Vector3(Math.cos(a)*18.5, 0, Math.sin(a)*18.5), inward = pos.clone().multiplyScalar(-1).normalize();
-      const sp = {kind, name, sub, pos, door: pos.clone().add(inward.multiplyScalar(6.6)), anchor: pos.clone().add(new T.Vector3(0, kind === 'play' ? 11.2 : 10.8, 0))};
+    // Partners and Play sit beside the plaza; Magic and the wellbeing tent sit further out, each on its own path from the plaza ring
+    const specials = [['partners', Math.PI + 0.15, 18.5], ['play', Math.PI + 1.0, 18.5], ['magic', 5.14, 31], ['wellness', 0.9, 44]]
+      .filter(([kind]) => liveSpecials().some(x => x.kind === kind)).map(([kind, a, rr]) => {
+      const meta = SPECIALS.find(x => x.kind === kind), pos = new T.Vector3(Math.cos(a)*rr, 0, Math.sin(a)*rr), inward = pos.clone().multiplyScalar(-1).normalize();
+      const sp = {kind, name: meta.name, sub: meta.sub, pos, door: pos.clone().add(inward.clone().multiplyScalar(6.6)), anchor: pos.clone().add(new T.Vector3(0, {play: 11.4, partners: 10.8, magic: 15.4, wellness: 11.4}[kind], 0))};
+      if (rr > 20){ sp.gate = new T.Vector3(Math.cos(a)*RING, 0, Math.sin(a)*RING); const side = new T.Vector3(-inward.z, 0, inward.x), n = Math.max(2, Math.round(sp.gate.distanceTo(sp.door)/1.7));
+        sp.walk = []; for (let i = 1; i < n; i++) sp.walk.push(sp.gate.clone().lerp(sp.door, i/n).addScaledVector(side, Math.sin(i*0.75)*1.1)); }
       dyn.add(specialTent(sp)); return sp; });
+    const pathPts = [];
+    specials.filter(s => s.walk).forEach(s => { const pts = [s.gate].concat(s.walk, [s.door]), magic = s.kind === 'magic';
+      const st = new T.InstancedMesh(new T.CylinderGeometry(0.75, 0.8, 0.14, 14), toon('#FFFFFF'), pts.length), m4 = new T.Matrix4(), col = new T.Color(), cols = magic ? ['#FFC72C','#B79BF2','#FFFFFF','#9A7BE0'] : ['#7CCB52','#FFFFFF','#7FD8F5','#FF7AB6'];
+      pts.forEach((p, i) => { m4.makeTranslation(p.x, 0.07, p.z); st.setMatrixAt(i, m4); st.setColorAt(i, col.set(cols[i % 4])); pathPts.push(p); }); st.receiveShadow = true; dyn.add(st);
+      // floating stars (Magic) or hearts (wellbeing) either side of the path
+      const arr = new Float32Array(pts.length*3), base = [], ph = [], side = new T.Vector3(-(s.door.z - s.gate.z), 0, s.door.x - s.gate.x).normalize();
+      pts.forEach((p, i) => { const q = p.clone().addScaledVector(side, i % 2 ? 1.8 : -1.8); arr[i*3] = q.x; arr[i*3+1] = 1.6 + (i % 3)*0.35; arr[i*3+2] = q.z; base.push(arr[i*3+1]); ph.push(i*0.7); });
+      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(arr, 3));
+      const pt = new T.Points(geo, new T.PointsMaterial({map: magic ? starTex : heartTex, size: 1.1, transparent: true, alphaTest: 0.35, depthWrite: false})); pt.raycast = () => {}; dyn.add(pt); anim.push({k:'points', geo, base, ph}); });
     const blockers = spots.map(s => s.pos).concat(specials.map(s => s.pos));
     // trees: pop-art puffs, lollipops and stacked pines with Ben-Day dots and thick ink outlines
     const rnd = seeded(7 + spots.length*13), treeN = Math.floor(R*1.6), UP = new T.Vector3(0,1,0);
@@ -1194,6 +1492,7 @@ function initWorld(){
       const a = rnd()*Math.PI*2, r = 14 + rnd()*(R-17), p = new T.Vector3(Math.cos(a)*r, 0, Math.sin(a)*r);
       if (blockers.some(b => b.distanceTo(p) < 11)) continue;
       let near = false; for (let k = 0; k < samples.length; k += 4){ if (samples[k].distanceTo(p) < 2.8){ near = true; break; } } if (near) continue;
+      if (pathPts.some(q => q.distanceTo(p) < 3.2)) continue;
       placed++;
       const k = 0.8 + rnd()*0.6, type = rnd(), x = p.x, z = p.z, yaw = rnd()*Math.PI*2; q.setFromAxisAngle(UP, yaw);
       const popOk = !blockers.some(b => b.distanceTo(p) < 17);
@@ -1294,17 +1593,23 @@ function initWorld(){
       x.fillStyle = ink; x.fillText(c.num, cx, cy + 6);
     });
   }
+  const TOPICON = {
+    play: {bg: ['#E0187A', '#FFC72C'], ring: '#FFFFFF', fill: '#FFFFFF', dy: 4, d: 'M9.5 17.6a3 3 0 1 1-2-2.8V5.2L19 3v11.6a3 3 0 1 1-2-2.8V7.3l-7.5 1.5z'},
+    partners: {bg: ['#22114A'], ring: '#FFC72C', fill: '#FFC72C', d: 'M12 2.6l2.8 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.8 3.2 1.3-6.5-4.9-4.5 6.6-.8z'},
+    magic: {bg: ['#4B1F9E'], ring: '#FFC72C', fill: '#FFC72C', d: 'M15.5 3.2a8.8 8.8 0 1 0 5.3 13.9A7.2 7.2 0 0 1 15.5 3.2z', star: true},
+    wellness: {bg: ['#7CCB52', '#1FA9E1'], ring: '#FFFFFF', fill: '#FFFFFF', dy: -1, d: 'M12 3.5c2.3 2.4 3 5.4 1.9 8.8-.5 1.6-1.1 2.7-1.9 3.9-.8-1.2-1.4-2.3-1.9-3.9C9 8.9 9.7 5.9 12 3.5zM2.5 9.5c3.3.2 5.8 1.9 7.2 4.7.6 1.3 1 2.5 1.2 3.7-1.5-.2-2.9-.7-4.1-1.4-2.8-1.6-4.1-4-4.3-7zM21.5 9.5c-3.3.2-5.8 1.9-7.2 4.7-.6 1.3-1 2.5-1.2 3.7 1.5-.2 2.9-.7 4.1-1.4 2.8-1.6 4.1-4 4.3-7z'}};
   function iconTopper(g, y, kind){
+    const K = TOPICON[kind];
     return topper(g, y, 3.2, 3.2, (x, W2, H2) => {
       const cx = W2/2, cy = H2/2, r = W2*0.40;
       x.fillStyle = '#22114A'; x.beginPath(); x.arc(cx + 10, cy + 12, r, 0, Math.PI*2); x.fill();
-      if (kind === 'play'){ const cols = ['#E0187A','#FF8A1F','#FFC72C','#7CCB52','#1FA9E1','#5B2DB0']; for (let i = 0; i < 12; i++){ x.fillStyle = cols[i % 6]; x.beginPath(); x.moveTo(cx, cy); x.arc(cx, cy, r, i/12*Math.PI*2, (i+1)/12*Math.PI*2); x.closePath(); x.fill(); } }
-      else { x.fillStyle = '#22114A'; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI*2); x.fill(); }
+      for (let i = 0; i < 12; i++){ x.fillStyle = K.bg[i % K.bg.length]; x.beginPath(); x.moveTo(cx, cy); x.arc(cx, cy, r, i/12*Math.PI*2, (i+1)/12*Math.PI*2 + 0.01); x.closePath(); x.fill(); }
       x.lineWidth = 18; x.strokeStyle = '#22114A'; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI*2); x.stroke();
-      x.lineWidth = 10; x.strokeStyle = kind === 'play' ? '#FFFFFF' : '#FFC72C'; x.beginPath(); x.arc(cx, cy, r - 26, 0, Math.PI*2); x.stroke();
-      const path = new Path2D(kind === 'play' ? 'M9.5 17.6a3 3 0 1 1-2-2.8V5.2L19 3v11.6a3 3 0 1 1-2-2.8V7.3l-7.5 1.5z' : 'M12 2.6l2.8 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.8 3.2 1.3-6.5-4.9-4.5 6.6-.8z');
-      const k = r*1.25/24; x.save(); x.translate(cx - 12*k, cy - 12*k + (kind === 'play' ? 4 : 0)); x.scale(k, k);
-      x.lineJoin = 'round'; x.lineWidth = 2.2; x.strokeStyle = '#22114A'; x.fillStyle = kind === 'play' ? '#FFFFFF' : '#FFC72C'; x.fill(path); x.stroke(path); x.restore();
+      x.lineWidth = 10; x.strokeStyle = K.ring; x.beginPath(); x.arc(cx, cy, r - 26, 0, Math.PI*2); x.stroke();
+      const k = r*1.25/24; x.save(); x.translate(cx - 12*k, cy - 12*k + (K.dy || 0)); x.scale(k, k);
+      x.lineJoin = 'round'; x.lineWidth = 2.2; x.strokeStyle = '#22114A'; x.fillStyle = K.fill; const path = new Path2D(K.d); x.fill(path); x.stroke(path);
+      if (K.star){ const st = new Path2D('M19.5 3.5l.9 2 2.1.3-1.6 1.4.4 2.1-1.8-1-1.8 1 .4-2.1-1.6-1.4 2.1-.3z'); x.fillStyle = '#FFFFFF'; x.lineWidth = 1.4; x.fill(st); x.stroke(st); }
+      x.restore();
     });
   }
   // six balloons (+ outlines + strings) in three draw calls; bobbing handled in the frame loop
@@ -1319,6 +1624,36 @@ function initWorld(){
       b.instanceMatrix.needsUpdate = bo.instanceMatrix.needsUpdate = st.instanceMatrix.needsUpdate = true; };
     place(0); b.castShadow = true; g.add(b, bo, st); anim.push({k:'balloons', place});
   }
+  // bunting: pennants hung along sagging strings (segs: [ax,ay,az, bx,by,bz, sag]); three draw calls at most per tent
+  const PEN = new T.BufferGeometry(); PEN.setAttribute('position', new T.Float32BufferAttribute([-0.32,0,0, 0.32,0,0, 0,-0.62,0], 3)); PEN.computeVertexNormals(); PEN.userData = {keep: true};
+  const PENMAT = toon('#FFFFFF', {side: T.DoubleSide}); PENMAT.userData.keep = true;
+  const STRING = new T.LineBasicMaterial({color:'#22114A'}); STRING.userData.keep = true;
+  const STAKE = new T.CylinderGeometry(0.1, 0.12, 1, 6); STAKE.userData = {keep: true};
+  function bunting(g, segs, cols, per, stakes){
+    const im = new T.InstancedMesh(PEN, PENMAT, segs.length*per), d = new T.Object3D(), col = new T.Color(), line = []; let k = 0;
+    segs.forEach(([ax, ay, az, bx, by, bz, sag]) => {
+      const yaw = Math.atan2(-(bz - az), bx - ax), at = s => [ax + (bx - ax)*s, ay + (by - ay)*s - sag*Math.sin(Math.PI*s), az + (bz - az)*s];
+      for (let j = 0; j < per; j++){ const p = at((j + 0.5)/per); d.position.set(p[0], p[1], p[2]); d.rotation.set(0, yaw, 0); d.updateMatrix(); im.setMatrixAt(k, d.matrix); im.setColorAt(k, col.set(cols[k % cols.length])); k++; }
+      for (let j = 0; j < 12; j++) line.push(...at(j/12), ...at((j + 1)/12));
+    });
+    const lg = new T.BufferGeometry(); lg.setAttribute('position', new T.Float32BufferAttribute(line, 3));
+    const ln = new T.LineSegments(lg, STRING); ln.raycast = () => {}; g.add(im, ln);
+    if (stakes){ const sm = new T.InstancedMesh(STAKE, toon('#22114A'), segs.length);
+      segs.forEach((s, i) => { d.position.set(s[3], s[4]/2, s[5]); d.rotation.set(0, 0, 0); d.scale.set(1, s[4], 1); d.updateMatrix(); sm.setMatrixAt(i, d.matrix); }); sm.castShadow = true; g.add(sm); }
+  }
+  const ringSegs = (n, r, y, sag) => Array.from({length: n}, (_, i) => { const a = i/n*Math.PI*2, b = (i + 1)/n*Math.PI*2; return [Math.cos(a)*r, y, Math.sin(a)*r, Math.cos(b)*r, y, Math.sin(b)*r, sag]; });
+  const spokes = (top, angs, r, y, sag) => angs.map(a => [0, top, 0, Math.cos(a)*r, y, Math.sin(a)*r, sag]);
+  // a set of instanced spheres that bob or bounce (one draw call, two with outlines)
+  function bobbers(g, list, r, mat, outline, amp, bounce){
+    const geo = new T.SphereGeometry(r, 14, 10), im = new T.InstancedMesh(geo, mat, list.length), ol = outline ? new T.InstancedMesh(geo, OUT, list.length) : null, d = new T.Object3D(), col = new T.Color();
+    list.forEach((it, i) => { if (it.c) im.setColorAt(i, col.set(it.c)); });
+    const place = t => { list.forEach((it, i) => { const w = t ? (bounce ? Math.abs(Math.sin(t*2.2 + it.ph)) : Math.sin(t*1.4 + it.ph))*amp : 0;
+      d.position.set(it.x, it.y + w, it.z); d.scale.setScalar(it.s || 1); d.updateMatrix(); im.setMatrixAt(i, d.matrix);
+      if (ol){ d.scale.setScalar((it.s || 1)*1.08); d.updateMatrix(); ol.setMatrixAt(i, d.matrix); } });
+      im.instanceMatrix.needsUpdate = true; if (ol) ol.instanceMatrix.needsUpdate = true; };
+    place(0); im.castShadow = !!outline; g.add(im); if (ol) g.add(ol); anim.push({k:'balloons', place});
+  }
+  const conicTex = (cols, n) => canvasTex(256, 256, x => { for (let i = 0; i < n; i++){ x.fillStyle = cols[i % cols.length]; x.beginPath(); x.moveTo(128, 128); x.arc(128, 128, 182, i/n*Math.PI*2, (i+1)/n*Math.PI*2 + 0.01); x.closePath(); x.fill(); } });
   function tent(s){
     const c = s.c, g = new T.Group(), pair = TENT[c.color] || TENT.purple, soon = c.status === 'soon';
     g.position.copy(s.pos); g.lookAt(0, 0, 0);
@@ -1340,7 +1675,7 @@ function initWorld(){
     const flag = mk(new T.ConeGeometry(0.5,1.3,3), '#E0187A', false); flag.rotation.z = -Math.PI/2; flag.position.set(0.62,8.3,0); g.add(flag); anim.push({o:flag, k:'flag'});
     const tp = chapterTopper(g, c, soon ? '#C9B8F2' : pair[0], (c.color === 'amber' || soon) ? '#FFFFFF' : '#FFC72C');
     if (c.status === 'next' || c.status === 'live') tp.scale.set(3.6, 3.6, 1);
-    if (!soon) balloons(g, [pair[0], '#FFC72C', '#1FA9E1']);
+    if (!soon){ balloons(g, [pair[0], '#FFC72C', '#1FA9E1']); bunting(g, spokes(8.1, [3.4, 4.2, 5.2, 6.0], 6.4, 2.2, 0.35), [pair[0], '#FFC72C', '#FFFFFF', '#1FA9E1'], 7, true); }
     if (c.posterId){
       const tex = blobTex(c.posterId);
       const board = mk(new T.BoxGeometry(2.3,3.1,0.15), '#22114A', false); board.position.set(3.9,2.3,2.3); board.rotation.y = 0.6; g.add(board);
@@ -1377,29 +1712,80 @@ function initWorld(){
   }
   function specialTent(sp){
     const g = new T.Group(); g.position.copy(sp.pos); g.lookAt(0, 0, 0);
-    const bcol = sp.kind === 'play' ? '#1FA9E1' : '#22114A';
-    const base = new T.Mesh(new T.CylinderGeometry(5,5.4,0.6,32), [toon(bcol), toon('#FFFFFF', {map: dotTex(sp.kind === 'play' ? '#1FA9E1' : '#FFC72C')}), toon(bcol)]);
+    const BASE = {play: ['#1FA9E1', '#FFC72C'], partners: ['#22114A', '#FFC72C'], magic: ['#4B1F9E', '#FFC72C'], wellness: ['#7CCB52', '#1FA9E1']}[sp.kind];
+    const base = new T.Mesh(new T.CylinderGeometry(5,5.4,0.6,32), [toon(BASE[0]), toon('#FFFFFF', {map: dotTex(BASE[1])}), toon(BASE[0])]);
     base.position.y = 0.3; base.receiveShadow = true; const bo = new T.Mesh(base.geometry, OUT); bo.scale.setScalar(1.02); base.add(bo); g.add(base);
+    const door = z => { const d = mk(new T.BoxGeometry(1.8, 2.2, 0.5), '#22114A', false); d.position.set(0, 1.7, z); g.add(d); const a = mk(new T.TorusGeometry(1.1,0.2,8,20,Math.PI), '#FFC72C'); a.position.set(0, 2.75, z + 0.25); g.add(a); };
     if (sp.kind === 'play'){
-      const rainbow = canvasTex(512, 64, (cx, w, hh) => { const cols = ['#E0187A','#FF8A1F','#FFC72C','#7CCB52','#1FA9E1','#5B2DB0']; for (let i = 0; i < 24; i++){ cx.fillStyle = cols[i % 6]; cx.fillRect(i*w/24, 0, w/24 + 1, hh); } });
-      const dome = mk(new T.SphereGeometry(3.9, 36, 18, 0, Math.PI*2, 0, Math.PI/2), toon('#FFFFFF', Object.assign({map: rainbow}, glow(rainbow))), true, 1.03); dome.position.y = 0.6; g.add(dome);
-      // giant rainbow arch over the dome
-      const rcols = ['#5B2DB0','#1FA9E1','#7CCB52','#FFC72C','#FF8A1F','#E0187A'];
-      [0.55, -0.55].forEach(ry => { const archG = new T.Group(); archG.rotation.y = ry; archG.position.y = 0.6; g.add(archG);
-        rcols.forEach((col, i) => { const band = new T.Mesh(new T.TorusGeometry(4.55 + i*0.42, 0.21, 10, 48, Math.PI), new T.MeshBasicMaterial({color: col})); archG.add(band); });
-        [4.3, 4.55 + 5*0.42 + 0.24].forEach(rr => { const edge = new T.Mesh(new T.TorusGeometry(rr, 0.07, 6, 48, Math.PI), new T.MeshBasicMaterial({color:'#22114A'})); archG.add(edge); }); });
-      // bouncy sensory balls around the base
-      ['#E0187A','#FFC72C','#1FA9E1','#7CCB52','#FF8A1F','#B79BF2'].forEach((col, i) => { const a = -0.9 + i*0.36; const ball = mk(new T.SphereGeometry(0.5, 16, 12), col, true, 1.08); ball.position.set(Math.cos(a)*4.4, 1.1, Math.sin(a)*4.4 + 0.6); g.add(ball); anim.push({o:ball, k:'balloon', ph:i, y:1.1}); });
-      const conic = canvasTex(256, 256, (cx, w, hh) => { const cols = ['#E0187A','#FF8A1F','#FFC72C','#7CCB52','#1FA9E1','#5B2DB0']; for (let i = 0; i < 36; i++){ cx.fillStyle = cols[i % 6]; cx.beginPath(); cx.moveTo(128,128); cx.arc(128, 128, 182, i/36*Math.PI*2, (i+1)/36*Math.PI*2 + 0.01); cx.closePath(); cx.fill(); } });
-      haloRing(g, null, conic);
-      signBoard(g, signTex('SENSORY GAMES', 'PLAY TENT', '#1FA9E1'), -4.3, 2.6, -0.6);
-      const door = mk(new T.BoxGeometry(1.8,2.2,0.5), '#22114A', false); door.position.set(0,1.7,3.5); g.add(door);
-      const arch = mk(new T.TorusGeometry(1.1,0.2,8,20,Math.PI), '#FFC72C'); arch.position.set(0,2.8,3.75); g.add(arch);
-      iconTopper(g, 9.2, 'play');
-      const bcol = ['#BDEFFF','#FFD1E8','#FFF1B8','#D9CCFF'];
-      for (let i = 0; i < 7; i++){ const a = i/7*Math.PI*2; const b = new T.Mesh(new T.SphereGeometry(0.35 + (i%3)*0.18, 16, 12), toon(bcol[i%4], {transparent:true, opacity:0.7})); b.position.set(Math.cos(a)*3.2, 5 + (i%3)*0.9, Math.sin(a)*3.2); g.add(b); anim.push({o:b, k:'float', ph:i, y:b.position.y}); }
+      // candy big top: purple and white drum, pink and yellow striped dome, bunting, bouncing sensory balls and floating bubbles
+      const dt2 = stripeTex('#5B2DB0', '#FFFFFF').clone(); dt2.needsUpdate = true; dt2.repeat.set(4, 1);
+      const drum = mk(new T.CylinderGeometry(3.9, 3.9, 1.7, 32), toon('#FFFFFF', Object.assign({map: dt2}, glow(dt2))), true, 1.03); drum.position.y = 1.45; g.add(drum);
+      const dm = stripeTex('#E0187A', '#FFC72C').clone(); dm.needsUpdate = true; dm.repeat.set(2, 1);
+      const dome = mk(new T.SphereGeometry(4.0, 32, 14, 0, Math.PI*2, 0, Math.PI/2), toon('#FFFFFF', Object.assign({map: dm}, glow(dm))), true, 1.03); dome.position.y = 2.3; g.add(dome);
+      const fin = mk(new T.SphereGeometry(0.5, 14, 10), '#1FA9E1', true, 1.1); fin.position.y = 6.75; g.add(fin);
+      const tip = mk(new T.ConeGeometry(0.22, 0.9, 10), '#FFC72C', true, 1.15); tip.position.y = 7.55; g.add(tip);
+      bunting(g, ringSegs(10, 4.1, 2.4, 0.3).filter((_, i) => i !== 2), ['#1FA9E1','#FFFFFF','#7CCB52','#FFC72C'], 3);
+      bobbers(g, ['#E0187A','#FFC72C','#1FA9E1','#7CCB52','#FF8A1F','#B79BF2'].map((c, i) => { const a = -0.9 + i*0.36; return {x: Math.cos(a)*4.55, y: 1.1, z: Math.sin(a)*4.55 + 0.6, c, ph: i}; }), 0.5, toon('#FFFFFF'), true, 0.45, true);
+      bobbers(g, Array.from({length: 8}, (_, i) => { const a = i/8*Math.PI*2; return {x: Math.cos(a)*3.4, y: 6.4 + (i % 3)*0.8, z: Math.sin(a)*3.4, c: ['#BDEFFF','#FFD1E8','#FFF1B8','#D9CCFF'][i % 4], s: 0.8 + (i % 3)*0.35, ph: i}; }),
+        0.42, toon('#FFFFFF', {transparent: true, opacity: 0.7}), false, 0.6, false);
+      haloRing(g, null, conicTex(['#E0187A', '#FFC72C'], 24));
+      signBoard(g, signTex('SENSORY GAMES', 'PLAY TENT', '#E0187A'), -4.3, 2.6, -0.6);
+      door(3.75);
+      iconTopper(g, 9.6, 'play');
+    } else if (sp.kind === 'magic'){
+      // wizard hat: starry night fabric, gold brim and band, a crooked tip with a star, a glowing crystal ball, sparkles and a beacon
+      const night = canvasTex(256, 256, (x, w, hh) => { x.fillStyle = '#4B1F9E'; x.fillRect(0, 0, w, hh); x.fillStyle = '#3B1585'; for (let i = 0; i < 8; i++) x.fillRect(i*32, 0, 16, hh);
+        const r2 = seeded(5); x.fillStyle = '#FFC72C'; x.strokeStyle = '#22114A'; x.lineWidth = 2;
+        for (let i = 0; i < 12; i++){ const cx = r2()*w, cy = r2()*hh, r = 7 + r2()*7; x.beginPath(); for (let j = 0; j < 10; j++){ const rr = j % 2 ? r*0.45 : r, a = j/10*Math.PI*2 - Math.PI/2; x.lineTo(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr); } x.closePath(); x.fill(); x.stroke(); }
+        x.fillStyle = '#FFF6E0'; for (let i = 0; i < 40; i++){ x.beginPath(); x.arc(r2()*w, r2()*hh, 1.6, 0, Math.PI*2); x.fill(); } });
+      night.wrapS = T.RepeatWrapping; night.repeat.set(3, 1);
+      const walls = mk(new T.CylinderGeometry(3.4, 3.5, 3, 24), toon('#FFFFFF', Object.assign({map: night}, glow(night)))); walls.position.y = 2.1; g.add(walls);
+      const brim = mk(new T.CylinderGeometry(5, 5, 0.25, 40), '#5B2DB0', true, 1.03); brim.position.y = 3.72; g.add(brim);
+      const edge = new T.Mesh(new T.TorusGeometry(5, 0.15, 6, 48), new T.MeshBasicMaterial({color:'#FFC72C'})); edge.rotation.x = Math.PI/2; edge.position.y = 3.72; g.add(edge);
+      const ht = night.clone(); ht.needsUpdate = true; ht.repeat.set(2, 1);
+      const hat = mk(new T.ConeGeometry(3.6, 6.4, 28), toon('#FFFFFF', Object.assign({map: ht}, glow(ht))), true, 1.03); hat.position.y = 7.05; g.add(hat);
+      const band = new T.Mesh(new T.TorusGeometry(3.25, 0.3, 8, 40), new T.MeshBasicMaterial({color:'#FFC72C'})); band.rotation.x = Math.PI/2; band.position.y = 4.55; g.add(band);
+      const tipC = mk(new T.ConeGeometry(0.75, 2.2, 16), toon('#FFFFFF', {map: ht}), true, 1.06); tipC.position.set(0.55, 10.35, 0); tipC.rotation.z = -0.75; g.add(tipC);
+      const tstar = new T.Sprite(new T.SpriteMaterial({map: starTex, transparent: true})); tstar.scale.set(1.5, 1.5, 1); tstar.position.set(1.6, 11.4, 0); g.add(tstar); anim.push({o: tstar, k: 'float', ph: 1, y: 11.4});
+      const stand = mk(new T.CylinderGeometry(0.25, 0.45, 1.1, 10), '#22114A', false); stand.position.set(2.7, 1.15, 3.9); g.add(stand);
+      const ball = mk(new T.SphereGeometry(0.55, 20, 14), toon('#BDEFFF', {emissive:'#7FD8F5', emissiveIntensity: 0.5, transparent: true, opacity: 0.9}), true, 1.08); ball.position.set(2.7, 2.2, 3.9); g.add(ball); anim.push({o: ball, k: 'glow'});
+      bunting(g, ringSegs(12, 4.95, 3.6, 0.28).filter((_, i) => i !== 2 && i !== 3), ['#FFC72C','#E0187A','#1FA9E1','#FFFFFF'], 2);
+      const sn = 22, sa = new Float32Array(sn*3), sb = [], sph = [], r3 = seeded(9);
+      for (let i = 0; i < sn; i++){ const a = r3()*Math.PI*2, r = 2.5 + r3()*3.5; sa[i*3] = Math.cos(a)*r; sa[i*3+1] = 3 + r3()*9; sa[i*3+2] = Math.sin(a)*r; sb.push(sa[i*3+1]); sph.push(r3()*6); }
+      const sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(sa, 3));
+      const spk = new T.Points(sg, new T.PointsMaterial({map: starTex, size: 1.1, transparent: true, alphaTest: 0.35, depthWrite: false})); spk.raycast = () => {}; g.add(spk); anim.push({k: 'points', geo: sg, base: sb, ph: sph});
+      const beam = new T.Mesh(new T.CylinderGeometry(1.2, 2.2, 50, 18, 1, true), new T.MeshBasicMaterial({color:'#E3D5FF', transparent:true, opacity:0.2, depthWrite:false, side:T.DoubleSide, fog:false})); beam.position.y = 37; g.add(beam); beacons.push(beam);
+      haloRing(g, null, conicTex(['#4B1F9E', '#FFC72C'], 24));
+      signBoard(g, signTex('MAGIC GAMES', 'MAGIC TENT', '#4B1F9E'), -5.0, 3.0, -0.6);
+      door(3.55);
+      iconTopper(g, 13.2, 'magic');
+    } else if (sp.kind === 'wellness'){
+      // calm open pavilion: green and white hexagonal canopy on sky-blue posts, a lotus on top, yoga mats, plants and lanterns
+      const d = new T.Object3D(), col = new T.Color(), corner = i => Math.PI/6 + i*Math.PI/3;
+      const plat = mk(new T.CylinderGeometry(4.5, 4.5, 0.3, 6), '#FFF1D0', true, 1.03); plat.position.y = 0.75; g.add(plat);
+      const rt = stripeTex('#7CCB52', '#1FA9E1').clone(); rt.needsUpdate = true; rt.repeat.set(3, 1);
+      const roof = mk(new T.ConeGeometry(5.2, 2.8, 6), toon('#FFFFFF', {map: rt}), true, 1.03); roof.position.y = 5.6; g.add(roof);
+      const posts = new T.InstancedMesh(new T.CylinderGeometry(0.17, 0.17, 3.5, 8), toon('#1FA9E1'), 6), pOut = new T.InstancedMesh(posts.geometry, OUT, 6);
+      for (let i = 0; i < 6; i++){ const a = corner(i); d.position.set(Math.cos(a)*3.9, 2.65, Math.sin(a)*3.9); d.rotation.set(0, 0, 0); d.scale.set(1, 1, 1); d.updateMatrix(); posts.setMatrixAt(i, d.matrix); d.scale.set(1.3, 1.02, 1.3); d.updateMatrix(); pOut.setMatrixAt(i, d.matrix); }
+      posts.castShadow = true; g.add(posts, pOut);
+      const pet = new T.InstancedMesh(new T.SphereGeometry(0.5, 10, 8), toon('#FFFFFF'), 10), pOl = new T.InstancedMesh(pet.geometry, OUT, 10);
+      for (let i = 0; i < 10; i++){ const a = i/10*Math.PI*2, inner = i % 2; d.position.set(Math.cos(a)*(inner ? 0.25 : 0.5), 7.3, Math.sin(a)*(inner ? 0.25 : 0.5)); d.rotation.set(0, -a, 0); d.rotateZ(inner ? -0.3 : -0.75);
+        d.scale.set(0.42, 1.1, 0.22); d.updateMatrix(); pet.setMatrixAt(i, d.matrix); d.scale.multiplyScalar(1.12); d.updateMatrix(); pOl.setMatrixAt(i, d.matrix); pet.setColorAt(i, col.set(inner ? '#FFFFFF' : '#FF7AB6')); }
+      g.add(pet, pOl); d.rotation.set(0, 0, 0);
+      const heart = mk(new T.SphereGeometry(0.3, 12, 10), '#FFC72C', true, 1.12); heart.position.y = 7.35; g.add(heart);
+      const mats = new T.InstancedMesh(new T.BoxGeometry(1, 0.06, 2.2), toon('#FFFFFF'), 3);
+      [-1.5, 0, 1.5].forEach((x, i) => { d.position.set(x, 0.94, -0.3); d.scale.set(1, 1, 1); d.updateMatrix(); mats.setMatrixAt(i, d.matrix); mats.setColorAt(i, col.set(['#E0187A','#1FA9E1','#FFC72C'][i])); }); g.add(mats);
+      const pots = new T.InstancedMesh(new T.CylinderGeometry(0.45, 0.35, 0.7, 10), toon('#E0187A'), 4), leaves = new T.InstancedMesh(new T.SphereGeometry(0.75, 10, 8), toon('#FFFFFF', {map: benday()}), 4), lOut = new T.InstancedMesh(leaves.geometry, OUT, 4);
+      [0, 2, 3, 5].forEach((ci, i) => { const a = corner(ci), x = Math.cos(a)*4.8, z = Math.sin(a)*4.8; d.scale.set(1, 1, 1); d.position.set(x, 0.95, z); d.updateMatrix(); pots.setMatrixAt(i, d.matrix);
+        d.position.set(x, 1.85, z); d.updateMatrix(); leaves.setMatrixAt(i, d.matrix); leaves.setColorAt(i, col.set(['#3FAE49','#6CC24A','#2E9E5B','#94D152'][i])); d.scale.setScalar(1.08); d.updateMatrix(); lOut.setMatrixAt(i, d.matrix); });
+      pots.castShadow = leaves.castShadow = true; g.add(pots, leaves, lOut);
+      bobbers(g, [0, 1, 2, 3, 4, 5].map(i => { const a = corner(i); return {x: Math.cos(a)*4.6, y: 3.55, z: Math.sin(a)*4.6, c: i % 2 ? '#FFC72C' : '#FFE9A8', ph: i}; }), 0.3, toon('#FFFFFF', {emissive:'#FFC72C', emissiveIntensity: 0.35}), true, 0.08, false);
+      bunting(g, Array.from({length: 6}, (_, i) => { const a = corner(i), b = corner(i + 1); return [Math.cos(a)*5.1, 4.15, Math.sin(a)*5.1, Math.cos(b)*5.1, 4.15, Math.sin(b)*5.1, 0.3]; }), ['#7CCB52','#FFFFFF','#FF7AB6','#1FA9E1'], 4);
+      haloRing(g, null, conicTex(['#7CCB52', '#FFFFFF'], 24));
+      signBoard(g, signTex('HEALING & WELLBEING', String(sp.name || 'WELLBEING').toUpperCase(), '#7CCB52'), -4.3, 2.6, -0.6);
+      iconTopper(g, 9.6, 'wellness');
     } else {
-      // gold and white "thank you" pavilion with a red carpet and spotlights
+      // gold and navy "thank you" pavilion with a red carpet, spotlights and bunting from the peak
       const rt = stripeTex('#22114A', '#FFC72C').clone(); rt.needsUpdate = true; rt.repeat.set(2,1);
       const roof = mk(new T.ConeGeometry(5, 3, 4), toon('#FFFFFF', Object.assign({map: rt}, glow(rt))), true, 1.03); roof.rotation.y = Math.PI/4; roof.position.y = 5.2; g.add(roof);
       const trim = new T.Mesh(new T.TorusGeometry(3.55, 0.2, 6, 4), new T.MeshBasicMaterial({color:'#FFC72C'})); trim.rotation.set(Math.PI/2, 0, Math.PI/4); trim.position.y = 3.72; g.add(trim);
@@ -1412,6 +1798,7 @@ function initWorld(){
         const fl = mk(new T.ConeGeometry(0.4,1,3), ['#E0187A','#1FA9E1','#7CCB52','#FF8A1F'][i], false); fl.rotation.z = -Math.PI/2; fl.position.set(x + 0.5, 4.1, z); g.add(fl); });
       const board = mk(new T.BoxGeometry(4.4,2.6,0.2), '#22114A', false); board.position.set(0, 2.2, 0.4); g.add(board);
       const face = new T.Mesh(new T.PlaneGeometry(4.2,2.45), new T.MeshBasicMaterial({map: partnerBoard()})); face.position.z = 0.11; board.add(face);
+      bunting(g, spokes(7.0, [0, Math.PI, Math.PI*1.5], 6.4, 1.8, 0.3), ['#FFC72C','#E0187A','#FFFFFF','#1FA9E1'], 7, true);
       iconTopper(g, 8.8, 'partners');
     }
     g.traverse(o => { if (o.isMesh || o.isSprite) o.userData.special = sp.kind; }); pick.push(g);
@@ -1423,7 +1810,7 @@ function initWorld(){
     const sp = (W.specials || []).find(x => x.kind === kind); if (!sp){ cb && cb(); return; }
     marker.visible = false;
     if (S.calm || reduce){ av.pos.copy(sp.door); av.yaw = Math.atan2(sp.pos.x - sp.door.x, sp.pos.z - sp.door.z); av.path = []; snapCam(); cb && cb(); return; }
-    walkTo([sp.door], cb);
+    walkTo(sp.walk ? [sp.gate].concat(sp.walk, [sp.door]) : [sp.door], () => { W.gesture('wave', true); cb && cb(); });
   };
 
   // labels
@@ -1431,7 +1818,7 @@ function initWorld(){
   function buildLabels(spots, specials){
     const box = $('#labels'); box.replaceChildren();
     const extra = (specials || []).map(sp => { const b = h('button', {class:'tag', tabindex:'-1', onclick: () => goSpecial(sp.kind), 'aria-label': 'Go to the ' + sp.name},
-      h('span', {class:'num ' + (sp.kind === 'play' ? 'bg-rainbow' : 'bg-navy')}, icon(sp.kind === 'play' ? 'note' : 'star', 22, sp.kind === 'play' ? '#FFFFFF' : '#FFC72C')), h('span', {class:'meta'}, h('span', {class:'nm'}, sp.name), h('small', null, sp.sub)));
+      (m => h('span', {class:'num ' + m.bg}, icon(m.icon, 22, m.fill)))(SPECIALS.find(x => x.kind === sp.kind)), h('span', {class:'meta'}, h('span', {class:'nm'}, sp.name), h('small', null, sp.sub)));
       box.append(b); return {b, s: sp}; });
     tags = extra.concat(spots.map(s => { const c = s.c;
       const b = h('button', {class:'tag', tabindex:'-1', onclick: () => goChapter(c.id), 'aria-label': 'Travel to chapter ' + c.num + ', ' + c.name},
@@ -1455,9 +1842,11 @@ function initWorld(){
     if (down && !down.moved && e.type === 'pointerup') tap(e.clientX, e.clientY); down = null; };
   canvas.addEventListener('pointerup', endP); canvas.addEventListener('pointercancel', endP);
   canvas.addEventListener('wheel', e => { e.preventDefault(); cam.distT = Math.min(44, Math.max(12, cam.distT + e.deltaY * 0.02)); }, {passive:false});
+  let gi = 0;
   function tap(x, y){
     const r = canvas.getBoundingClientRect(); ndc.set((x - r.left)/r.width*2 - 1, -(y - r.top)/r.height*2 + 1); ray.setFromCamera(ndc, camera);
     if (ray.intersectObject(sunny.g, true).length){ W.say(TIPS[tipI++ % TIPS.length]()); return; }
+    if (av.P && ray.intersectObject(av.P.g, true).length){ W.gesture(GESTURES[gi++ % GESTURES.length].k); return; }
     const hit = ray.intersectObjects(pick, true)[0];
     if (hit && hit.object.userData.special){ goSpecial(hit.object.userData.special); return; }
     if (hit && hit.object.userData.chId){ goChapter(hit.object.userData.chId); return; }
@@ -1483,7 +1872,7 @@ function initWorld(){
     if (Math.sqrt(nd) > 3 || !samples.length) pts.push(samples.length ? samples[ni] : s.door);
     for (let k = ni; stepK > 0 ? k <= s.sample : k >= s.sample; k += stepK) pts.push(samples[k]);
     pts.push(s.door);
-    walkTo(pts, cb);
+    walkTo(pts, () => { W.gesture('wave', true); cb && cb(); });
   }
   W.travel = travel;
   function snapCam(){ cam.yaw = cam.yawT; cam.dist = cam.distT; placeCam(); }
@@ -1506,16 +1895,16 @@ function initWorld(){
       if (d <= stepL){ av.pos.x = tgt.x; av.pos.z = tgt.z; av.path.shift(); if (!av.path.length){ marker.visible = false; const cb = av.onArrive; av.onArrive = null; cb && cb(); } }
       else { av.pos.x += v.x/d*stepL; av.pos.z += v.z/d*stepL; av.yawT = Math.atan2(v.x, v.z); }
       moving = true; }
-    if (av.yawT != null){ let dy = av.yawT - av.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); av.yaw += dy * Math.min(1, dt*10); }
+    if (av.yawT != null){ let dy = av.yawT - av.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy)); av.yaw += dy * Math.min(1, dt*10); av.turn = dy; }
     const P = av.P; P.g.position.copy(av.pos); P.g.rotation.y = av.yaw;
-    if (moving){ av.phase += dt*10; }
-    const sw = moving && !calm ? Math.sin(av.phase)*0.7 : 0;
-    P.legs.forEach((l,i) => l.rotation.x = i ? sw : -sw); if (P.type !== 'chair') P.arms.forEach((a,i) => a.rotation.x = i ? -sw*0.8 : sw*0.8);
+    if (moving){ av.phase += dt*(P.type === 'chair' ? 6 : 10); av.idle = 0; } else av.idle += dt;
+    av.mv += ((moving ? 1 : 0) - av.mv)*Math.min(1, dt*8);
     P.wheels.forEach(w => { if (moving) w.rotation.x += (av.speed||9)*dt/0.72; });
-    P.g.position.y = moving && !calm && P.type !== 'chair' ? Math.abs(Math.sin(av.phase))*0.12 : 0;
+    poseAvatar(P, dt, t, calm);
     if (av.dog){ const fx = Math.sin(av.yaw), fz = Math.cos(av.yaw); const want = v.set(av.pos.x - fx*1.6 + fz*1.4, 0, av.pos.z - fz*1.6 - fx*1.4);
       const dd = av.dogPos.distanceTo(want); if (dd > 0.05){ const dog = av.dog.g; const mv = Math.min(dd, Math.max(6, dd*4)*dt); const dir = want.clone().sub(av.dogPos).normalize(); av.dogPos.addScaledVector(dir, mv); dog.rotation.y = Math.atan2(dir.x, dir.z); }
-      av.dog.g.position.copy(av.dogPos); const dw = dd > 0.2 && !calm ? Math.sin(t*14)*0.5 : 0; av.dog.legs.forEach((l,i) => l.rotation.x = (i%2?dw:-dw)); av.dog.tail.rotation.z = calm ? 0 : Math.sin(t*8)*0.5; }
+      av.dog.g.position.copy(av.dogPos); const dw = dd > 0.2 && !calm ? Math.sin(t*14)*0.5 : 0; av.dog.legs.forEach((l,i) => l.rotation.x = (i%2?dw:-dw)); av.dog.tail.rotation.z = calm ? 0 : Math.sin(t*(av.gk ? 20 : 8))*0.5;
+      const sit = !calm && av.idle > 1.5 && dd < 0.3 ? -0.3 : 0; av.dog.g.rotation.x += (sit - av.dog.g.rotation.x)*Math.min(1, dt*4); }
     // camera
     const k = calm ? 1 : Math.min(1, dt*5); cam.yaw += (cam.yawT - cam.yaw)*k; cam.dist += (cam.distT - cam.dist)*k; placeCam();
     sun.position.set(av.pos.x + 30, 60, av.pos.z + 20); sun.target.position.copy(av.pos);
@@ -1523,6 +1912,7 @@ function initWorld(){
     if (!calm){ clouds.forEach(c => { c.x += dt*1.2; if (c.x > 220) c.x = -220; }); placeClouds();
       anim.forEach(a => { if (a.k === 'flag') a.o.rotation.x = Math.sin(t*3)*0.25; else if (a.k === 'float') a.o.position.y = a.y + Math.sin(t*1.5 + a.ph)*0.6;
         else if (a.k === 'balloons') a.place(t);
+        else if (a.k === 'glow') a.o.material.emissiveIntensity = 0.45 + Math.sin(t*2.4)*0.3;
         else if (a.k === 'points'){ const arr = a.geo.attributes.position.array; for (let i = 0; i < a.base.length; i++) arr[i*3+1] = a.base[i] + Math.sin(t*1.5 + a.ph[i])*0.6; a.geo.attributes.position.needsUpdate = true; } });
       beacons.forEach(b => b.material.opacity = 0.16 + Math.sin(t*2)*0.08); marker.rotation.z += dt*2; stepCrowd(dt, t); }
     const rx = Math.cos(cam.yaw), rz = -Math.sin(cam.yaw), sk = calm ? 1 : Math.min(1, dt*3.5);
@@ -1545,7 +1935,7 @@ function initWorld(){
   function updateNear(){
     let best = null, bd = 6.5; (W.spots||[]).concat(W.specials||[]).forEach(s => { const d = av.pos.distanceTo(s.door); if (d < bd){ bd = d; best = s; } });
     const btn = $('#near');
-    if (best && best.kind && S.special !== best.kind && !av.path.length){ btn.hidden = false; btn.textContent = best.kind === 'play' ? 'Enter the Play Tent' : 'Visit our partners'; btn.onclick = () => openSpecial(best.kind); }
+    if (best && best.kind && S.special !== best.kind && !av.path.length){ btn.hidden = false; btn.textContent = SPECIALS.find(x => x.kind === best.kind).near; btn.onclick = () => openSpecial(best.kind); }
     else if (best && best.c && S.openId !== best.c.id && !av.path.length){ btn.hidden = false; btn.textContent = 'Enter Chapter ' + best.c.num + ': ' + best.c.name; btn.onclick = () => openRoom(best.c.id); }
     else btn.hidden = true;
     updateHere();
@@ -1567,7 +1957,7 @@ function initWorld(){
 function updateHere(force){
   if (!force && $('#here').dataset.busy) return;
   const i = W.ok ? W.nearestIdx() : -1, sp = W.ok && W.nearSpecial ? W.nearSpecial() : null;
-  const txt = sp ? (sp.kind === 'partners' ? 'At the Partners tent' : 'At the ' + sp.name) : i >= 0 && S.chapters[i] ? 'Near Chapter ' + S.chapters[i].num + ': ' + S.chapters[i].name : 'Sunshine Square';
+  const txt = sp ? (sp.kind === 'partners' ? 'At the Partners tent' : sp.kind === 'wellness' ? 'At the ' + sp.name + ' tent' : 'At the ' + sp.name) : i >= 0 && S.chapters[i] ? 'Near Chapter ' + S.chapters[i].num + ': ' + S.chapters[i].name : 'Sunshine Square';
   if ($('#here').textContent !== txt) $('#here').textContent = txt;
 }
 
@@ -1592,7 +1982,7 @@ function stepChapter(d){
 let lastSig = '';
 function refresh(){
   computeChapters(); renderMeta(); renderGuide(); renderCards();
-  const sig = JSON.stringify([S.chapters.map(c => [c.id, c.status, c.color, c.posterId, c.snaps.slice(0,3).map(s => s.assetId)]), (S.partners || []).map(p => p.logo)]);
+  const sig = JSON.stringify([S.chapters.map(c => [c.id, c.status, c.color, c.posterId, c.snaps.slice(0,3).map(s => s.assetId)]), (S.partners || []).map(p => p.logo), S.wellness ? S.wellness.name : '']);
   if (W.ok && sig !== lastSig){ lastSig = sig; W.layout(S.chapters); }
   if (S.openId){ if (chById(S.openId)) renderRoom(); else closeRoom(); }
   if (S.lb) renderLb();
@@ -1609,6 +1999,8 @@ function buildMe(){
   mk('#f-type', 'type', [{v:'walk',t:'Walking'},{v:'chair',t:'Wheelchair'},{v:'cane',t:'With a cane'}], S.me.type);
   mk('#f-hood', 'hood', COLORS.map(c => ({v:c, t:NAMES[c], sw:HEX[c]})), S.me.hood);
   mk('#f-skin', 'skin', [0,1,2,3].map(i => ({v:i, t:'Tone ' + (i+1), sw:['#F6D3B3','#D9A47A','#A86B43','#6B4428'][i]})), S.me.skin);
+  const fg = $('#f-gest'); GESTURES.forEach(gs => fg.append(h('button', {type:'button', class:'btn sm', onclick: () => {
+    if (W.ok && !S.list){ W.gesture(gs.k); announce('Your character ' + gs.verb + '.'); } else toast('Switch to the 3D world to see your character ' + gs.t.toLowerCase() + '.'); }}, gs.t)));
   const dg = $('#f-dog'); dg.checked = !!S.me.dog; dg.addEventListener('change', () => { S.me.dog = dg.checked; store.set('me', S.me); W.ok && W.rebuildAvatar(); });
 }
 
@@ -1652,7 +2044,7 @@ function setList(on, thenId){
   S.list = on; store.set('list', on); applyPrefs();
   if (!on){ refresh(); window.dispatchEvent(new Event('resize')); $('#world').focus(); if (thenId) goChapter(thenId); }
 }
-function routeHash(){ if (location.hash === '#zones'){ if (S.page !== 'zones') openPage('zones'); return; } if (location.hash === '#our-partners'){ if (S.page !== 'partners') openPage('partners'); return; } if (location.hash === '#tickets'){ if ($('#tickets').hidden) openTickets(); return; } if (location.hash === '#play' || location.hash === '#partners'){ const k = location.hash.slice(1); if (S.special !== k) goSpecial(k); return; } const m = /^#ch-([A-Za-z0-9-]+)$/.exec(location.hash); if (m && chById(m[1]) && S.openId !== m[1]) goChapter(m[1]); }
+function routeHash(){ if (location.hash === '#zones'){ if (S.page !== 'zones') openPage('zones'); return; } if (location.hash === '#our-partners'){ if (S.page !== 'partners') openPage('partners'); return; } if (location.hash === '#tickets'){ if ($('#tickets').hidden) openTickets(); return; } if (['#play', '#partners', '#magic', '#wellness'].includes(location.hash)){ const k = location.hash.slice(1); if (S.special !== k) goSpecial(k); return; } const m = /^#ch-([A-Za-z0-9-]+)$/.exec(location.hash); if (m && chById(m[1]) && S.openId !== m[1]) goChapter(m[1]); }
 
 /* ---------- boot ---------- */
 applyPrefs(); buildMe(); wire(); wireGame(); renderMeta(); renderGuide(); renderCards();
@@ -1662,7 +2054,8 @@ if (W.ok){ W.layout([]); applyPrefs(); }
   let site = null;
   try { const res = await fetch('data/site.json', {cache:'no-cache'}); if (res.ok) site = await res.json(); } catch(e){}
   if (!site){ S.loaded = true; S.loadError = true; refresh(); $('#series-count').textContent = 'Chapters could not load'; return; }
-  S.config = site.config || {}; S.events = site.events || []; S.partners = Array.isArray(site.partners) ? site.partners : []; S.snaps = (site.snapshots || []).map((s, i) => Object.assign({id: 'snap' + i}, s));
+  S.config = site.config || {}; S.events = site.events || []; S.partners = Array.isArray(site.partners) ? site.partners : [];
+  S.wellness = site.wellness && site.wellness.name ? site.wellness : null; if (S.wellness) SPECIALS.find(x => x.kind === 'wellness').name = S.wellness.tentName || S.wellness.name; S.snaps = (site.snapshots || []).map((s, i) => Object.assign({id: 'snap' + i}, s));
   S.loaded = true; refresh(); routeHash();
 })();
 })();

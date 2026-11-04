@@ -32,6 +32,8 @@ events[]:  id (unique slug, also the page URL), name, date (YYYY-MM-DD or "" = T
 snapshots[]: eventId, assetId (path), caption, alt, createdAt (number = order)
 partners[]:  name, type (Partner|Sponsor|Supporter…), logo (path), url, blurb
              (only organisations that have agreed to be named)
+wellness:    name, tentName, about, offers[], note, address, hours, phone, email, url,
+             instagram, facebook (the Artful Yoga wellbeing tent; remove the block to hide the tent)
 ```
 Add fields; never rename existing ones.
 
@@ -40,13 +42,15 @@ Add fields; never rename existing ones.
 - **`computeChapters()`**: published events, dated ones sorted by date then undated by name; numbered 01, 02…; status from the visitor's date: past `wrapped`, today `live`, first future `next`, later `upcoming`, no date `soon`. Never hard-code the number of events.
 - **`refresh()`**: re-renders meta, guide, list cards, open room and lightbox; calls `W.layout()` only when the chapter signature changes.
 - **`initWorld()`**: Three.js scene. `layout(chapters)` rebuilds the island (radius grows with chapter count), CatmullRom story trail, `tent()` per chapter (status-specific dressing), instanced pop-art trees, flowers, floating stars and hearts, lilac skyline, plus the HTML labels (`buildLabels`). The avatar, dog, Sunny (`mascot()`), statue, camera, input and the `frame()` loop live here too.
-- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play`, `#partners` (walk to the tent), `#tickets`, `#zones` and `#our-partners`.
-- **Landmark tents** (`SPECIALS`, `specialTent()` in `layout`): the **Partners pavilion** (striped pyramid canopy with a logo board drawn from `partners[]`) and the **Play Tent** (rainbow dome) sit beside the plaza, outside the chapter spiral. `goSpecial(kind)` walks there (`W.travelSpecial`), then `openSpecial(kind)` opens `#special` (`renderSpecial`). They're listed under "Around the island" in the guide and as cards in List view.
-- **Sensory games** (`GAMES`, `openGame`, `gLoop`, `#game` overlay): Bubble Pop, Glow Painter, Music Pads (real buttons, keys 1–8) and Breathe with Sunny (4s in / 2s hold / 6s out, phase announced via aria-live). No scores, timers or fail states. Soft WebAudio pentatonic notes, Sound toggle (localStorage `asw.sound`), Calm mode halves speeds and turns off vibration. The 3D loop pauses while a game is open.
-- **Tent toppers** (`topper`, `chapterTopper`, `iconTopper` in `initWorld`): camera-facing canvas medallions above every tent (chapter number; navy star for Partners; rainbow note for Play). They fade when the camera is close. Plus `haloRing` and `signBoard` on the grass. Keep each tent visually distinct.
+- **Navigation**: `goChapter(id)` walks the trail (`W.travel`), then `openRoom(id)`. List view or no WebGL opens the room directly. Hash routes are `#ch-<event id>`, `#play`, `#magic`, `#wellness`, `#partners` (walk to the tent), `#tickets`, `#zones` and `#our-partners`.
+- **Landmark tents** (`SPECIALS`, `liveSpecials()`, `specialTent()` in `layout`): the **Partners pavilion** (navy and gold pyramid with a logo board drawn from `partners[]`) and the **Play Tent** (pink and yellow candy big top) sit beside the plaza. The **Magic Tent** (starry wizard hat, radius 31) and the **wellbeing tent** (green lotus pavilion from `wellness`, radius 44) sit further out, each on its own stepping-stone path from the plaza ring (`sp.gate`, `sp.walk`). The crowd uses those paths as "spurs". `goSpecial(kind)` walks there (`W.travelSpecial`), then `openSpecial(kind)` opens `#special` (`renderSpecial`). They're listed under "Around the island" in the guide and as cards in List view.
+- **Games** (`GAMES` with a `zone` of `play` or `magic`, `openGame`, `gLoop`, `#game` overlay). Play Tent: Bubble Pop, Glow Painter, Music Pads (real buttons, keys 1–8) and Breathe with Sunny (4s in / 2s hold / 6s out, phase announced via aria-live). Magic Tent (`setupMagic`): Magic Hat, Vanishing Card, Cup Shuffle (DOM buttons, keys 1–3, Slow, Show me) and Wand Reveal (scratch-off mist, Reveal it). `DOMGAMES` lists the games that use DOM instead of the canvas. No scores, timers or fail states. Soft WebAudio pentatonic notes, Sound toggle (localStorage `asw.sound`), Calm mode halves speeds and turns off vibration. The 3D loop pauses while a game is open.
+- **Tent toppers** (`topper`, `chapterTopper`, `iconTopper` in `initWorld`): camera-facing canvas medallions above every tent (`TOPICON`: chapter number; navy star for Partners; candy note for Play; purple moon for Magic; green lotus for wellbeing). They fade when the camera is close. Plus `haloRing` and `signBoard` on the grass. Keep each tent visually distinct.
 - **Quick tickets** (`openTickets`/`renderTickets`, `#tickets` sheet): the top-bar "Get tickets" lists every upcoming chapter with its own ticket button. It's for visitors who don't want the tour.
 - **Page views** (`openPage(kind)`/`renderPage`, `#pageview`): full-screen pages in the List-view layout. `zones` groups every tent by zone (open directly, Walk there in 3D, games playable directly); `partners` is the in-app partners page. Opening one adds `body.paging`, which hides the bottom bar and pauses the 3D loop.
 - **Panels**: room (`renderRoom`), Chapter guide, Connect (`renderConnect`), landmark panel (`renderSpecial`), tickets, page view, Me popover, lightbox, game. Escape closes the top panel.
+- **Avatar** (`person`, `poseAvatar`, `W.gesture`): body group (lean, roll, breathing), head group (look-around, tilt) with blinking eyes, hands, shoes, hood and badge. Gestures (`GESTURES`: wave, cheer, clap, dance) come from the Me panel, tapping the avatar, and a quiet wave on arrival. In Calm mode, gestures hold a still pose.
+- **Bunting and bobbers** (`bunting`, `ringSegs`, `spokes`, `bobbers`): instanced pennants on strings (3 calls) and instanced bobbing spheres. Use them for tent dressing.
 - **Prefs** (localStorage `asw.*`): calm, big text, list view, character choices.
 - **Walking crowd** (`npcModel`, `npcDog`, `buildCrowd`, `stepCrowd`): 6 + one per chapter (max 12) visitors (walking, wheelchair, cane; two with assistance dogs) walk a ring around the plaza edge (radius 11.5) and the story trail between tent doors, pausing at each. Built per layout. Each is about 6 draw calls (`mergeParts`/`bodyMesh` merge static parts with vertex colours). Calm mode freezes them; low quality hides half.
 - **Performance rules:**
@@ -58,7 +62,7 @@ Add fields; never rename existing ones.
   - Adaptive quality (`W.sampleQuality`): after load, if frames average over 34ms, it drops shadows, uses pixel ratio 1 and halves the crowd. `localStorage asw.quality` = `"high"`/`"low"` forces it (for testing).
   - JSZip is loaded only when someone taps "Download all".
 
-  Baseline before 1.2.0 was about 430 draw calls and 345k triangles. Keep new scenery instanced.
+  Baseline before 1.2.0 was about 430 draw calls and 345k triangles; 1.2.0 was 293 calls and 181k. Keep new scenery instanced.
 - **Icons** (`ICONS`, `icon(name, size, fill)`): inline SVG for labels, guide and zone cards. Don't use font glyphs (★ ♫), which render inconsistently.
 
 ## Must not change
@@ -95,3 +99,8 @@ Add fields; never rename existing ones.
 3. Videos per chapter: an optional `videos[]` with click-to-load YouTube-nocookie or Vimeo, or `<video>` with captions. Never autoplay.
 4. Performance: Netlify Image CDN for photo thumbnails once event photos are added. Three.js r128 is the biggest download (~600KB, ~150KB gzipped from cdnjs).
 5. Media consent: anyone pictured must have consented; the takedown note in each room must reach a real person.
+6. **Security pass (next, before the back end):**
+   - HTTPS on ableshine.com.au (Netlify certificate). Then add security headers in `netlify.toml`: HSTS, a CSP allowing cdnjs, Google Fonts, and `data:` images (the magic games draw icons from data: SVGs), X-Frame-Options or frame-ancestors, Referrer-Policy and Permissions-Policy.
+   - Check every external link and script.
+   - Back end (admin and content editor) built with sign-in and roles from the start.
+7. Confirm with Artful Yoga Gallery that they agree to be named, and that they offer the sessions listed in `wellness.offers`. Disability healing and tarot are not on their website; the owner supplied them.

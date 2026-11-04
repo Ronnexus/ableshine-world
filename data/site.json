@@ -144,5 +144,25 @@
     "logo": "media/partners/organisation-logo.png",
     "url": "https://example.org",
     "blurb": "One short line about what they support."
+  },
+  "wellness": {
+    "name": "Artful Yoga Gallery",
+    "tentName": "Artful Yoga",
+    "about": "A not-for-profit, all-inclusive art and wellness gallery in St Kilda. They run yoga, meditation, art and community programs, and healing sessions for people with disability.",
+    "offers": [
+      "Disability healing sessions",
+      "Holistic healing",
+      "Tarot reading",
+      "Yoga and meditation",
+      "Art and creative sessions"
+    ],
+    "note": "Healing sessions sit alongside, not instead of, care from your doctor or support team.",
+    "address": "1 Vale Street, St Kilda VIC 3182",
+    "hours": "Gallery hours: Tuesday to Friday 10am to 4pm, Saturday and Sunday 11am to 4pm, closed Mondays. Classes and events run at other times too.",
+    "phone": "0458 706 381",
+    "email": "info@artfulyoga.com.au",
+    "url": "https://www.artfulyoga.com.au",
+    "instagram": "https://www.instagram.com/artfulyoga.gallery/",
+    "facebook": "https://www.facebook.com/ArtfulYogaGallery"
   }
 }
