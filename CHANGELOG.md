@@ -9,6 +9,31 @@ Versions follow **MAJOR.MINOR.PATCH**:
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-04
+
+### Added
+- **A walking crowd.** Ten visitors walk around the plaza and along the story trail between tents, pausing at each one. They include people walking, wheelchair users and cane users, two have assistance dogs, and their hair and clothes vary. The crowd grows with the number of chapters. Calm mode freezes them.
+
+### Changed
+- **Partners and Play Tent labels redesigned.** Proper icon tiles (navy star, rainbow music note) replace the small text symbols. Clear sub-lines ("Sponsors and supporters", "Sensory games"). Matching icon medallions float above the tents instead of the duplicate "PARTNERS" and "PLAY" text badges.
+- Icons in the Chapter guide, List view and Zones cards are now drawn as SVG, so they look the same on every device.
+- Tent number medallions fade when the camera is right next to them, so they never block the view.
+
+### Performance
+- **About a third fewer draw calls (431 → 293) and half the triangles (345k → 181k), with the new crowd included.**
+  - Trees use lighter shapes.
+  - Repeated scenery is drawn as one instance each: the skyline (135 → 8 calls), clouds, floating stars and hearts, tent scallops and balloons.
+  - Sunny (statue and guide) is built from about 7 parts instead of about 40.
+- The static crowd at past events is gone (it grew with every event). The walking crowd replaces it.
+- **Adaptive quality:** devices that can't hold about 30fps drop shadows and extra sharpness and show half the crowd.
+- Pixel ratio capped at 1.5 (phones were rendering up to 2×).
+- The download-all library (JSZip, 98KB) only loads when someone taps "Download all".
+- Logo is 66KB → 12KB with no visible change.
+- Switching back from List view no longer rebuilds the whole island, and everything a rebuild throws away is now freed. Memory use dropped about 30%.
+
+### Removed
+- Unused code from the original claude.ai version: the in-page Studio editor, photo uploads, photo editing and their styles. None of it ran on the live site.
+
 ## [1.1.0] - 2026-11-04
 
 ### Added
