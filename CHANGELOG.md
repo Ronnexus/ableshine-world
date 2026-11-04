@@ -9,8 +9,28 @@ Versions follow **MAJOR.MINOR.PATCH**:
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-04
+
 ### Added
+- **Get tickets, no tour needed.** The top-bar button opens a list of every upcoming event, each with its own Get tickets and Details buttons (it was only "Get tickets: Melton"). It's also in the welcome hint and List view, at `#tickets`, and as a shareable page at ableshine.com.au/tickets. The WhatsApp number shows for events without a ticket link yet.
+- **Zones** button: a List-view-style page grouping every tent:
+  - Event tents
+  - Play zone, with each game playable straight away
+  - Partners zone
+  - Sunshine Square and help
+
+  Each one can be opened directly or walked to in 3D, at `#zones`.
+- **Partners page in the List-view layout** (`#our-partners`), opened from the Partners tent's "See all partners" button.
+- Tents that stand out:
+  - Every tent has a floating topper above it: a numbered medallion for chapters, a marquee badge for Partners and a rainbow badge for Play.
+  - Bold halo rings and named signboards on the grass, brighter fabric, and a clear lawn around each tent.
+  - Partners is now a navy-and-gold pavilion with a red carpet and spotlights.
+  - The Play Tent has crossed rainbow arches and sensory balls.
 - This changelog, a pull request checklist, and a release process in CLAUDE.md.
+
+### Fixed
+- Status chips on list cards were hard to read.
+- Page views sat under the wrapped top bar on phones.
 
 ### Changed
 - Melton and Whittlesea ticket buttons now use the branded links ableshinemelton.eventbrite.com.au and ableshinewhittlesea.eventbrite.com.au (same events). Shipped straight to main in 0708daa.
