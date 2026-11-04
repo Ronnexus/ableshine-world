@@ -9,6 +9,36 @@ Versions follow **MAJOR.MINOR.PATCH**:
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-04
+
+### Added
+- **Magic Tent:** a starry wizard-hat tent further out from the plaza, reached by its own sparkly stepping-stone path. It has a crooked hat tip with a star, a glowing crystal ball, floating sparkles and a light beam so it's easy to find. It holds four magic games with no scores and nothing to get wrong:
+  - **Magic Hat:** tap the hat (or press Space) and a new surprise pops out each time.
+  - **Vanishing Card:** think of a card and Sunny makes it disappear.
+  - **Cup Shuffle:** follow the star. It has a Slow option, a "Show me" button and keys 1 to 3. In Calm mode the cups swap without moving.
+  - **Wand Reveal:** wave your wand to clear the mist and find a picture, or press "Reveal it".
+- **Artful Yoga wellbeing tent:** a calm green pavilion with a lotus on top, the furthest tent out, along a path of hearts.
+  - Lists the healing and wellbeing sessions people can ask about: disability healing, holistic healing, tarot reading, yoga and meditation, and art.
+  - Shows Artful Yoga Gallery's address, gallery hours, phone, email, website and socials.
+  - Has a "Connect with someone" form that writes an email in the visitor's own mail app. AbleShine never sees or stores it.
+  - All content comes from a new `wellness` block in `site.json`.
+- **Your character has more personality:**
+  - A face that blinks and smiles, rosy cheeks, hands, shoes, a hoodie hood and a little sun badge.
+  - Walking eases in and out, with a forward lean and a tilt into turns. The cane swings in rhythm, and wheelchair users push their wheels.
+  - When standing still, your character breathes, looks around, and your assistance dog sits down.
+  - **Gestures:** Wave, Cheer, Clap and Dance from the Me panel, or tap your character. You also wave when you arrive at a tent.
+- Visitors in the crowd wave when they arrive somewhere and say hello as you walk past.
+- Magic zone and Wellbeing zone on the Zones page, plus `#magic` and `#wellness` links.
+
+### Changed
+- **The Play Tent is now an on-brand candy big top** (pink and yellow stripes, a purple and white drum, bunting), replacing the rainbow dome. Its label, topper and list card use the pink and yellow candy stripe too.
+- **Every tent is catchier:** chapter tents have bunting strung from the flagpole to stakes on the grass, and the Partners pavilion has bunting from its peak.
+
+### Performance
+- About 350 draw calls, up from 293 in 1.2.0 but still below the 431 in 1.1.0. Triangles are unchanged at about 180k, even with two new tents, bunting everywhere and the more detailed character.
+  - The Play Tent went from about 45 draw calls to about 20 (instanced balls, bubbles and bunting).
+  - All new scenery is instanced: bunting, stakes, paths, petals, mats, plants and lanterns.
+
 ## [1.2.0] - 2026-11-04
 
 ### Added
