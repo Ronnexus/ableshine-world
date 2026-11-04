@@ -9,6 +9,29 @@ Versions follow **MAJOR.MINOR.PATCH**:
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-04
+
+### Added
+- **A livelier character on the move:**
+  - Jointed arms and legs: knees bend through each step and elbows pump.
+  - The back is no longer plain: a hood, a yellow backpack with a pink sun patch and straps.
+  - A pink scarf streams out behind as you walk, and wheelchair users get a fluttering pink safety flag.
+  - Little confetti puffs pop up at each footstep (not in Calm mode).
+  - The camera starts a little closer so the character reads better.
+- Home-screen app icon, app manifest and theme colour.
+
+### Performance
+- **Devices without a graphics card** (software 3D at 1 or 2 frames a second, which is also how Lighthouse and PageSpeed test) now open in List view with everything on it, and a note that they can switch to the 3D world. Three.js isn't downloaded unless they do. If they switch, or a device's frames take over 70ms, the world draws only while something is happening (walking, turning, gesturing, Sunny talking, or just after a tap). Phones and computers with a graphics card are unchanged.
+- Three.js (about 150KB zipped) now loads in the background instead of blocking the page. The page paints first, then builds the 3D island.
+- Local Lighthouse (mobile, software rendering) against 1.2.0: total blocking time **9,840ms → under 50ms**, main-thread work **27s → under 3s**.
+- Fonts no longer block the first paint.
+- The logo has a fixed size, so nothing jumps when it loads.
+- Posters are about 18% lighter.
+- Local Lighthouse score (mobile, same setup): **0.27 → 0.94**. First paint 5.0s → 2.4s, largest paint 8.9s → 2.5s.
+
+### Changed
+- Netlify now serves the site at https://www.ableshine.com.au, and the build defaults its canonical address to match.
+
 ## [1.3.0] - 2026-11-04
 
 ### Added
