@@ -1,6 +1,6 @@
 # AbleShine World
 
-Live site: https://ableshine.com.au (also ableshine-world.netlify.app; Netlify project `ableshine-world`, auto-deploys from `main`).
+Live site: https://www.ableshine.com.au (apex redirects; also ableshine-world.netlify.app; Netlify project `ableshine-world`, auto-deploys from `main`).
 
 A 3D, third-person "event world" for AbleShine: free, all-abilities community days across Melbourne. Each event is a **chapter**: a striped festival tent on a story trail spiralling out from a plaza with a giant sun statue. Visitors walk a character (walking, wheelchair or cane, optional assistance dog) with **Sunny** the sun mascot floating beside them. Tapping a tent walks them along the trail and opens that chapter's **room**.
 
@@ -15,7 +15,7 @@ A 3D, third-person "event world" for AbleShine: free, all-abilities community da
 | `netlify.toml` | Build command, `dist` publish dir, cache headers. |
 | `EDITING-GUIDE.txt` | Plain-English guide for the owner. |
 
-External scripts (cdnjs): Three.js **r128** (global `THREE`) and JSZip 3.10.1. Fonts: Lilita One + Nunito (Google Fonts).
+External scripts (cdnjs, both loaded on demand): Three.js **r128** (global `THREE`) and JSZip 3.10.1. Fonts: Lilita One + Nunito (Google Fonts).
 
 ## Data model (`data/site.json`)
 
@@ -61,6 +61,9 @@ Add fields; never rename existing ones.
   - Pixel ratio is capped at 1.5.
   - Adaptive quality (`W.sampleQuality`): after load, if frames average over 34ms, it drops shadows, uses pixel ratio 1 and halves the crowd. `localStorage asw.quality` = `"high"`/`"low"` forces it (for testing).
   - JSZip is loaded only when someone taps "Download all".
+  - Three.js loads in the background (`loadThree`, `THREE_URL`), not as a blocking script. `boot3d()` runs after first paint.
+  - **No graphics card** (`softwareGL()`, a software renderer such as SwiftShader or llvmpipe, which is also what Lighthouse and PageSpeed use): the page starts in List view with `S.lazy3d`. Three.js is fetched only when the visitor taps "Back to the 3D world" (`setList(false)` → `startWorld`).
+  - Power-saving render (`W.lite`, `W.wake(sec)`): with software 3D, or frames over 70ms, the loop renders only while moving, turning, gesturing, talking or just after input, and ambient animation rests. `localStorage asw.quality = "lite"` forces it.
 
   Baseline before 1.2.0 was about 430 draw calls and 345k triangles; 1.2.0 was 293 calls and 181k. Keep new scenery instanced.
 - **Icons** (`ICONS`, `icon(name, size, fill)`): inline SVG for labels, guide and zone cards. Don't use font glyphs (★ ♫), which render inconsistently.
